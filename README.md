@@ -20,7 +20,7 @@ Run the watchers, dev and source maps servers
 $ gulp dev
 ```
 
-URLS to test things out:
+URLS to test things out: 
 
 * `http://127.0.0.1:3000/`: Server-side bootstrap, JS takes over.
 
