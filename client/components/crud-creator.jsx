@@ -1,4 +1,5 @@
 var React = require("react");
+var {Map,toJS} = require("immutable");
 // Router
 var Router = require("react-router");
 var RouteHandler = Router.RouteHandler;
@@ -18,7 +19,7 @@ module.exports= {
 	    };
 	  }
 	   function nodes () {
-	      var nodes = this.state.store.toArray().map(itemRender);
+	      var nodes = this.state.data.get('store').toArray().map(itemRender);
 	      return nodes;
 	    }
 	  var Item = React.createClass({
@@ -31,7 +32,7 @@ module.exports= {
 	    mixins: [store.mixin,errorStore.mixin],
 
 	    getInitialState: function () {
-	      return getState();
+	      return {data:Map(getState())};
 	    },
 
 	    componentWillMount: function () {
@@ -43,7 +44,12 @@ module.exports= {
 	    
 
 	    storeDidChange: function () {
-	      this.setState(getState());
+	    	var s=getState();
+	    	this.setState(prev=>
+	    		({
+	    			data:prev.data.set("store", s.store).set("error", s.error)
+	    		})
+	    	);
 	    },
 
 	    render: function()
@@ -57,7 +63,7 @@ module.exports= {
 	  // Component
 	  function getState() {
 	    return {
-	      data:store.get()||null,
+	      item:store.get()||null,
 	      error:errorStore.get()
 	    };
 	  }
@@ -72,7 +78,7 @@ module.exports= {
 
 	    getInitialState: function () {
 	      
-	      return {data:null};
+	      return {data:Map()};
 	    },
 
 	    componentDidMount: function () {
@@ -84,29 +90,29 @@ module.exports= {
 
 	    storeDidChange: function () {
 	      var s=getState();
-	      this.setState(()=>s);
+	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    handleChange:function(field){
 	      return function(evt){
-	        actions._new(this.state.data.set(field,evt.target.value));
+	      	actions._new(this.state.data.setIn(['item',field],evt.target.value).get('item'));
 	      }.bind(this);
 	    },
 	    post:function() {
-	      actions.post(this.state.data);
+	      actions.post(this.state.data.get('item'));
 	    },
 	    render: function () {   
-	      if(this.state.data)
+	      if(this.state.data.get('item'))
 	      {
 	        return <div >
-	           <Item handleChange={this.handleChange} item={this.state.data}/>
+	           <Item handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.post} value="Create" />
-	           <Error error={this.state.error}/>
+	           <Error error={this.state.data.get('error')}/>
 	        </div>
 	      }
 	      else
 	      {
-	        return (<Error error={this.state.error}/>);
+	        return (<Error error={this.state.data.get('error')}/>);
 	      }
 	    }
 	  })
@@ -116,7 +122,7 @@ module.exports= {
 	  // Component
 	  function getState() {
 	    return {
-	      data:store.get()||null,
+	      item:store.get()||null,
 	      error:errorStore.get()
 	    };
 	  }
@@ -131,7 +137,7 @@ module.exports= {
 
 	    getInitialState: function () {
 	      
-	      return {data:null};
+	      return {data:Map()};
 	    },
 
 	    componentDidMount: function () {
@@ -143,27 +149,27 @@ module.exports= {
 
 	    storeDidChange: function () {
 	      var s=getState();
-	      this.setState(()=>s);
+	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    del:function() {
-	      actions.del(this.state.data.get('_id'));
+	      actions.del(this.state.data.getIn(['item','_id']));
 	    },
 
 	    render: function () {   
-	      if(this.state.data)
+	      if(this.state.data.get('item'))
 	      {
 	       return(
 	          <div>
-	             <Item item={this.state.data}/>
+	             <Item item={this.state.data.get('item')}/>
 	             <Button buttonCallback={this.del} value="Delete" />
-	             <Error error={this.state.error}/>
+	             <Error error={this.state.data.get('error')}/>
 	          </div>
 	        );
 	      }
 	      else
 	      {
-	        return (<Error error={this.state.error}/>);
+	        return (<Error error={this.state.data.get('error')}/>);
 	      }
 	    }
 	  });
@@ -173,7 +179,7 @@ module.exports= {
 	  // Component
 	  function getState() {
 	    return {
-	      data:store.get()||null,
+	      item:store.get()||null,
 	      error:errorStore.get()
 	    };
 	  }
@@ -189,7 +195,7 @@ module.exports= {
 
 	    getInitialState: function () {
 	      
-	      return {data:null};
+	      return {data:Map()};
 	    },
 
 	    componentDidMount: function () {
@@ -201,23 +207,23 @@ module.exports= {
 
 	    storeDidChange: function () {
 	      var s=getState();
-	      this.setState(()=>s);
+	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    render: function () {   
-	      if(this.state.data)
+	      if(this.state.data.get('item'))
 	      {
 	       return(
 	          <div>
-	             <Item item={this.state.data}/>
-	             <Error error={this.state.error}/>
+	             <Item item={this.state.data.get('item')}/>
+	             <Error error={this.state.data.get('error')}/>
 	             <RouteHandler {...this.props} />
 	          </div>
 	        );
 	      }
 	      else
 	      {
-	        return (<Error error={this.state.error}/>);
+	        return (<Error error={this.state.data.get('error')}/>);
 	      }
 	    }
 	  });
@@ -227,7 +233,7 @@ module.exports= {
 	  // Component
 	  function getState() {
 	    return {
-	      data:store.get()||null,
+	      item:store.get()||null,
 	      error:errorStore.get()
 	    };
 	  }
@@ -242,7 +248,7 @@ module.exports= {
 
 	    getInitialState: function () {
 	      
-	      return {data:null};
+	      return {data:Map()};
 	    },
 
 	    componentDidMount: function () {
@@ -254,30 +260,30 @@ module.exports= {
 
 	    storeDidChange: function () {
 	      var s=getState();
-	      this.setState(()=>s);
+	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    handleChange:function(field){
 	      return function(evt){
-	        actions._new(this.state.data.set(field,evt.target.value));
+	      	actions._new(this.state.data.setIn(['item',field],evt.target.value).get('item'));
 	      }.bind(this);
 	    },
 	    put:function() {
-	      actions.put(this.state.data);x
+	      actions.put(this.state.data.get('item'));
 	    },
 
 	    render: function () {   
-	      if(this.state.data)
+	      if(this.state.data.get('item'))
 	      {
 	      	return (<div >
-	           <Item handleChange={this.handleChange} item={this.state.data}/>
+	           <Item handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.put} value="Update" />
-	           <Error error={this.state.error}/>
+	           <Error error={this.state.data.get('error')}/>
 	        </div>);
 	      }
 	      else
 	      {
-	        return (<Error error={this.state.error}/>);
+	        return (<Error error={this.state.data.get('error')}/>);
 	      }
 	    }
 	  });
