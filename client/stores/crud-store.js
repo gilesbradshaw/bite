@@ -1,30 +1,32 @@
 var Biff = require("../biff");
 var _ = require("lodash");
-var {List,fromJS} = require('immutable');
+var {List,fromJS,Map} = require('immutable');
 
-function dispose(item,name, payload)
-{
-  if (payload.actionType === name + "_DISPOSE") {
-      delete item[payload.index];
-      this.emitChange();
-    }
-}
+
 
 function listStore(name)
 {
-  var _items= List.of(...[]);
-  function load (items) {
-      _items = List.of(...items.map((u)=>fromJS(u)));
+  var _items= Map() //List.of(...[]);
+  function load (index,items) {
+      _items= _items.set(index, List.of(...items.map((u)=>fromJS(u))));
   }
   // Creates a DataStore
   return Biff.createStore({
     // Initial setup
-    get: function () {
-      return _items;
+    get: function (index) {
+      if(!_items.get(index))
+      {
+        _items=_items.set(index,List.of(...[]));
+      }
+      return _items.get(index);// || (_items[index]=List.of(...[]));
     }
   }, function (payload) {
     if (payload.actionType === name + "_LOAD") {
-      load(payload.items);
+      load(payload.index,payload.items);
+      this.emitChange();
+    }
+    if (payload.actionType === name + "_DISPOSE") {
+      _items= _items.remove(payload.index);
       this.emitChange();
     }
   });
@@ -32,63 +34,50 @@ function listStore(name)
 
 function getStore(name)
 {
-  var  _item={};
+  var  _item=Map();
   // Creates a DataStore
   return Biff.createStore({
     // Initial setup
     get: function(index) {
-     return _item[index];
+     return _item.get(index);
     },
   }, function (payload) {
     if (payload.actionType === name + "_GOT") {
-      _item[payload.index] = fromJS(payload.item);
+      _item=_item.set(payload.index,payload.item);
       this.emitChange();
     }
     if (payload.actionType === name + "_NEW") {
-      _item[payload.index] = payload.item; 
+      _item=_item.set(payload.index,payload.item); 
       this.emitChange();
     }
-    dispose.bind(this)(_item, name, payload);
-  });
-}
-function createStore(name)
-{
-  var  _item={};
-  // Creates a DataStore
-  return Biff.createStore({
-    // Initial setup
-    get: function(index) {
-     return _item[index];
-    },
-    
-  }, function (payload) {
-    if (payload.actionType === name + "_NEW") {
-      _item[payload.index] = payload.item || fromJS({});
+    if (payload.actionType === name + "_DISPOSE") {
+      _item= _item.remove(payload.index);
       this.emitChange();
     }
-    dispose.bind(this)(_item, name, payload);
   });
 }
-
 function errorStore(name)
 {
-  var  _error={};
+  var  _error=Map();
   // Creates a DataStore
   return Biff.createStore({
     // Initial setup
     get: function(index) {
-     return _error[index];
+     return _error.get(index);
     },
   }, function (payload) {
     if (payload.actionType === name + "_ERROR") {
-      _error[payload.index] = payload.item;
+      _error=_error.set(payload.index, payload.item);
       this.emitChange();
     }
     if (payload.actionType === name + "_NOERROR") {
-      delete _error[payload.index];
+      _error=_error.remove(payload.index);
       this.emitChange();
     }
-    dispose.bind(this)(_error, name, payload);
+    if (payload.actionType === name + "_DISPOSE") {
+      _error= _error.remove(payload.index);
+      this.emitChange();
+    }
   });
 }
 

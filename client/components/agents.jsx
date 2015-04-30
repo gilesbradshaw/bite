@@ -90,7 +90,7 @@ module.exports =
   create:crud.creator (
     "AgentNew",
     Actions,
-    Store.create,
+    Store.get,
     Store.error,
      function(){
         return (

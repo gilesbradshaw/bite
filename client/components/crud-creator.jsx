@@ -63,7 +63,7 @@ module.exports= {
 	      }
 	  });
 	},
-	creator:function newer(displayName,actions, store,errorStore, render)
+	creator:function creator(displayName,actions, store,errorStore, render)
 	{
 	  // Component
 	  function getState(index) {
