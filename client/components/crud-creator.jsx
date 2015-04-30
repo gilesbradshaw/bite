@@ -1,4 +1,5 @@
 var React = require("react");
+var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var {Map,toJS} = require("immutable");
 // Router
 var Router = require("react-router");
@@ -7,15 +8,16 @@ var Link = Router.Link;
 var Error = require("./error");
 var Button = require("./button");
 
+var index=0;
 
 module.exports= {
 	lister:function lister(displayName,actions, store,errorStore, render, itemRender)
 	{
 	// Component
-	  function getState() {
+	  function getState(index) {
 	    return {
-	      store: store.get(),
-	      error: errorStore.get()
+	      store: store.get(index),
+	      error: errorStore.get(index)
 	    };
 	  }
 	   function nodes () {
@@ -29,22 +31,25 @@ module.exports= {
 
 	  return  React.createClass({
 	    displayName: displayName,
-	    mixins: [store.mixin,errorStore.mixin],
+	    mixins: [
+	    	PureRenderMixin,
+	    	store.mixin,
+	    	errorStore.mixin
+	    ],
 
 	    getInitialState: function () {
-	      return {data:Map(getState())};
+	      return {data:Map(getState(index)),index:index++};
 	    },
 
 	    componentWillMount: function () {
-	      actions.load();
+	      actions.load({index:this.state.index});
 	    },
 
-	    componentWillUnmount: function () {},
-
-	    
-
+	    componentWillUnmount: function () {
+	    	actions.dispose(this.state.index);
+	    },
 	    storeDidChange: function () {
-	    	var s=getState();
+	    	var s=getState(this.state.index);
 	    	this.setState(prev=>
 	    		({
 	    			data:prev.data.set("store", s.store).set("error", s.error)
@@ -61,45 +66,57 @@ module.exports= {
 	creator:function newer(displayName,actions, store,errorStore, render)
 	{
 	  // Component
-	  function getState() {
+	  function getState(index) {
 	    return {
-	      item:store.get()||null,
-	      error:errorStore.get()
+	      item:store.get(index)||null,
+	      error:errorStore.get(index)
 	    };
 	  }
 	  var Item = React.createClass({
+	  	mixins:[PureRenderMixin],
 	    displayName: displayName+'Item', 
 	    render: render
 	  });
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
-	    mixins: [store.mixin,errorStore.mixin],
+	    mixins: [
+	    	PureRenderMixin,
+	    	store.mixin,
+	    	errorStore.mixin
+	    ],
 
 	    getInitialState: function () {
 	      
-	      return {data:Map()};
+	      return {data:Map(),index:index++};
 	    },
 
 	    componentDidMount: function () {
-	      actions._new();
+	      actions._new({index:this.state.index});
 	    },
 
 	    componentWillUnmount: function () {
+	    	actions.dispose(this.state.index);
 	    },
 
 	    storeDidChange: function () {
-	      var s=getState();
+	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    handleChange:function(field){
 	      return function(evt){
-	      	actions._new(this.state.data.setIn(['item',field],evt.target.value).get('item'));
+	      	actions._new({
+	      		index:this.state.index,
+	      		item:this.state.data.setIn(['item',field],evt.target.value).get('item')
+	      	});
 	      }.bind(this);
 	    },
 	    post:function() {
-	      actions.post(this.state.data.get('item'));
+	      actions.post({
+	      	index:this.state.index,
+	      	item:this.state.data.get('item')
+	      	});
 	    },
 	    render: function () {   
 	      if(this.state.data.get('item'))
@@ -120,10 +137,10 @@ module.exports= {
 	deleter:function deleter(displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
-	  function getState() {
+	  function getState(index) {
 	    return {
-	      item:store.get()||null,
-	      error:errorStore.get()
+	      item:store.get(index)||null,
+	      error:errorStore.get(index)
 	    };
 	  }
 	  var Item = React.createClass({
@@ -131,29 +148,39 @@ module.exports= {
 	    render: render
 	  });
 	  return React.createClass({
-	    displayName: displayName,
+	  	displayName: displayName,
 	    propTypes: {},
-	    mixins: [store.mixin,errorStore.mixin],
-
+	    mixins: [
+	    	PureRenderMixin,
+	    	store.mixin,
+	    	errorStore.mixin
+	    ],
 	    getInitialState: function () {
 	      
-	      return {data:Map()};
+	      return {data:Map(),index:index++};
 	    },
 
 	    componentDidMount: function () {
-	      actions.get(this.props.params[paramName]);
+	      actions.get({
+	      	index:this.state.index,
+	      	id:this.props.params[paramName]
+	      });
 	    },
 
 	    componentWillUnmount: function () {
+	    	actions.dispose(this.state.index);
 	    },
 
 	    storeDidChange: function () {
-	      var s=getState();
+	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    del:function() {
-	      actions.del(this.state.data.getIn(['item','_id']));
+	      actions.del({
+	      	index:this.state.index,
+	      	id:this.state.data.getIn(['item','_id'])
+	      });
 	    },
 
 	    render: function () {   
@@ -177,10 +204,10 @@ module.exports= {
 	viewer:function viewer(displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
-	  function getState() {
+	  function getState(index) {
 	    return {
-	      item:store.get()||null,
-	      error:errorStore.get()
+	      item:store.get(index)||null,
+	      error:errorStore.get(index)
 	    };
 	  }
 	  var Item = React.createClass({
@@ -191,22 +218,30 @@ module.exports= {
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
-	    mixins: [store.mixin,errorStore.mixin],
+	    mixins: [
+	    	PureRenderMixin,
+	    	store.mixin,
+	    	errorStore.mixin
+	    ],
 
 	    getInitialState: function () {
 	      
-	      return {data:Map()};
+	      return {data:Map(),index:index++};
 	    },
 
 	    componentDidMount: function () {
-	       actions.get(this.props.params[paramName]);
+	       actions.get({
+	       	index:this.state.index,
+	       	id:this.props.params[paramName]
+	       });
 	    },
 
 	    componentWillUnmount: function () {
+	    	actions.dispose(this.state.index);
 	    },
 
 	    storeDidChange: function () {
-	      var s=getState();
+	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
@@ -231,10 +266,10 @@ module.exports= {
 	editor:function editor(displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
-	  function getState() {
+	  function getState(index) {
 	    return {
-	      item:store.get()||null,
-	      error:errorStore.get()
+	      item:store.get(index)||null,
+	      error:errorStore.get(index)
 	    };
 	  }
 	  var Item = React.createClass({
@@ -244,32 +279,46 @@ module.exports= {
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
-	    mixins: [store.mixin,errorStore.mixin],
+	    mixins: [
+	    	PureRenderMixin,
+	    	store.mixin,
+	    	errorStore.mixin
+	    ],
 
 	    getInitialState: function () {
 	      
-	      return {data:Map()};
+	      return {data:Map(),index:index++};
 	    },
 
 	    componentDidMount: function () {
-	      actions.get(this.props.params[paramName]);
+	      actions.get({
+	      	index:this.state.index,
+	      	id:this.props.params[paramName]
+	      });
 	    },
 
 	    componentWillUnmount: function () {
+	    	actions.dispose(this.state.index);
 	    },
 
 	    storeDidChange: function () {
-	      var s=getState();
+	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
 
 	    handleChange:function(field){
 	      return function(evt){
-	      	actions._new(this.state.data.setIn(['item',field],evt.target.value).get('item'));
+	      	actions._new({
+	      		index:this.state.index,
+	      		item:this.state.data.setIn(['item',field],evt.target.value).get('item')
+	      	});
 	      }.bind(this);
 	    },
 	    put:function() {
-	      actions.put(this.state.data.get('item'));
+	      actions.put({
+	      	index:this.state.index,
+	      	item:this.state.data.get('item')
+	      });
 	    },
 
 	    render: function () {   
@@ -288,5 +337,4 @@ module.exports= {
 	    }
 	  });
 	}
-
 };

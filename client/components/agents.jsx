@@ -85,7 +85,7 @@ module.exports =
           </div>
         );
      },
-     "agencyId"
+     "agentId"
   ),
   create:crud.creator (
     "AgentNew",
