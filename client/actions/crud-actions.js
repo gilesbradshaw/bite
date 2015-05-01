@@ -28,7 +28,7 @@ function logError(error,res, single, index){
 }
 
 
-function crudActions(single, plural)
+function crudActions(single, plural,path)
 {
   return Biff.createActions({
     load: function (params) {
@@ -36,7 +36,7 @@ function crudActions(single, plural)
         setTimeout(()=>
         {
           request
-          .get("/" + plural)
+          .get(path(params))
           .set("Accept", "application/json")
           .end(function (error, res) {
             if(res && res.ok)
@@ -79,7 +79,7 @@ function crudActions(single, plural)
       {
         var self = this;
         request
-        .post("/" + plural)
+        .post(path(params))
         .send(params.item)
         .set("Accept", "application/json")
         .end( (error, res)=> {
@@ -109,7 +109,7 @@ function crudActions(single, plural)
       {
         var self = this;
         request
-        .put("/"+ plural + "/" + params.item.get('_id'))
+        .put(path(params) + "/" + params.item.get('_id'))
         .send(params.item)
         .set("Accept", "application/json")
         .end( (error, res)=> {
@@ -138,7 +138,7 @@ function crudActions(single, plural)
       {
         var self = this;
         request
-        .del("/"+ plural + "/" + params.id)
+        .del(path(params) + "/" + params.id)
         .send()
         .set("Accept", "application/json")
         .end( (error, res)=> {
@@ -170,7 +170,7 @@ function crudActions(single, plural)
       {
         var self = this;
         request
-        .get("/"+ plural + "/" + params.id)
+        .get(path(params) + "/" + params.id)
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)
@@ -192,50 +192,6 @@ function crudActions(single, plural)
           }
         });
       },0);
-    },
-    children: function(name)
-    {
-      return {
-        get:function (params) {
-          setTimeout( ()=>
-          {
-            var self = this;
-            request
-            .get("/"+ plural + "/" + params.id + "/" + name)
-            .set("Accept", "application/json")
-            .end( (error, res)=> {
-              if(res && res.ok)
-              {
-                var data=fromJS(JSON.parse(res.text));           
-              }
-              else
-              {
-                  logError.bind(self)(error,res, single, params.index, params.index);
-              }
-            });
-          },0);
-        },
-        post:function (params) {
-          setTimeout( ()=>
-          {
-            var self = this;
-            request
-            .post("/"+ plural + "/" + params.id + "/" + name)
-            .set("Accept", "application/json")
-            .send(params.item)
-            .end( (error, res)=> {
-              if(res && res.ok)
-              {
-                var data=fromJS(JSON.parse(res.text));           
-              }
-              else
-              {
-                  logError.bind(self)(error,res, single, params.index, params.index);
-              }
-            });
-          },0);
-        }
-      }
     },
     dispose: function (index) {
       this.dispatch({

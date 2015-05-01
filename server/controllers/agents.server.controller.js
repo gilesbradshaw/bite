@@ -86,6 +86,7 @@ exports.listByAgency = function(req, res) {
 	res.json(req.agents);
 };
 
+
 /**
  * Agent middleware
  */

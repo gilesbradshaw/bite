@@ -23,6 +23,9 @@ var routes = (
     <Route name="agency" path="agency/:agencyId" handler={Agencies.view} >
       <Route name="agency-agents" path='agents' handler={Agents.list} >
         <Route name="agency-agents-create" path='create' handler={Agents.create} />
+        <Route name="agency-agents-view" path='view/:agentId' handler={Agents.view} />
+        <Route name="agency-agents-edit" path='edit/:agentId' handler={Agents.edit} />
+        <Route name="agency-agents-delete" path='delete/:agentId' handler={Agents.del} />
       </Route>    
     </Route>
     <Route name="agency-create" handler={Agencies.create} />

@@ -39,6 +39,7 @@ function getStore(name)
   return Biff.createStore({
     // Initial setup
     get: function(index) {
+     _item=_item.update(index,(val)=>val||Map());
      return _item.get(index);
     },
   }, function (payload) {

@@ -44,7 +44,11 @@ module.exports= {
 
 	    componentWillMount: function () {
 	      console.log('list mounting ' + displayName);
-	      actions.load({index:this.state.index});
+	      actions.load(
+	      	{
+	      		index:this.state.index,
+	      		props:this.props
+	      	});
 	      console.log('list mounted ' + displayName);
 	    },
 
@@ -66,13 +70,13 @@ module.exports= {
 	      }
 	  });
 	},
-	creator:function creator(displayName,actions, store,errorStore, render)
+	creator:function creator(displayName,actions, store,errorStore, render, getInitial)
 	{
 	  // Component
 	  function getState(index) {
 	  	console.log(displayName + ' getting state ' + index + ' rets ' + store.get(index));
 	    return {
-	      item:store.get(index)||null,
+	      item:store.get(index),
 	      error:errorStore.get(index)
 	    };
 	  }
@@ -90,14 +94,16 @@ module.exports= {
 	    	errorStore.mixin
 	    ],
 
-	    getInitialState: function () {
-	      
+	    getInitialState: function () {	      
 	      return {data:Map(),index:index++};
 	    },
 
 	    componentWillMount: function () {
 	      console.log('creator mounting ' + this.state.index + ' for ' + displayName);
-	      actions.set({index:this.state.index});
+	      actions.set(
+	      	{
+	      		index:this.state.index
+	      	});
 	      console.log('creator mounted ' + this.state.index + ' for ' + displayName);
 	    },
 
@@ -121,8 +127,9 @@ module.exports= {
 	    post:function() {
 	      actions.post({
 	      	index:this.state.index,
-	      	item:this.state.data.get('item')
-	      	});
+	      	item:this.state.data.get('item'),
+	      	props:this.props
+	      });
 	    },
 	    render: function () {
 	      if(this.state.data.get('item'))
@@ -171,7 +178,8 @@ module.exports= {
 	      console.log('deleter mounting ' + displayName);
 	      actions.get({
 	      	index:this.state.index,
-	      	id:this.props.params[paramName]
+	      	id:this.props.params[paramName],
+	      	props:this.props
 	      });
 	      console.log('deleter mounted ' + displayName);
 	    },
@@ -188,7 +196,8 @@ module.exports= {
 	    del:function() {
 	      actions.del({
 	      	index:this.state.index,
-	      	id:this.state.data.getIn(['item','_id'])
+	      	id:this.state.data.getIn(['item','_id']),
+	      	props:this.props
 	      });
 	    },
 
@@ -242,7 +251,8 @@ module.exports= {
 	       console.log('viewer mounting ' + displayName);
 	       actions.get({
 	       	index:this.state.index,
-	       	id:this.props.params[paramName]
+	       	id:this.props.params[paramName],
+	       	props:this.props
 	       });
 	       console.log('viewer mounted ' + displayName);
 	    },
@@ -305,7 +315,8 @@ module.exports= {
 	      console.log('editor mounting ' + displayName);
 	      actions.get({
 	      	index:this.state.index,
-	      	id:this.props.params[paramName]
+	      	id:this.props.params[paramName],
+	      	props:this.props
 	      });
 	       console.log('editor mounting ' + displayName);
 	    },
@@ -330,7 +341,8 @@ module.exports= {
 	    put:function() {
 	      actions.put({
 	      	index:this.state.index,
-	      	item:this.state.data.get('item')
+	      	item:this.state.data.get('item'),
+	      	props:this.props
 	      });
 	    },
 

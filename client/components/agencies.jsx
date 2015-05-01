@@ -11,40 +11,7 @@ import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
 
 
-  var AgentsAction = Actions.children("AGENTS");
-  var Agents = React.createClass({
-      displayName: "Agents",
-      propTypes: {},
-      mixins: [
-        PureRenderMixin,
-        //store.mixin,
-        //errorStore.mixin
-      ],
-
-      getInitialState: function () {
-        return null;
-        //return {data:Map(),index:index++};
-      },
-
-      componentDidMount: function () {
-         AgentsAction.get({
-          index:0,
-          id:this.props.id
-         });
-      },
-
-      componentWillUnmount: function () {
-      },
-
-      storeDidChange: function () {
-      },
-
-      render: function () {   
-        return <div>AGENTS!!!</div>
-      }
-    });
-
-
+  
 
 
 export default  
@@ -90,7 +57,6 @@ export default
           <div >
              <div>{this.props.item.get('title')}</div>
              <div>{this.props.item.get('website')}</div>   
-             <Agents id={this.props.item.get('_id')}/>           
           </div>
         );
       },

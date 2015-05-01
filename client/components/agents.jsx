@@ -85,17 +85,17 @@ export default
      },
      "agentId"
   ),
-  create:crud.creator (
+  create:crud.creator(
     "AgentCreate",
     Actions,
     Store.get,
     Store.error,
-     function(){
-        return (
-          <div>
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
+    function(){
+      return (
+        <div>
+           <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
+        </div>
+      );
+    }
   )
 }

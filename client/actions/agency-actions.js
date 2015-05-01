@@ -1,3 +1,8 @@
 import crudActions from "./crud-actions";
 
-export default crudActions("AGENCY", "AGENCIES");
+export default crudActions(
+	"AGENCY", 
+	"AGENCIES",
+	(params)=>
+		"/AGENCIES"
+);

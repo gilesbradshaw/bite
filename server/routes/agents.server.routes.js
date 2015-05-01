@@ -19,7 +19,11 @@ module.exports = function(app) {
 	
 	app.route('/agents/agency/:agencyId')
 		.get(agents.listByAgency);
-	
+
+	app.route('/agencies/:agencyId/agents/:agentId')
+		.get(agents.read)
+		.put(users.requiresLogin, agents.hasAuthorization, agents.update);
+		
 	// Finish by binding the article middleware
 	app.param('agencyId', agents.agentsByAgencyID);
 	app.param('agentId', agents.agentByID);
