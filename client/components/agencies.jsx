@@ -5,7 +5,7 @@ var PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
 import Store from "../stores/agency-store";
-import Actions from "../actions/agency-actions";
+import {agency as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";

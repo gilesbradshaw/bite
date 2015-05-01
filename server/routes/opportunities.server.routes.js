@@ -18,5 +18,6 @@ module.exports = function(app) {
 		.delete(users.requiresLogin, opportunities.hasAuthorization, opportunities.delete);
 
 	// Finish by binding the opportunity middleware
+	app.param('profileId', opportunities.opportunitiesByProfileID);
 	app.param('opportunityId', opportunities.opportunityByID);
 };

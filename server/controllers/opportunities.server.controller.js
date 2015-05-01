@@ -84,6 +84,10 @@ exports.list = function(req, res) {
 	});
 };
 
+exports.listByProfile = function(req, res) {
+	res.json(req.opportunities);
+};
+
 /**
  * Opportunity middleware
  */
@@ -96,6 +100,16 @@ exports.opportunityByID = function(req, res, next, id) {
 	});
 };
 
+
+exports.opportunitiesByProfileID = function(req, res, next, id) {
+	Opportunity.find({'user':new mongoose.Types.ObjectId(id)}).exec(function(err,opportunities){
+		if (err) return next(err);
+		if (!opportunities) return next(new Error('Failed to load opportunities for profile ' + id));
+		req.opportunities = opportunities;
+		next();
+	});
+	
+};
 /**
  * Opportunity authorization middleware
  */

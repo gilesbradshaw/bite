@@ -2,9 +2,9 @@
 import React from "react";
 
 import crud from "./crud-creator";
-import Store from "../stores/agent-store";
+import Store from "../stores/profile-store";
 
-import {agent as Actions} from "../actions/actions";
+import {profile as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
@@ -15,7 +15,7 @@ export default
 {
 
   list:crud.lister(
-    "Agents",
+    "Profiles",
     Actions,
     Store.list,
     Store.error,
@@ -24,7 +24,7 @@ export default
       return function () {
         return (
           <div>
-            <p>Agent Bank:</p>
+            <p>Profile Bank:</p>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -32,68 +32,68 @@ export default
       };
     },
     function (data) {
-      var params={agentId:data.get('_id')};
+      var params={profileId:data.get('_id')};
       return (
         <div key={data.get('_id')}>
-          <div>{data.get('title')}</div>
-          <span><Link to="agent" params={params}>View</Link></span>
-          <span><Link to="agent-edit" params={params}>Edit</Link></span>
-          <span><Link to="agent-delete" params={params}>Delete</Link></span>
+          <div>{data.get('firstName')}</div>
+          <span><Link to="profile" params={params}>View</Link></span>
+          <span><Link to="profile-edit" params={params}>Edit</Link></span>
+          <span><Link to="profile-delete" params={params}>Delete</Link></span>
         </div>
       );
     }
   ),
   view:crud.viewer (
-     "AgentView",
+     "ProfileView",
       Actions,
       Store.get,
       Store.error,
       function(){   
         return (
           <div >
-             <div>{this.props.item.get('title')}</div>
+             <div>{this.props.item.get('firstName')}</div>
           </div>
         );
       },
-      "agentId"
+      "profileId"
   ),
   edit:module.exports = crud.editor (
-    "AgentEdit",
+    "ProfileEdit",
      Actions,
      Store.get,
      Store.error,
      function(){
         return (
           <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
+             <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('firstName')} />
           </div>
         );
      },
-     "agentId"
+     "profileId"
   ),
   del:crud.deleter (
-    "AgentDelete",
+    "ProfileDelete",
     Actions,
     Store.get,
     Store.error,
     function(){
         return (
           <div >
-             <div>{this.props.item.get('title')}</div>
+             <div>{this.props.item.get('profile')}</div>
           </div>
         );
      },
-     "agentId"
+     "profileId"
   ),
   create:crud.creator(
-    "AgentCreate",
+    "ProfileCreate",
     Actions,
     Store.get,
     Store.error,
     function(){
       return (
         <div>
-           <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
+           <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('title')} />
         </div>
       );
     }

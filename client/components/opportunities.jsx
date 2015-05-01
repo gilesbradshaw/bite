@@ -2,9 +2,9 @@
 import React from "react";
 
 import crud from "./crud-creator";
-import Store from "../stores/agent-store";
+import Store from "../stores/opportunity-store";
 
-import {agent as Actions} from "../actions/actions";
+import {opportunity as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
@@ -15,7 +15,7 @@ export default
 {
 
   list:crud.lister(
-    "Agents",
+    "Opportunities",
     Actions,
     Store.list,
     Store.error,
@@ -24,7 +24,7 @@ export default
       return function () {
         return (
           <div>
-            <p>Agent Bank:</p>
+            <p>Opportunity Bank:</p>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -32,19 +32,19 @@ export default
       };
     },
     function (data) {
-      var params={agentId:data.get('_id')};
+      var params={opportunityId:data.get('_id')};
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="agent" params={params}>View</Link></span>
-          <span><Link to="agent-edit" params={params}>Edit</Link></span>
-          <span><Link to="agent-delete" params={params}>Delete</Link></span>
+          <span><Link to="opportunity" params={params}>View</Link></span>
+          <span><Link to="opportunity-edit" params={params}>Edit</Link></span>
+          <span><Link to="opportunity-delete" params={params}>Delete</Link></span>
         </div>
       );
     }
   ),
   view:crud.viewer (
-     "AgentView",
+     "OpportunityView",
       Actions,
       Store.get,
       Store.error,
@@ -55,10 +55,10 @@ export default
           </div>
         );
       },
-      "agentId"
+      "opportunityId"
   ),
   edit:module.exports = crud.editor (
-    "AgentEdit",
+    "OpportunityEdit",
      Actions,
      Store.get,
      Store.error,
@@ -69,10 +69,10 @@ export default
           </div>
         );
      },
-     "agentId"
+     "opportunityId"
   ),
   del:crud.deleter (
-    "AgentDelete",
+    "OpportunityDelete",
     Actions,
     Store.get,
     Store.error,
@@ -86,7 +86,7 @@ export default
      "agentId"
   ),
   create:crud.creator(
-    "AgentCreate",
+    "OpportunityCreate",
     Actions,
     Store.get,
     Store.error,

@@ -20,8 +20,15 @@ var Nav = React.createClass({
         <span className="navLink"><Link to="app">Home</Link> </span>
         <span className="navLink"><Link to="agencies">Agencies</Link></span>
         <span className="navLink"><Link to="agency-create">Create</Link></span>
+
         <span className="navLink"><Link to="agents">Agents</Link></span>
         <span className="navLink"><Link to="agent-create">Create</Link></span>
+
+        <span className="navLink"><Link to="profiles">Profiles</Link></span>
+        <span className="navLink"><Link to="profile-create">Create</Link></span>
+
+        <span className="navLink"><Link to="opportunities">Opportunities</Link></span>
+        <span className="navLink"><Link to="opportunity-create">Create</Link></span>
 
         <span className="navLink"><Link to="users">Users</Link></span>
         <span className="navLink"><Link to="me">Me</Link></span>
