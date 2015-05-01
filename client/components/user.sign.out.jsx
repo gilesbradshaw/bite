@@ -1,17 +1,14 @@
-// React
-var React = require("react");
-var UserStore = require("../stores/user-current-store");
-var ErrorStore = require("../stores/user-error-store");
-var UserActions = require("../actions/user-actions");
+import React from "react";
+import UserStore from "../stores/user-current-store";
+import ErrorStore from "../stores/user-error-store";
+import UserActions from "../actions/user-actions";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
+import {RouteHandler} from "react-router";
 
 // Child Components
-var Button = require("./button");
-var FormInput = require("./formInput");
-var Error = require("./error");
+import Button from "./button";
+import FormInput from "./formInput";
+import Error from "./error";
 
 
 // Component
@@ -76,4 +73,4 @@ var UserSignOutForm = React.createClass({
   }
 });
 
-module.exports = UserSignOutForm;
+export default  UserSignOutForm;

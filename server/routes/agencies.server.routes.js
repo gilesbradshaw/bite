@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 var users = require('../controllers/users.server.controller'),
-	agencies= require('../controllers/agencies.server.controller');
+	agencies= require('../controllers/agencies.server.controller'),
+	agents= require('../controllers/agents.server.controller');
 
 module.exports = function(app) {
 	// Agency Routes
@@ -13,6 +14,7 @@ module.exports = function(app) {
 		.post(users.requiresLogin, agencies.create);
 
 	app.route('/agencies/:agencyId/agents')
+		.get(agents.listByAgency)
 		.post(users.requiresLogin, agencies.hasAuthorization,agencies.addAgent);
 
 	app.route('/agencies/:agencyId')

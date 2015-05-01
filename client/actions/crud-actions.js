@@ -1,8 +1,8 @@
-var Biff = require("../biff");
+import Biff from "../biff";
 
 // Request
-var request = require("superagent");
-var {fromJS}=require("immutable");
+import request from "superagent";
+import {fromJS} from "immutable";
 
 function logError(error,res, single, index){
   
@@ -33,43 +33,51 @@ function crudActions(single, plural)
   return Biff.createActions({
     load: function (params) {
       var self = this;
-        request
-        .get("/" + plural)
-        .set("Accept", "application/json")
-        .end(function (error, res) {
-          if(res && res.ok)
-          {
-            self.dispatch({
-              actionType: plural + "_LOAD",
-              items:JSON.parse(res.text),
-              index:params.index  
-            });
-            self.dispatch({
-              actionType: single + "_NOERROR",
-              index:params.index
-            }); 
-          }
-          else
-          {
-              logError.bind(self)(error,res, single, params.index);
-          }
-        });
+        setTimeout(()=>
+        {
+          request
+          .get("/" + plural)
+          .set("Accept", "application/json")
+          .end(function (error, res) {
+            if(res && res.ok)
+            {
+              self.dispatch({
+                actionType: plural + "_LOAD",
+                items:JSON.parse(res.text),
+                index:params.index  
+              });
+              self.dispatch({
+                actionType: single + "_NOERROR",
+                index:params.index
+              }); 
+            }
+            else
+            {
+                logError.bind(self)(error,res, single, params.index);
+            }
+          });
+        },0);
     },
-    _new: function(params){
-      this.dispatch({
-        actionType: single + "_NEW",
-        index: params.index,
-        item:params.item
-      });
-      if(!params.item){
+    set: function(params){
+      setTimeout(()=>
+      {
         this.dispatch({
-          actionType: single+ "_NOERROR",
-          index:params.index
-        }); 
-      }
+          actionType: single + "_NEW",
+          index: params.index,
+          item:params.item
+        });
+        if(!params.item){
+          this.dispatch({
+            actionType: single+ "_NOERROR",
+            index:params.index
+          }); 
+        }
+      },0);
     },
     post: function (params) {
-      var self = this;
+      setTimeout(()=>
+      {
+        var self = this;
         request
         .post("/" + plural)
         .send(params.item)
@@ -94,9 +102,12 @@ function crudActions(single, plural)
           }
           
         });
+      },0);
     },
     put: function (params) {
-      var self = this;
+      setTimeout( ()=>
+      {
+        var self = this;
         request
         .put("/"+ plural + "/" + params.item.get('_id'))
         .send(params.item)
@@ -120,9 +131,12 @@ function crudActions(single, plural)
               logError.bind(self)(error,res, single, params.index);
           }
         });
+      },0)
     },
     del: function (params) {
-      var self = this;
+      setTimeout( ()=>
+      {
+        var self = this;
         request
         .del("/"+ plural + "/" + params.id)
         .send()
@@ -149,9 +163,12 @@ function crudActions(single, plural)
               logError.bind(self)(error,res, single, params.index);
           }
         });
+      },0);
     },
     get: function (params) {
-      var self = this;
+      setTimeout( ()=>
+      {
+        var self = this;
         request
         .get("/"+ plural + "/" + params.id)
         .set("Accept", "application/json")
@@ -174,6 +191,51 @@ function crudActions(single, plural)
               logError.bind(self)(error,res, single, params.index, params.index);
           }
         });
+      },0);
+    },
+    children: function(name)
+    {
+      return {
+        get:function (params) {
+          setTimeout( ()=>
+          {
+            var self = this;
+            request
+            .get("/"+ plural + "/" + params.id + "/" + name)
+            .set("Accept", "application/json")
+            .end( (error, res)=> {
+              if(res && res.ok)
+              {
+                var data=fromJS(JSON.parse(res.text));           
+              }
+              else
+              {
+                  logError.bind(self)(error,res, single, params.index, params.index);
+              }
+            });
+          },0);
+        },
+        post:function (params) {
+          setTimeout( ()=>
+          {
+            var self = this;
+            request
+            .post("/"+ plural + "/" + params.id + "/" + name)
+            .set("Accept", "application/json")
+            .send(params.item)
+            .end( (error, res)=> {
+              if(res && res.ok)
+              {
+                var data=fromJS(JSON.parse(res.text));           
+              }
+              else
+              {
+                  logError.bind(self)(error,res, single, params.index, params.index);
+              }
+            });
+          },0);
+        }
+      }
     },
     dispose: function (index) {
       this.dispatch({
@@ -187,4 +249,4 @@ function crudActions(single, plural)
     }
   });
 }
-module.exports=crudActions;
+export default crudActions;

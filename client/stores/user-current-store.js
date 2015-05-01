@@ -1,8 +1,8 @@
-var Biff = require("../biff");
-var _ = require("lodash");
-var {fromJS}=require('immutable');
+import Biff from "../biff";
+import _ from "lodash";
+import {fromJS} from 'immutable';
 
-var   _user=fromJS(window.user);
+var _user=fromJS(window.user);
 // Creates a DataStore
 var UserStore = Biff.createStore({
   // Initial setup
@@ -23,4 +23,4 @@ var UserStore = Biff.createStore({
   }
 });
 
-module.exports = UserStore;
+export default UserStore;

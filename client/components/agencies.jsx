@@ -1,19 +1,53 @@
 // React
-var React = require("react");
-var crud = require("./crud-creator");
-var Store = require("../stores/agency-store");
+import React from "react";
+import {addons as ReactAddons} from 'react/addons';
+var PureRenderMixin = ReactAddons.PureRenderMixin;
 
-var Actions = require("../actions/agency-actions");
+import crud from "./crud-creator";
+import Store from "../stores/agency-store";
+import Actions from "../actions/agency-actions";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
-var Link = Router.Link;
-var FormInput = require("./formInput");
-
+import  {RouteHandler, Link} from "react-router";
+import FormInput from "./formInput";
 
 
-module.exports = 
+  var AgentsAction = Actions.children("AGENTS");
+  var Agents = React.createClass({
+      displayName: "Agents",
+      propTypes: {},
+      mixins: [
+        PureRenderMixin,
+        //store.mixin,
+        //errorStore.mixin
+      ],
+
+      getInitialState: function () {
+        return null;
+        //return {data:Map(),index:index++};
+      },
+
+      componentDidMount: function () {
+         AgentsAction.get({
+          index:0,
+          id:this.props.id
+         });
+      },
+
+      componentWillUnmount: function () {
+      },
+
+      storeDidChange: function () {
+      },
+
+      render: function () {   
+        return <div>AGENTS!!!</div>
+      }
+    });
+
+
+
+
+export default  
 {
 
   list:crud.lister(
@@ -55,7 +89,8 @@ module.exports =
         return (
           <div >
              <div>{this.props.item.get('title')}</div>
-             <div>{this.props.item.get('website')}</div>         
+             <div>{this.props.item.get('website')}</div>   
+             <Agents id={this.props.item.get('_id')}/>           
           </div>
         );
       },
@@ -94,7 +129,7 @@ module.exports =
   create:crud.creator (
     "AgencyNew",
     Actions,
-    Store.create,
+    Store.get,
     Store.error,
      function(){
         return (

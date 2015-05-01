@@ -1,9 +1,6 @@
-// React
-var React = require("react");
+import React from "react";
 
-// Router
-var Router = require("react-router");
-var Link = Router.Link;
+import {Link} from "react-router";
 
 // Component
 var Nav = React.createClass({
@@ -35,7 +32,7 @@ var Nav = React.createClass({
   }
 });
 
-module.exports = Nav;
+export default Nav;
 
 // Note {...this.props}, see:
 // http://facebook.github.io/react/docs/jsx-spread.html

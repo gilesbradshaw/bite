@@ -1,5 +1,4 @@
-// React
-var React = require("react");
+import React from "react";
 
 // Component
 var Input = React.createClass({
@@ -36,4 +35,4 @@ var Input = React.createClass({
   }
 });
 
-module.exports = Input;
+export default  Input;

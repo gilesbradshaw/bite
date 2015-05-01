@@ -1,3 +1,3 @@
-var crudStore = require("./crud-store");
+import crudStore from "./crud-store";
 
-module.exports = crudStore("AGENT", "AGENTS");
+export default crudStore("AGENT", "AGENTS");

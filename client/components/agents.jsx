@@ -1,19 +1,17 @@
 // React
-var React = require("react");
-var crud = require("./crud-creator");
-var Store = require("../stores/agent-store");
+import React from "react";
 
-var Actions = require("../actions/agent-actions");
+import crud from "./crud-creator";
+import Store from "../stores/agent-store";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
-var Link = Router.Link;
-var FormInput = require("./formInput");
+import Actions from "../actions/agent-actions";
+
+import  {RouteHandler, Link} from "react-router";
+import FormInput from "./formInput";
 
 
 
-module.exports = 
+export default 
 {
 
   list:crud.lister(
@@ -88,7 +86,7 @@ module.exports =
      "agentId"
   ),
   create:crud.creator (
-    "AgentNew",
+    "AgentCreate",
     Actions,
     Store.get,
     Store.error,

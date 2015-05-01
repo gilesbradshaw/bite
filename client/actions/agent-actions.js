@@ -1,3 +1,3 @@
-var crudActions = require("./crud-actions");
+import crudActions from "./crud-actions";
 
-module.exports = crudActions("AGENT", "AGENTS");
+export default crudActions("AGENT", "AGENTS");

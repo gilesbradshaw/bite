@@ -1,9 +1,6 @@
-// React
-var React = require("react");
+import React from "react";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
+import {RouteHandler} from "react-router";
 
 // Component
 var User = React.createClass({
@@ -26,4 +23,4 @@ var User = React.createClass({
   }
 });
 
-module.exports = User;
+export default User;

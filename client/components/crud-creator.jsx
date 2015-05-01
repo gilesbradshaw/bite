@@ -1,10 +1,11 @@
-var React = require("react");
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
-var {Map,toJS} = require("immutable");
+import React from "react";
+import {addons as ReactAddons} from 'react/addons';
+var PureRenderMixin = ReactAddons.PureRenderMixin;
+
+import {Map,toJS} from "immutable";
 // Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
-var Link = Router.Link;
+import  {RouteHandler, Link} from "react-router";
+
 var Error = require("./error");
 var Button = require("./button");
 
@@ -42,7 +43,9 @@ module.exports= {
 	    },
 
 	    componentWillMount: function () {
+	      console.log('list mounting ' + displayName);
 	      actions.load({index:this.state.index});
+	      console.log('list mounted ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -67,6 +70,7 @@ module.exports= {
 	{
 	  // Component
 	  function getState(index) {
+	  	console.log(displayName + ' getting state ' + index + ' rets ' + store.get(index));
 	    return {
 	      item:store.get(index)||null,
 	      error:errorStore.get(index)
@@ -91,8 +95,10 @@ module.exports= {
 	      return {data:Map(),index:index++};
 	    },
 
-	    componentDidMount: function () {
-	      actions._new({index:this.state.index});
+	    componentWillMount: function () {
+	      console.log('creator mounting ' + this.state.index + ' for ' + displayName);
+	      actions.set({index:this.state.index});
+	      console.log('creator mounted ' + this.state.index + ' for ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -106,7 +112,7 @@ module.exports= {
 
 	    handleChange:function(field){
 	      return function(evt){
-	      	actions._new({
+	      	actions.set({
 	      		index:this.state.index,
 	      		item:this.state.data.setIn(['item',field],evt.target.value).get('item')
 	      	});
@@ -118,10 +124,11 @@ module.exports= {
 	      	item:this.state.data.get('item')
 	      	});
 	    },
-	    render: function () {   
+	    render: function () {
 	      if(this.state.data.get('item'))
 	      {
 	        return <div >
+	        	<div>{this.props.condition}</div>
 	           <Item handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.post} value="Create" />
 	           <Error error={this.state.data.get('error')}/>
@@ -160,11 +167,13 @@ module.exports= {
 	      return {data:Map(),index:index++};
 	    },
 
-	    componentDidMount: function () {
+	    componentWillMount: function () {
+	      console.log('deleter mounting ' + displayName);
 	      actions.get({
 	      	index:this.state.index,
 	      	id:this.props.params[paramName]
 	      });
+	      console.log('deleter mounted ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -229,11 +238,13 @@ module.exports= {
 	      return {data:Map(),index:index++};
 	    },
 
-	    componentDidMount: function () {
+	    componentWillMount: function () {
+	       console.log('viewer mounting ' + displayName);
 	       actions.get({
 	       	index:this.state.index,
 	       	id:this.props.params[paramName]
 	       });
+	       console.log('viewer mounted ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -252,7 +263,7 @@ module.exports= {
 	          <div>
 	             <Item item={this.state.data.get('item')}/>
 	             <Error error={this.state.data.get('error')}/>
-	             <RouteHandler {...this.props} />
+	             <RouteHandler condition='conditional handler' {...this.props} />
 	          </div>
 	        );
 	      }
@@ -290,11 +301,13 @@ module.exports= {
 	      return {data:Map(),index:index++};
 	    },
 
-	    componentDidMount: function () {
+	    componentWillMount: function () {
+	      console.log('editor mounting ' + displayName);
 	      actions.get({
 	      	index:this.state.index,
 	      	id:this.props.params[paramName]
 	      });
+	       console.log('editor mounting ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -308,7 +321,7 @@ module.exports= {
 
 	    handleChange:function(field){
 	      return function(evt){
-	      	actions._new({
+	      	actions.set({
 	      		index:this.state.index,
 	      		item:this.state.data.setIn(['item',field],evt.target.value).get('item')
 	      	});

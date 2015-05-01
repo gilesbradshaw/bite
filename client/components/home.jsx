@@ -1,9 +1,8 @@
-// React
-var React = require("react");
+import React from "react";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
+import  {RouteHandler} from "react-router";
+import FormInput from "./formInput";
+
 
 // Component
 var Home = React.createClass({
@@ -29,4 +28,4 @@ var Home = React.createClass({
   }
 });
 
-module.exports = Home;
+export default Home;

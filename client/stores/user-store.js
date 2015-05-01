@@ -1,6 +1,6 @@
-var Biff = require("../biff");
-var _ = require("lodash");
-var {List,fromJS} = require('immutable');
+import Biff from "../biff";
+import _ from "lodash";
+import {List,fromJS} from 'immutable';
 
 var _users= List.of(...[]);
 function loadUsers (users) {    
@@ -38,4 +38,4 @@ var UserStore = Biff.createStore({
 
 });
 
-module.exports = UserStore;
+export default UserStore;

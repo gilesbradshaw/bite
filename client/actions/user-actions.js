@@ -1,8 +1,8 @@
-var Biff = require("../biff");
+import Biff from "../biff";
 
 // Request
-var request = require("superagent");
-var {fromJS} = require('immutable');
+import request from "superagent";
+import {fromJS} from 'immutable';
 
 var UserActions = Biff.createActions({
   loadUsers: function () {
@@ -122,4 +122,4 @@ var UserActions = Biff.createActions({
   },
 });
 
-module.exports = UserActions;
+export default UserActions;

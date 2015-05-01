@@ -1,3 +1,3 @@
-var Biff = require("biff");
+import Biff from "biff";
 
-module.exports = new Biff();
+export default new Biff();

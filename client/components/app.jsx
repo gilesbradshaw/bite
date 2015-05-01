@@ -1,13 +1,14 @@
 // React
-var React = require("react");
+import React from "react";
 
 // Router
-var Router = require("react-router");
+import Router from "react-router";
+
 var RouteHandler = Router.RouteHandler;
 
 // Child Components
-var Nav = require("./nav");
-var UserLoggedIn = require("./user.LoggedIn");
+import Nav from "./nav";
+import UserLoggedIn from "./user.LoggedIn";
 
 // Component
 var App = React.createClass({
@@ -32,4 +33,4 @@ var App = React.createClass({
   }
 });
 
-module.exports = App;
+export default App;

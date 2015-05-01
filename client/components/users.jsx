@@ -1,12 +1,9 @@
-// React
-var React = require("react");
-var UserStore = require("../stores/user-store");
-var UserActions = require("../actions/user-actions");
-var User = require("./user");
+import React from "react";
+import UserStore from "../stores/user-store";
+import UserActions from "../actions/user-actions";
+import User from "./user";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
+import {RouteHandler} from  "react-router";
 
 // Component
 function getState() {
@@ -55,4 +52,4 @@ var Users = React.createClass({
   }
 });
 
-module.exports = Users;
+export default Users;

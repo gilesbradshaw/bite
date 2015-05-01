@@ -1,6 +1,6 @@
-var Biff = require("../biff");
-var _ = require("lodash");
-var {List,fromJS,Map} = require('immutable');
+import Biff from "../biff";
+import _ from "lodash";
+import {List,fromJS,Map} from 'immutable';
 
 
 
@@ -47,7 +47,7 @@ function getStore(name)
       this.emitChange();
     }
     if (payload.actionType === name + "_NEW") {
-      _item=_item.set(payload.index,payload.item); 
+      _item=_item.set(payload.index,payload.item || Map()); 
       this.emitChange();
     }
     if (payload.actionType === name + "_DISPOSE") {
@@ -81,12 +81,11 @@ function errorStore(name)
   });
 }
 
-module.exports = function(single,plural)
+export default function(single,plural)
 {
   return {
     list:listStore(plural),
     get:getStore(single),
-    create:createStore(single),
     error:errorStore(single)
   }
 }

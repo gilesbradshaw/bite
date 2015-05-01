@@ -1,10 +1,7 @@
-// React
-var React = require("react");
-var UserStore = require("../stores/user-current-store");
+import React from "react";
+import UserStore from "../stores/user-current-store";
 
-// Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
+import {RouteHandler} from  "react-router";
 
 function getState() {
   return {user:UserStore.getCurrentUser()};
@@ -41,4 +38,4 @@ var User = React.createClass({
   }
 });
 
-module.exports = User;
+export default User;

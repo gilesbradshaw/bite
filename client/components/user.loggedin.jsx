@@ -1,11 +1,9 @@
-// React
-var React = require("react");
-var UserStore = require("../stores/user-current-store");
-var UserActions = require("../actions/user-actions");
+import React from "react";
+import UserStore from "../stores/user-current-store";
+import UserActions from "../actions/user-actions";
 
 // Router
-var Router = require("react-router");
-var RouteHandler = Router.RouteHandler;
+import {RouteHandler, Link} from "react-router";
 
 
 // Component
@@ -47,17 +45,17 @@ var UserLoggedIn= React.createClass({
     {
       return (
         <div>
-          <span className="navLink"><Router.Link to="me">{this.state.user.get('displayName')}</Router.Link></span>
-          <span className="navLink"><Router.Link to="signout">sign out</Router.Link></span>
+          <span className="navLink"><Link to="me">{this.state.user.get('displayName')}</Link></span>
+          <span className="navLink"><Link to="signout">sign out</Link></span>
         </div>
       );
     }else
     {
       return (
-        <span className="navLink"><Router.Link to="signin">Sign in</Router.Link></span>
+        <span className="navLink"><Link to="signin">Sign in</Link></span>
       );
     }
   }
 });
 
-module.exports = UserLoggedIn;
+export default UserLoggedIn;

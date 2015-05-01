@@ -1,5 +1,5 @@
 // React
-var React = require("react");
+import React from "react";
 
 // Component
 var NotFound = React.createClass({
@@ -22,4 +22,4 @@ var NotFound = React.createClass({
   }
 });
 
-module.exports = NotFound;
+export default NotFound;

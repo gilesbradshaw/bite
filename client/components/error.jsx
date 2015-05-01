@@ -1,5 +1,4 @@
-// React
-var React = require("react");
+import React from "react";
 
 // Child Components
 
@@ -17,4 +16,4 @@ var Error = React.createClass({
   }
 });
 
-module.exports = Error;
+export default Error;

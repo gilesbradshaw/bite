@@ -1,6 +1,6 @@
-var Biff = require("../biff");
-var _ = require("lodash");
-var immutable=require('immutable');
+import Biff from "../biff";
+import _ from "lodash";
+
 var  _error=null;
 
 // Creates a DataStore
