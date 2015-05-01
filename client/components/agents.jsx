@@ -2,7 +2,7 @@
 import React from "react";
 
 import crud from "./crud-creator";
-import Store from "../stores/agent-store";
+import {agent as Store} from "../stores/store";
 
 import {agent as Actions} from "../actions/actions";
 

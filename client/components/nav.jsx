@@ -30,6 +30,12 @@ var Nav = React.createClass({
         <span className="navLink"><Link to="opportunities">Opportunities</Link></span>
         <span className="navLink"><Link to="opportunity-create">Create</Link></span>
 
+        <span className="navLink"><Link to="notes">Notes</Link></span>
+        <span className="navLink"><Link to="note-create">Create</Link></span>
+
+        <span className="navLink"><Link to="tasks">Tasks</Link></span>
+        <span className="navLink"><Link to="task-create">Create</Link></span>
+
         <span className="navLink"><Link to="users">Users</Link></span>
         <span className="navLink"><Link to="me">Me</Link></span>
         <span className="navLink"><Link to="signup">Sign up</Link></span>

@@ -4,8 +4,8 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
-import {agency as Store} from "../stores/store";
-import {agency as Actions} from "../actions/actions";
+import {note as Store} from "../stores/store";
+import {note as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
@@ -18,7 +18,7 @@ export default
 {
 
   list:crud.lister(
-    "Agencies",
+    "Notes",
     Actions,
     Store.list,
     Store.error,
@@ -27,7 +27,7 @@ export default
       return function () {
         return (
           <div>
-            <p>Agency Bank:</p>
+            <p>Note Bank:</p>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -35,20 +35,19 @@ export default
       };
     },
     function (data) {
-      var params={agencyId:data.get('_id')};
+      var params={noteId:data.get('_id')};
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="agency" params={params}>View</Link></span>
-          <span><Link to="agency-edit" params={params}>Edit</Link></span>
-          <span><Link to="agency-delete" params={params}>Delete</Link></span>
+          <span><Link to="note" params={params}>View</Link></span>
+          <span><Link to="note-edit" params={params}>Edit</Link></span>
+          <span><Link to="note-delete" params={params}>Delete</Link></span>
         </div>
-        //<Agency agency={data} key={data.get('_id')} />
       );
     }
   ),
   view:crud.viewer (
-     "AgencyView",
+     "NoteView",
       Actions,
       Store.get,
       Store.error,
@@ -56,14 +55,13 @@ export default
         return (
           <div >
              <div>{this.props.item.get('title')}</div>
-             <div>{this.props.item.get('website')}</div>   
           </div>
         );
       },
-      "agencyId"
+      "noteId"
   ),
   edit:module.exports = crud.editor (
-    "AgencyEdit",
+    "NoteEdit",
      Actions,
      Store.get,
      Store.error,
@@ -71,14 +69,13 @@ export default
         return (
           <div >
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-             <FormInput id='website' title='Web site'  value={this.props.item.get('website')} onChange={this.props.handleChange('website')} />
           </div>
         );
      },
-     "agencyId"
+     "noteId"
   ),
   del:crud.deleter (
-    "AgencyDelete",
+    "NoteDelete",
     Actions,
     Store.get,
     Store.error,
@@ -86,14 +83,13 @@ export default
         return (
           <div >
              <div>{this.props.item.get('title')}</div>
-             <div>{this.props.item.get('website')}</div>
           </div>
         );
      },
-     "agencyId"
+     "noteId"
   ),
   create:crud.creator (
-    "AgencyNew",
+    "NoteNew",
     Actions,
     Store.get,
     Store.error,
@@ -101,7 +97,6 @@ export default
         return (
           <div>
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-             <FormInput id='website' title='Web site'  value={this.props.item.get('website')} onChange={this.props.handleChange('website')} />
           </div>
         );
      }

@@ -2,7 +2,7 @@
 import React from "react";
 
 import crud from "./crud-creator";
-import Store from "../stores/profile-store";
+import {profile as Store} from "../stores/store";
 
 import {profile as Actions} from "../actions/actions";
 

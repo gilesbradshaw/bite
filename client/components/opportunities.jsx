@@ -2,7 +2,7 @@
 import React from "react";
 
 import crud from "./crud-creator";
-import Store from "../stores/opportunity-store";
+import {opportunity as Store} from "../stores/store";
 
 import {opportunity as Actions} from "../actions/actions";
 

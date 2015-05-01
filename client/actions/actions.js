@@ -42,3 +42,18 @@ var opportunity = crudActions(
 );
 export {opportunity as opportunity};
 
+var note = crudActions(
+	"NOTE", 
+	"NOTES",
+	(params)=>
+		"/NOTES"
+);
+export {note as note};
+
+var task = crudActions(
+	"TASK", 
+	"TASKS",
+	(params)=>
+		"/TASKS"
+);
+export {task as task};

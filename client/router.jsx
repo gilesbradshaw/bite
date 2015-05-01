@@ -8,6 +8,8 @@ import Agencies from "./components/agencies";
 import Agents from "./components/agents";
 import Profiles from "./components/profiles";
 import Opportunities from "./components/opportunities";
+import Tasks from "./components/tasks";
+import Notes from "./components/notes";
 import Users from "./components/users";
 import User from "./components/user.edit";
 import Me from "./components/user.me";
@@ -58,7 +60,18 @@ var routes = (
     <Route name="opportunity-create" handler={Opportunities.create} />
     <Route name="opportunity-edit"  path="opportunity-edit/:opportunityId" handler={Opportunities.edit} />
     <Route name="opportunity-delete"  path="opportunity-delete/:opportunityId" handler={Opportunities.del} />
+  
+    <Route name="notes" handler={Notes.list} />
+    <Route name="note" path="note/:noteId" handler={Notes.view} />
+    <Route name="note-create" handler={Notes.create} />
+    <Route name="note-edit"  path="note-edit/:noteId" handler={Notes.edit} />
+    <Route name="note-delete"  path="note-delete/:noteId" handler={Notes.del} />
 
+    <Route name="tasks" handler={Tasks.list} />
+    <Route name="task" path="task/:taskId" handler={Tasks.view} />
+    <Route name="task-create" handler={Tasks.create} />
+    <Route name="task-edit"  path="task-edit/:taskId" handler={Tasks.edit} />
+    <Route name="task-delete"  path="task-delete/:taskId" handler={Tasks.del} />
 
     <Route name="users" handler={Users}>
       <Route name="user" path="user/:userId" handler={User} />
