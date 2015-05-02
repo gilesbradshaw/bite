@@ -18,6 +18,11 @@ module.exports = function(app) {
 		.put(users.requiresLogin, notes.hasAuthorization, notes.update)
 		.delete(users.requiresLogin, notes.hasAuthorization, notes.delete);
 
+	app.route('/opportunities/:opportunityId/notes/:noteId')
+		.get(notes.read)
+		.put(users.requiresLogin, notes.hasAuthorization, notes.update);
+
 	// Finish by binding the note middleware
 	app.param('noteId', notes.noteByID);
+	app.param('opportunityId', notes.notesByOpportunityID);
 };

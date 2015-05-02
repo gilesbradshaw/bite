@@ -41,9 +41,6 @@ exports.addAgent = function(req, res) {
 			res.json(agent);
 		}
 	});
-	
-	
-	
 };
 
 

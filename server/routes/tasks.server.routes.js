@@ -17,6 +17,12 @@ module.exports = function(app) {
 		.put(users.requiresLogin, tasks.hasAuthorization, tasks.update)
 		.delete(users.requiresLogin, tasks.hasAuthorization, tasks.delete);
 
+	app.route('/opportunities/:opportunityId/tasks/:taskId')
+		.get(tasks.read)
+		.put(users.requiresLogin, tasks.hasAuthorization, tasks.update);
+
+
 	// Finish by binding the task middleware
 	app.param('taskId', tasks.taskByID);
+	app.param('opportunityId', tasks.tasksByOpportunityID);
 };

@@ -6,6 +6,8 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Opportunity = mongoose.model('Opportunity'),
+	Task = mongoose.model('Task'),
+	Note = mongoose.model('Note'),
 	_ = require('lodash');
 
 /**
@@ -22,6 +24,43 @@ exports.create = function(req, res) {
 			});
 		} else {
 			res.json(opportunity);
+		}
+	});
+};
+
+
+
+/**
+ * Add a task
+ */
+exports.addTask = function(req, res) {
+	var task = new Task(req.body);
+	task.opportunity=req.opportunity;
+	task.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(task);
+		}
+	});
+};
+
+
+/**
+ * Add a note
+ */
+exports.addNote = function(req, res) {
+	var note = new Note(req.body);
+	note.opportunity=req.opportunity;
+	note.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(note);
 		}
 	});
 };

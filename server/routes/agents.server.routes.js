@@ -17,8 +17,8 @@ module.exports = function(app) {
 		.put(users.requiresLogin, agents.hasAuthorization, agents.update)
 		.delete(users.requiresLogin, agents.hasAuthorization, agents.delete);
 	
-	app.route('/agents/agency/:agencyId')
-		.get(agents.listByAgency);
+	//app.route('/agents/agency/:agencyId')
+	//	.get(agents.listByAgency);
 
 	app.route('/agencies/:agencyId/agents/:agentId')
 		.get(agents.read)

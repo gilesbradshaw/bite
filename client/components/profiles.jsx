@@ -36,6 +36,8 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('firstName')}</div>
+          <div>{data.get('displayName')}</div>
+          <div>{data.get('userName')}</div>
           <span><Link to="profile" params={params}>View</Link></span>
           <span><Link to="profile-edit" params={params}>Edit</Link></span>
           <span><Link to="profile-delete" params={params}>Delete</Link></span>

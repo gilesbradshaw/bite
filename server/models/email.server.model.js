@@ -6,8 +6,7 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-
-var TaskSchema = new Schema({
+var EmailSchema = new Schema({
 	created: {
 		type: Date,
 		default: Date.now
@@ -28,4 +27,4 @@ var TaskSchema = new Schema({
 	}
 });
 
-mongoose.model('Task', TaskSchema);
+mongoose.model('Email', EmailSchema);

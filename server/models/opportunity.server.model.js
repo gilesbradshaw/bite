@@ -6,9 +6,7 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-/**
- * Article Schema
- */
+
 var OpportunitySchema = new Schema({
 	created: {
 		type: Date,

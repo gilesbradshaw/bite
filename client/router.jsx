@@ -10,6 +10,7 @@ import Profiles from "./components/profiles";
 import Opportunities from "./components/opportunities";
 import Tasks from "./components/tasks";
 import Notes from "./components/notes";
+import Emails from "./components/emails";
 import Users from "./components/users";
 import User from "./components/user.edit";
 import Me from "./components/user.me";
@@ -56,7 +57,26 @@ var routes = (
     <Route name="profile-delete"  path="profile-delete/:profileId" handler={Profiles.del} />
 
     <Route name="opportunities" handler={Opportunities.list} />
-    <Route name="opportunity" path="opportunity/:opportunityId" handler={Opportunities.view} />
+    <Route name="opportunity" path="opportunity/:opportunityId" handler={Opportunities.view} >
+      <Route name="opportunity-tasks" path='tasks' handler={Tasks.list} >
+        <Route name="opportunity-tasks-create" path='create' handler={Tasks.create} />
+        <Route name="opportunity-tasks-view" path='view/:taskId' handler={Tasks.view} />
+        <Route name="opportunity-tasks-edit" path='edit/:taskId' handler={Tasks.edit} />
+        <Route name="opportunity-tasks-delete" path='delete/:taskId' handler={Tasks.del} />
+      </Route>
+      <Route name="opportunity-notes" path='notes' handler={Notes.list} >
+        <Route name="opportunity-notes-create" path='create' handler={Notes.create} />
+        <Route name="opportunity-notes-view" path='view/:noteId' handler={Notes.view} />
+        <Route name="opportunity-notes-edit" path='edit/:noteId' handler={Notes.edit} />
+        <Route name="opportunity-notes-delete" path='delete/:noteId' handler={Notes.del} />
+      </Route>
+      <Route name="opportunity-emails" path='emails' handler={Emails.list} >
+        <Route name="opportunity-emails-create" path='create' handler={Emails.create} />
+        <Route name="opportunity-emails-view" path='view/:emailId' handler={Emails.view} />
+        <Route name="opportunity-emails-edit" path='edit/:emailId' handler={Emails.edit} />
+        <Route name="opportunity-emails-delete" path='delete/:emailId' handler={Emails.del} />
+      </Route>
+    </Route>
     <Route name="opportunity-create" handler={Opportunities.create} />
     <Route name="opportunity-edit"  path="opportunity-edit/:opportunityId" handler={Opportunities.edit} />
     <Route name="opportunity-delete"  path="opportunity-delete/:opportunityId" handler={Opportunities.del} />
@@ -72,6 +92,12 @@ var routes = (
     <Route name="task-create" handler={Tasks.create} />
     <Route name="task-edit"  path="task-edit/:taskId" handler={Tasks.edit} />
     <Route name="task-delete"  path="task-delete/:taskId" handler={Tasks.del} />
+
+    <Route name="emails" handler={Emails.list} />
+    <Route name="email" path="task/:taskId" handler={Emails.view} />
+    <Route name="email-create" handler={Emails.create} />
+    <Route name="email-edit"  path="Email-edit/:emailId" handler={Emails.edit} />
+    <Route name="email-delete"  path="Email-delete/:emailId" handler={Emails.del} />
 
     <Route name="users" handler={Users}>
       <Route name="user" path="user/:userId" handler={User} />

@@ -17,3 +17,6 @@ export {profile as profile};
 
 var task = crudStore("TASK", "TASKS"); 
 export {task as task};
+
+var email = crudStore("EMAIL", "EMAILS"); 
+export {email as email};

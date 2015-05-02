@@ -45,15 +45,35 @@ export {opportunity as opportunity};
 var note = crudActions(
 	"NOTE", 
 	"NOTES",
-	(params)=>
-		"/NOTES"
+	(params)=> {
+		if(params.props.params.opportunityId)
+			return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/NOTES";
+		else
+			return "/NOTES";
+	}
 );
 export {note as note};
 
 var task = crudActions(
 	"TASK", 
 	"TASKS",
-	(params)=>
-		"/TASKS"
+	(params)=> {
+		if(params.props.params.opportunityId)
+			return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/TASKS";
+		else
+			return "/TASKS";
+	}
+);
+export {task as task};
+
+var email = crudActions(
+	"EMAIL", 
+	"EMAILS",
+	(params)=> {
+		if(params.props.params.opportunityId)
+			return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/EMAILS";
+		else
+			return "/EMAILS";
+	}
 );
 export {task as task};

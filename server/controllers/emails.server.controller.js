@@ -5,66 +5,66 @@
  */
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
-	Note = mongoose.model('Note'),
+	Email = mongoose.model('Email'),
 	_ = require('lodash');
 
 /**
- * Create a note
+ * Create a email
  */
 exports.create = function(req, res) {
-	var note = new Note(req.body);
-	note.user = req.user;
+	var email = new Email(req.body);
+	email.user = req.user;
 	console.log('atricle updating');
-	note.save(function(err) {
+	email.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json(note);
+			res.json(email);
 		}
 	});
 };
 
 /**
- * Show the current note
+ * Show the current email
  */
 exports.read = function(req, res) {
-	res.json(req.note);
+	res.json(req.email);
 };
 
 /**
- * Update a note
+ * Update a email
  */
 exports.update = function(req, res) {
-	var note = req.note;
+	var email = req.email;
 
-	note = _.extend(note, req.body);
+	email = _.extend(email, req.body);
 
-	note.save(function(err) {
+	email.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json(note);
+			res.json(email);
 		}
 	});
 };
 
 /**
- * Delete an note
+ * Delete an email
  */
 exports.delete = function(req, res) {
-	var note = req.note;
+	var email = req.email;
 
-	note.remove(function(err) {
+	email.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json(note);
+			res.json(email);
 		}
 	});
 };
@@ -73,7 +73,7 @@ exports.delete = function(req, res) {
  * List of Opportunities
  */
 exports.list = function(req, res) {
-	Note.find().sort('-created').populate('user', 'displayName').exec(function(err, opportunities) {
+	Email.find().sort('-created').populate('user', 'displayName').exec(function(err, opportunities) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -86,37 +86,36 @@ exports.list = function(req, res) {
 
 
 exports.listByOpportunity = function(req, res) {
-	res.json(req.notes);
+	res.json(req.emails);
 };
 
-
 /**
- * Note middleware
+ * Email middleware
  */
-exports.noteByID = function(req, res, next, id) {
-	Note.findById(id).populate('user', 'displayName').exec(function(err, note) {
+exports.emailByID = function(req, res, next, id) {
+	Email.findById(id).populate('user', 'displayName').exec(function(err, email) {
 		if (err) return next(err);
-		if (!note) return next(new Error('Failed to load note ' + id));
-		req.note = note;
+		if (!email) return next(new Error('Failed to load email ' + id));
+		req.email = email;
 		next();
 	});
 };
 
-exports.notesByOpportunityID = function(req, res, next, id) {
-	Note.find({'opportunity':new mongoose.Types.ObjectId(id)}).exec(function(err,notes){
+exports.emailsByOpportunityID = function(req, res, next, id) {
+	Email.find({'opportunity':new mongoose.Types.ObjectId(id)}).exec(function(err,emails){
 		if (err) return next(err);
-		if (!notes) return next(new Error('Failed to load notes for opportunity ' + id));
-		req.notes = notes;
+		if (!emails) return next(new Error('Failed to load emails for opportunity ' + id));
+		req.emails = emails;
 		next();
 	});	
 };
 
 
 /**
- * Note authorization middleware
+ * Email authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.note.user.id !== req.user.id) {
+	if (req.email.user.id !== req.user.id) {
 		return res.status(403).send({
 			message: 'User is not authorized'
 		});

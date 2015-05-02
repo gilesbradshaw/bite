@@ -6,9 +6,7 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-/**
- * Article Schema
- */
+
 var NoteSchema = new Schema({
 	created: {
 		type: Date,
@@ -23,6 +21,10 @@ var NoteSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
+	},
+	opportunity: {
+		type: Schema.ObjectId,
+		ref: 'Opportunity'
 	}
 });
 

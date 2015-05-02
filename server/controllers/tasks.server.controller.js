@@ -84,6 +84,11 @@ exports.list = function(req, res) {
 	});
 };
 
+
+exports.listByOpportunity = function(req, res) {
+	res.json(req.tasks);
+};
+
 /**
  * Task middleware
  */
@@ -95,6 +100,16 @@ exports.taskByID = function(req, res, next, id) {
 		next();
 	});
 };
+
+exports.tasksByOpportunityID = function(req, res, next, id) {
+	Task.find({'opportunity':new mongoose.Types.ObjectId(id)}).exec(function(err,tasks){
+		if (err) return next(err);
+		if (!tasks) return next(new Error('Failed to load tasks for opportunity ' + id));
+		req.tasks = tasks;
+		next();
+	});	
+};
+
 
 /**
  * Task authorization middleware

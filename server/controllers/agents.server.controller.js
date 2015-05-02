@@ -105,8 +105,7 @@ exports.agentsByAgencyID = function(req, res, next, id) {
 		if (!agents) return next(new Error('Failed to load agents for agency ' + id));
 		req.agents = agents;
 		next();
-	});
-	
+	});	
 };
 
 /**

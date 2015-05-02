@@ -7,9 +7,7 @@ var mongoose = require('mongoose'),
 validators = require('mongoose-validators'),
 	Schema = mongoose.Schema;
 
-/**
- * Agent Schema
- */
+
 var AgentSchema = new Schema({
 	created: {
 		type: Date,
