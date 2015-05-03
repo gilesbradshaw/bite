@@ -38,7 +38,7 @@ export default
           <div>{data.get('firstName')}</div>
           <div>{data.get('displayName')}</div>
           <div>{data.get('userName')}</div>
-          <span><Link to="profile" params={params}>View</Link></span>
+          <span><Link to="profile-view" params={params}>View</Link></span>
           <span><Link to="profile-edit" params={params}>Edit</Link></span>
           <span><Link to="profile-delete" params={params}>Delete</Link></span>
         </div>
@@ -54,6 +54,20 @@ export default
         return (
           <div >
              <div>{this.props.item.get('firstName')}</div>
+          </div>
+        );
+      },
+      "profileId"
+  ),
+  head:crud.viewer (
+     "ProfileHead",
+      Actions,
+      Store.get,
+      Store.error,
+      function(){   
+        return (
+          <div >
+             <div>Profile header</div>
           </div>
         );
       },

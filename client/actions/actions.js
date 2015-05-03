@@ -1,5 +1,16 @@
 import crudActions from "./crud-actions";
 
+
+
+var opportunityType=  crudActions(
+	"OPPORTUNITYTYPE", 
+	"OPPORTUNITYTYPES",
+	(params)=>
+		"/OPPORTUNITYTYPES"
+) ;
+export {opportunityType as opportunityType};
+
+
 var agency=  crudActions(
 	"AGENCY", 
 	"AGENCIES",
@@ -76,4 +87,4 @@ var email = crudActions(
 			return "/EMAILS";
 	}
 );
-export {task as task};
+export {email as email};

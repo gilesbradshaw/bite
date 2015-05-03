@@ -4,8 +4,8 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
-import {email as Store} from "../stores/store";
-import {email as Actions} from "../actions/actions";
+import {opportunityType as Store} from "../stores/store";
+import {opportunityType as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
@@ -18,7 +18,7 @@ export default
 {
 
   list:crud.lister(
-    "Emails",
+    "OpportunityTypes",
     Actions,
     Store.list,
     Store.error,
@@ -27,7 +27,7 @@ export default
       return function () {
         return (
           <div>
-            <p>Email Bank:</p>
+            <p>Opportunity Type Bank:</p>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -35,19 +35,20 @@ export default
       };
     },
     function (data) {
-      var params={emailId:data.get('_id')};
+      var params={opportunityTypeId:data.get('_id')};
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="email-view" params={params}>View</Link></span>
-          <span><Link to="email-edit" params={params}>Edit</Link></span>
-          <span><Link to="email-delete" params={params}>Delete</Link></span>
+          <span><Link to="opportunityType" params={params}>View</Link></span>
+          <span><Link to="opportunityType-edit" params={params}>Edit</Link></span>
+          <span><Link to="opportunityType-delete" params={params}>Delete</Link></span>
         </div>
+        //<Agency agency={data} key={data.get('_id')} />
       );
     }
   ),
   view:crud.viewer (
-     "EmailView",
+     "OpportunityTypeView",
       Actions,
       Store.get,
       Store.error,
@@ -58,24 +59,10 @@ export default
           </div>
         );
       },
-      "emailId"
-  ),
-  head:crud.viewer (
-     "EmailHead",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{'ok this is the head ' + this.props.item.get('title')}</div>
-          </div>
-        );
-      },
-      "emailId"
+      "opportunityTypeId"
   ),
   edit:module.exports = crud.editor (
-    "EmailEdit",
+    "OpportunityTypeEdit",
      Actions,
      Store.get,
      Store.error,
@@ -86,10 +73,10 @@ export default
           </div>
         );
      },
-     "emailId"
+     "opportunityTypeId"
   ),
   del:crud.deleter (
-    "EmailDelete",
+    "OpportunityTypeDelete",
     Actions,
     Store.get,
     Store.error,
@@ -100,10 +87,10 @@ export default
           </div>
         );
      },
-     "emailId"
+     "opportunityTypeId"
   ),
   create:crud.creator (
-    "EmailNew",
+    "OpportunityTypeNew",
     Actions,
     Store.get,
     Store.error,

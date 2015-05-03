@@ -25,4 +25,5 @@ module.exports = function(app) {
 	// Finish by binding the email middleware
 	app.param('emailId', emails.emailByID);
 	app.param('opportunityId', emails.emailsByOpportunityID);
+	app.param('profileId', emails.emailsByProfileID);
 };

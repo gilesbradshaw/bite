@@ -39,7 +39,7 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="agency" params={params}>View</Link></span>
+          <span><Link to="agency-item" params={params}>View</Link></span>
           <span><Link to="agency-edit" params={params}>Edit</Link></span>
           <span><Link to="agency-delete" params={params}>Delete</Link></span>
         </div>

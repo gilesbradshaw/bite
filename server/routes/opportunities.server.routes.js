@@ -6,7 +6,8 @@
 var users = require('../controllers/users.server.controller'),
 	opportunities = require('../controllers/opportunities.server.controller'),
 	tasks= require('../controllers/tasks.server.controller'),
-	notes= require('../controllers/notes.server.controller');
+	notes= require('../controllers/notes.server.controller'),
+	emails= require('../controllers/emails.server.controller');
 
 module.exports = function(app) {
 	// Opportunity Routes
@@ -21,6 +22,10 @@ module.exports = function(app) {
 	app.route('/opportunities/:opportunityId/notes')
 		.get(notes.listByOpportunity)
 		.post(users.requiresLogin, opportunities.hasAuthorization,opportunities.addNote);
+
+	app.route('/opportunities/:opportunityId/emails')
+		.get(emails.listByOpportunity)
+		.post(users.requiresLogin, opportunities.hasAuthorization,opportunities.addEmail);
 
 	app.route('/opportunities/:opportunityId')
 		.get(opportunities.read)

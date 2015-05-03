@@ -39,7 +39,7 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="note" params={params}>View</Link></span>
+          <span><Link to="note-view" params={params}>View</Link></span>
           <span><Link to="note-edit" params={params}>Edit</Link></span>
           <span><Link to="note-delete" params={params}>Delete</Link></span>
         </div>
@@ -54,7 +54,21 @@ export default
       function(){   
         return (
           <div >
-             <div>{this.props.item.get('title')}</div>
+             <div>{'hhh   ' + this.props.item.get('title')}</div>
+          </div>
+        );
+      },
+      "noteId"
+  ),
+  head:crud.viewer (
+     "NoteView",
+      Actions,
+      Store.get,
+      Store.error,
+      function(){   
+        return (
+          <div >
+             <div>{'ok this is the head for a note ' + this.props.item.get('title')}</div>
           </div>
         );
       },

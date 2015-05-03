@@ -36,7 +36,7 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="agent" params={params}>View</Link></span>
+          <span><Link to="agent-view" params={params}>View</Link></span>
           <span><Link to="agent-edit" params={params}>Edit</Link></span>
           <span><Link to="agent-delete" params={params}>Delete</Link></span>
         </div>

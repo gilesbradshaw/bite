@@ -89,6 +89,10 @@ exports.listByOpportunity = function(req, res) {
 	res.json(req.notes);
 };
 
+exports.listByProfile = function(req, res) {
+	res.json(req.notes);
+};
+
 
 /**
  * Note middleware
@@ -111,6 +115,14 @@ exports.notesByOpportunityID = function(req, res, next, id) {
 	});	
 };
 
+exports.notesByProfileID = function(req, res, next, id) {
+	Note.find({'user':new mongoose.Types.ObjectId(id)}).exec(function(err,notes){
+		if (err) return next(err);
+		if (!notes) return next(new Error('Failed to load notes for user ' + id));
+		req.notes = notes;
+		next();
+	});	
+};
 
 /**
  * Note authorization middleware

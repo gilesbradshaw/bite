@@ -40,7 +40,7 @@ exports.update = function(req, res) {
 	var email = req.email;
 
 	email = _.extend(email, req.body);
-
+	email.user=req.user;
 	email.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -89,6 +89,11 @@ exports.listByOpportunity = function(req, res) {
 	res.json(req.emails);
 };
 
+exports.listByProfile = function(req, res) {
+	res.json(req.emails);
+};
+
+
 /**
  * Email middleware
  */
@@ -109,12 +114,26 @@ exports.emailsByOpportunityID = function(req, res, next, id) {
 		next();
 	});	
 };
+exports.emailsByProfileID = function(req, res, next, id) {
+	Email.find({'user':new mongoose.Types.ObjectId(id)}).exec(function(err,emails){
+		if (err) return next(err);
+		if (!emails) return next(new Error('Failed to load emails for user ' + id));
+		req.emails = emails;
+		next();
+	});	
+};
 
 
 /**
  * Email authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
+	if(!req.email.user){
+		return res.status(403).send({
+			message: 'Email has no user!!!'
+		});
+	}
+
 	if (req.email.user.id !== req.user.id) {
 		return res.status(403).send({
 			message: 'User is not authorized'

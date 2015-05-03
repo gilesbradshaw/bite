@@ -99,12 +99,10 @@ module.exports= {
 	    },
 
 	    componentWillMount: function () {
-	      console.log('creator mounting ' + this.state.index + ' for ' + displayName);
 	      actions.set(
 	      	{
 	      		index:this.state.index
 	      	});
-	      console.log('creator mounted ' + this.state.index + ' for ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -161,6 +159,13 @@ module.exports= {
 	    displayName: displayName+'Item', 
 	    render: render
 	  });
+	  function init(props){
+		  actions.get({
+	      	index:this.state.index,
+	      	id:props.params[paramName],
+	      	props:props
+	      });
+	  };
 	  return React.createClass({
 	  	displayName: displayName,
 	    propTypes: {},
@@ -175,19 +180,17 @@ module.exports= {
 	    },
 
 	    componentWillMount: function () {
-	      console.log('deleter mounting ' + displayName);
-	      actions.get({
-	      	index:this.state.index,
-	      	id:this.props.params[paramName],
-	      	props:this.props
-	      });
-	      console.log('deleter mounted ' + displayName);
+	    	console.log("deleter mount " + this.props.params.agencyId);
+	    	init.bind(this)(this.props);
 	    },
 
 	    componentWillUnmount: function () {
 	    	actions.dispose(this.state.index);
 	    },
-
+	   	componentWillReceiveProps: function (props) 
+	    {
+	    	init.bind(this)(props);
+	    },
 	    storeDidChange: function () {
 	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
@@ -232,6 +235,13 @@ module.exports= {
 	    displayName: displayName+'Item', 
 	    render: render
 	  });
+	  function init(props){
+		actions.get({
+	       	index:this.state.index,
+	       	id:props.params[paramName],
+	       	props:props
+	    });
+	  };
 
 	  return React.createClass({
 	    displayName: displayName,
@@ -248,17 +258,16 @@ module.exports= {
 	    },
 
 	    componentWillMount: function () {
-	       console.log('viewer mounting ' + displayName);
-	       actions.get({
-	       	index:this.state.index,
-	       	id:this.props.params[paramName],
-	       	props:this.props
-	       });
-	       console.log('viewer mounted ' + displayName);
+	    	init.bind(this)(this.props);
 	    },
 
 	    componentWillUnmount: function () {
 	    	actions.dispose(this.state.index);
+	    },
+
+	    componentWillReceiveProps: function (props) 
+	    {
+	    	init.bind(this)(props);
 	    },
 
 	    storeDidChange: function () {
@@ -273,7 +282,7 @@ module.exports= {
 	          <div>
 	             <Item item={this.state.data.get('item')}/>
 	             <Error error={this.state.data.get('error')}/>
-	             <RouteHandler condition='conditional handler' {...this.props} />
+	             <RouteHandler {...this.props} />
 	          </div>
 	        );
 	      }
@@ -297,6 +306,13 @@ module.exports= {
 	    displayName: displayName+'Item', 
 	    render: render
 	  });
+	  function init(props){
+		  actions.get({
+	      	index:this.state.index,
+	      	id:props.params[paramName],
+	      	props:props
+	      });
+	  };
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
@@ -312,19 +328,16 @@ module.exports= {
 	    },
 
 	    componentWillMount: function () {
-	      console.log('editor mounting ' + displayName);
-	      actions.get({
-	      	index:this.state.index,
-	      	id:this.props.params[paramName],
-	      	props:this.props
-	      });
-	       console.log('editor mounting ' + displayName);
+	    	init.bind(this)(this.props);
 	    },
 
 	    componentWillUnmount: function () {
 	    	actions.dispose(this.state.index);
 	    },
-
+	    componentWillReceiveProps: function (props) 
+	    {
+	    	init.bind(this)(props);
+	    },
 	    storeDidChange: function () {
 	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));

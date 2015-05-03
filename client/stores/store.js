@@ -1,5 +1,8 @@
 import crudStore from "./crud-store";
 
+var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
+export {opportunityType as opportunityType};
+
 var agency= crudStore("AGENCY", "AGENCIES");
 export {agency as agency};	
 

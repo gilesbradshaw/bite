@@ -25,4 +25,5 @@ module.exports = function(app) {
 	// Finish by binding the task middleware
 	app.param('taskId', tasks.taskByID);
 	app.param('opportunityId', tasks.tasksByOpportunityID);
+	app.param('profileId', tasks.tasksByProfileID);
 };

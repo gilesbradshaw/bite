@@ -39,7 +39,7 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="task" params={params}>View</Link></span>
+          <span><Link to="task-view" params={params}>View</Link></span>
           <span><Link to="task-edit" params={params}>Edit</Link></span>
           <span><Link to="task-delete" params={params}>Delete</Link></span>
         </div>
@@ -54,6 +54,22 @@ export default
       function(){   
         return (
           <div >
+            <div> task viewer</div>
+             <div>{this.props.item.get('title')}</div>
+          </div>
+        );
+      },
+      "taskId"
+  ),
+  head:crud.viewer (
+     "TaskHead",
+      Actions,
+      Store.get,
+      Store.error,
+      function(){   
+        return (
+          <div >
+            <div> task header</div>
              <div>{this.props.item.get('title')}</div>
           </div>
         );

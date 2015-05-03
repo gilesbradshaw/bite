@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 	Opportunity = mongoose.model('Opportunity'),
 	Task = mongoose.model('Task'),
 	Note = mongoose.model('Note'),
+	Email = mongoose.model('Email'),
 	_ = require('lodash');
 
 /**
@@ -36,6 +37,7 @@ exports.create = function(req, res) {
 exports.addTask = function(req, res) {
 	var task = new Task(req.body);
 	task.opportunity=req.opportunity;
+	task.user = req.user;
 	task.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -53,6 +55,12 @@ exports.addTask = function(req, res) {
  */
 exports.addNote = function(req, res) {
 	var note = new Note(req.body);
+	note.user = req.user;
+	if(!req.user)
+	{
+		ret.gg='kkk';
+		throw "nahhhhh";
+	}
 	note.opportunity=req.opportunity;
 	note.save(function(err) {
 		if (err) {
@@ -65,6 +73,23 @@ exports.addNote = function(req, res) {
 	});
 };
 
+/**
+ * Add an email
+ */
+exports.addEmail = function(req, res) {
+	var email = new Email(req.body);
+	email.user = req.user;
+	email.opportunity=req.opportunity;
+	email.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(email);
+		}
+	});
+};
 /**
  * Show the current opportunity
  */

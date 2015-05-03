@@ -7,6 +7,9 @@ var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	User = mongoose.model('User'),
 	Opportunity = mongoose.model('Opportunity'),
+	Task = mongoose.model('Task'),
+	Note = mongoose.model('Note'),
+	Email = mongoose.model('Email'),
 	_ = require('lodash');
 
 exports.create = function(req, res) {
@@ -38,6 +41,58 @@ exports.addOpportunity = function(req, res) {
 		}
 	});
 };
+
+/**
+ * Add a Task
+ */
+exports.addTask = function(req, res) {
+	var task = new Task(req.body);
+	task.user=req.profile;
+	task.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(task);
+		}
+	});
+};
+
+/**
+ * Add a Note
+ */
+exports.addNote = function(req, res) {
+	var note = new Note(req.body);
+	note.user=req.profile;
+	note.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(note);
+		}
+	});
+};
+
+/**
+ * Add an Email
+ */
+exports.addEmail = function(req, res) {
+	var email = new Email(req.body);
+	email.user=req.profile;
+	email.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(email);
+		}
+	});
+};
+
 exports.read = function(req, res) {
 	res.json(req.profile);
 };

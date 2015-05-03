@@ -36,7 +36,7 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="opportunity" params={params}>View</Link></span>
+          <span><Link to="opportunity-view" params={params}>View</Link></span>
           <span><Link to="opportunity-edit" params={params}>Edit</Link></span>
           <span><Link to="opportunity-delete" params={params}>Delete</Link></span>
         </div>
@@ -52,6 +52,20 @@ export default
         return (
           <div >
              <div>{this.props.item.get('title')}</div>
+          </div>
+        );
+      },
+      "opportunityId"
+  ),
+  head:crud.viewer (
+     "OpportunityHead",
+      Actions,
+      Store.get,
+      Store.error,
+      function(){   
+        return (
+          <div >
+             <div>Opportunity header</div>
           </div>
         );
       },
@@ -83,7 +97,7 @@ export default
           </div>
         );
      },
-     "agentId"
+     "opportunityId"
   ),
   create:crud.creator(
     "OpportunityCreate",

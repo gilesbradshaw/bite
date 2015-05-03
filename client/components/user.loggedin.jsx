@@ -1,16 +1,16 @@
 import React from "react";
 import UserStore from "../stores/user-current-store";
 import UserActions from "../actions/user-actions";
+function getState() {
+  return {user:UserStore.getCurrentUser()};
+}
+
 
 // Router
 import {RouteHandler, Link} from "react-router";
 
 
 // Component
-function getState() {
-  return {user:UserStore.getCurrentUser()};
-}
-
 function signOut() {
   UserActions.signOut();
 }
