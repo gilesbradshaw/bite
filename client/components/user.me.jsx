@@ -1,10 +1,13 @@
 import React from "react";
 import UserStore from "../stores/user-current-store";
 
-import {RouteHandler} from  "react-router";
+import  {RouteHandler, Link} from "react-router";
 
 function getState() {
-  return {user:UserStore.getCurrentUser()};
+  return {
+    user:UserStore.getCurrentUser(),
+    myPath: "me" 
+  };
 }
 // Component
 var User = React.createClass({
@@ -22,10 +25,13 @@ var User = React.createClass({
     
       if(this.state.user)
       {
+        this.params={profileId:this.state.user.get('_id')};
         return (
-        <div className="user"> {this.state.user.get('displayName')}
-          <RouteHandler {...this.props}/>
-        </div>
+          <div className="user">
+          <span><Link to="me-profile" params={this.params}>View</Link></span>
+           {this.state.user.get('displayName')}
+            <RouteHandler myPath={this.state.myPath} {...this.props}/>
+          </div>
         );
       }
       else

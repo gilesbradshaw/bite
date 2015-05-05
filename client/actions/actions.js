@@ -1,6 +1,28 @@
 import crudActions from "./crud-actions";
 
+var opportunityStatus=  crudActions(
+	"OPPORTUNITYSTATUS", 
+	"OPPORTUNITYSTATUSES",
+	(params)=>
+		"/OPPORTUNITYSTATUSES"
+) ;
+export {opportunityStatus as opportunityStatus};
 
+var opportunityAgentRating=  crudActions(
+	"OPPORTUNITYAGENTRATING", 
+	"OPPORTUNITYAGENTRATINGS",
+	(params)=>
+		"/OPPORTUNITYAGENTRATINGS"
+) ;
+export {opportunityAgentRating as opportunityAgentRating};
+
+var opportunityRatePeriod=  crudActions(
+	"OPPORTUNITYRATEPERIOD", 
+	"OPPORTUNITYRATEPERIODS",
+	(params)=>
+		"/OPPORTUNITYRATEPERIODS"
+) ;
+export {opportunityRatePeriod as opportunityRatePeriod};
 
 var opportunityType=  crudActions(
 	"OPPORTUNITYTYPE", 

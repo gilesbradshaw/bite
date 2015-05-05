@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Opportunity = mongoose.model('Opportunity'),
+	OpportunityType = mongoose.model('OpportunityType'),
 	Task = mongoose.model('Task'),
 	Note = mongoose.model('Note'),
 	Email = mongoose.model('Email'),
@@ -104,7 +105,6 @@ exports.update = function(req, res) {
 	var opportunity = req.opportunity;
 
 	opportunity = _.extend(opportunity, req.body);
-
 	opportunity.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -137,7 +137,13 @@ exports.delete = function(req, res) {
  * List of Opportunities
  */
 exports.list = function(req, res) {
-	Opportunity.find().sort('-created').populate('user', 'displayName').exec(function(err, opportunities) {
+	Opportunity.find().sort('-created')
+	.populate('type', 'title')
+	.populate('status', 'title')
+	.populate('agentRating', 'title')
+	.populate('ratePeriod', 'title')
+	.populate('user', 'displayName')
+	.exec(function(err, opportunities) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -156,7 +162,13 @@ exports.listByProfile = function(req, res) {
  * Opportunity middleware
  */
 exports.opportunityByID = function(req, res, next, id) {
-	Opportunity.findById(id).populate('user', 'displayName').exec(function(err, opportunity) {
+	Opportunity.findById(id)
+		.populate('type', 'title')
+		.populate('status', 'title')
+		.populate('agentRating', 'title')
+		.populate('ratePeriod', 'title')
+		.populate('user', 'displayName').
+		exec(function(err, opportunity) {
 		if (err) return next(err);
 		if (!opportunity) return next(new Error('Failed to load opportunity ' + id));
 		req.opportunity = opportunity;

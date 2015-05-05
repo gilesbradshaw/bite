@@ -37,9 +37,18 @@ module.exports= {
 	    	store.mixin,
 	    	errorStore.mixin
 	    ],
+	    propTypes: {
+    		onChange: React.PropTypes.func,
+  		},
+
 
 	    getInitialState: function () {
-	      return {data:Map(getState(index)),index:index++};
+	      return {
+	      	data:Map(getState(index)),
+	      	index:index++,
+			myPath:(this.props.myPath || '') + "|" + displayName 
+
+	      };
 	    },
 
 	    componentWillMount: function () {
@@ -95,7 +104,11 @@ module.exports= {
 	    ],
 
 	    getInitialState: function () {	      
-	      return {data:Map(),index:index++};
+	      return {
+	      	data:Map(),
+	      	index:index++,
+	      	myPath:(this.props.myPath || '') + "|" + displayName 
+	      };
 	    },
 
 	    componentWillMount: function () {
@@ -133,7 +146,6 @@ module.exports= {
 	      if(this.state.data.get('item'))
 	      {
 	        return <div >
-	        	<div>{this.props.condition}</div>
 	           <Item handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.post} value="Create" />
 	           <Error error={this.state.data.get('error')}/>
@@ -176,7 +188,11 @@ module.exports= {
 	    ],
 	    getInitialState: function () {
 	      
-	      return {data:Map(),index:index++};
+	      return {
+	      	data:Map(),
+	      	index:index++,
+	      	myPath:(this.props.myPath || '') + "|" + displayName 
+	      };
 	    },
 
 	    componentWillMount: function () {
@@ -254,7 +270,11 @@ module.exports= {
 
 	    getInitialState: function () {
 	      
-	      return {data:Map(),index:index++};
+	      return {
+	      	data:Map(),
+	      	index:index++,
+	      	myPath:(this.props.myPath || '') + "|" + displayName 
+	      };
 	    },
 
 	    componentWillMount: function () {
@@ -280,9 +300,14 @@ module.exports= {
 	      {
 	       return(
 	          <div>
+	          	<div>here</div>
+	          	<div>{displayName}</div>
+	          	<div >{this.state.myPath}</div>
 	             <Item item={this.state.data.get('item')}/>
 	             <Error error={this.state.data.get('error')}/>
-	             <RouteHandler {...this.props} />
+	             <div>rhandler here passing </div>
+	             <RouteHandler {...this.props} myPath={this.state.myPath} />
+	             <div>rhandler was here </div>
 	          </div>
 	        );
 	      }
@@ -324,7 +349,11 @@ module.exports= {
 
 	    getInitialState: function () {
 	      
-	      return {data:Map(),index:index++};
+	      return {
+	      	data:Map(),
+	      	index:index++,
+	      	myPath:(this.props.myPath || '') + "" + displayName 
+	      };
 	    },
 
 	    componentWillMount: function () {
@@ -351,6 +380,14 @@ module.exports= {
 	      	});
 	      }.bind(this);
 	    },
+	    handleRawChange:function(field){
+	      return function(evt, value){
+	      	actions.set({
+	      		index:this.state.index,
+	      		item:this.state.data.setIn(['item',field],evt).get('item')
+	      	});
+	      }.bind(this);
+	    },
 	    put:function() {
 	      actions.put({
 	      	index:this.state.index,
@@ -363,7 +400,7 @@ module.exports= {
 	      if(this.state.data.get('item'))
 	      {
 	      	return (<div >
-	           <Item handleChange={this.handleChange} item={this.state.data.get('item')}/>
+	           <Item handleRawChange= {this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.put} value="Update" />
 	           <Error error={this.state.data.get('error')}/>
 	        </div>);

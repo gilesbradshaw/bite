@@ -3,6 +3,18 @@ import crudStore from "./crud-store";
 var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
 export {opportunityType as opportunityType};
 
+var opportunityStatus = crudStore("OPPORTUNITYSTATUS", "OPPORTUNITYSTATUSES");
+export {opportunityStatus as opportunityStatus};
+
+var opportunityRatePeriod = crudStore("OPPORTUNITYRATEPERIOD", "OPPORTUNITYRATEPERIODS");
+export {opportunityRatePeriod as opportunityRatePeriod};
+
+var opportunityAgentRating = crudStore("OPPORTUNITYAGENTRATING", "OPPORTUNITYAGENTRATINGS");
+export {opportunityAgentRating as opportunityAgentRating};
+
+var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
+export {opportunityType as opportunityType};
+
 var agency= crudStore("AGENCY", "AGENCIES");
 export {agency as agency};	
 

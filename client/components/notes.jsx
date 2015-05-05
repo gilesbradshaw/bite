@@ -13,21 +13,40 @@ import FormInput from "./formInput";
 
   
 
+import crudFactory from './crud-factory';
 
-export default  
-{
-
-  list:crud.lister(
-    "Notes",
-    Actions,
-    Store.list,
-    Store.error,
+var exp = crudFactory(crud, "Note", Actions, Store, "noteId")
+  .head(
+    function(){   
+      return (
+        <div >
+           <h1>{this.props.item.get('title')}</h1>
+        </div>
+      );
+    }
+  )
+  .select( 
+    (self,nodes)=>
+        <div>
+          <p>Note Selector:</p>
+          <FieldSelect
+              name="Notes-selecter"
+              value={self.props.value}
+              label='title'
+              options={nodes()}
+              onChange={self.props.onChange}
+          />
+          <RouteHandler {...self.props} />
+        </div>
+  )
+  .list(
     function(nodes){
       var self=this;
       return function () {
         return (
           <div>
             <p>Note Bank:</p>
+            <span className="navLink"><Link to="note">Create</Link></span>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -45,69 +64,36 @@ export default
         </div>
       );
     }
-  ),
-  view:crud.viewer (
-     "NoteView",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{'hhh   ' + this.props.item.get('title')}</div>
-          </div>
-        );
-      },
-      "noteId"
-  ),
-  head:crud.viewer (
-     "NoteView",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{'ok this is the head for a note ' + this.props.item.get('title')}</div>
-          </div>
-        );
-      },
-      "noteId"
-  ),
-  edit:module.exports = crud.editor (
-    "NoteEdit",
-     Actions,
-     Store.get,
-     Store.error,
+  )
+  .view(
+    function(){   
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .del(
+    function(){
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .edit(
      function(){
         return (
           <div >
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
           </div>
         );
-     },
-     "noteId"
-  ),
-  del:crud.deleter (
-    "NoteDelete",
-    Actions,
-    Store.get,
-    Store.error,
+     }
+  )
+  .create(
     function(){
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-          </div>
-        );
-     },
-     "noteId"
-  ),
-  create:crud.creator (
-    "NoteNew",
-    Actions,
-    Store.get,
-    Store.error,
-     function(){
         return (
           <div>
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
@@ -115,4 +101,9 @@ export default
         );
      }
   )
-}
+  .make();
+
+export default  exp;
+
+
+

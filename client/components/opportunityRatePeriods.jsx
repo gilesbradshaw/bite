@@ -1,18 +1,20 @@
 // React
 import React from "react";
+import {addons as ReactAddons} from 'react/addons';
+var PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
-import {agent as Store} from "../stores/store";
-
-import {agent as Actions} from "../actions/actions";
+import {opportunityRatePeriod as Store} from "../stores/store";
+import {opportunityRatePeriod as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
+import FieldSelect from './fieldSelect';
 
 
 import crudFactory from './crud-factory';
 
-var exp = crudFactory(crud, "Agent", Actions, Store, "agentId")
+var exp = crudFactory(crud, "OpportunityRatePeriod", Actions, Store, "opportunityRatePeriodId")
   .head(
     function(){   
       return (
@@ -25,15 +27,15 @@ var exp = crudFactory(crud, "Agent", Actions, Store, "agentId")
   .select( 
     (self,nodes)=>
         <div>
-          <p>Agent Selector:</p>
+          <p>Opportunity Rate Period Selector:</p>
           <FieldSelect
-              name="Agents-selecter"
+              name="OpportunityRatePeriods-selecter"
               value={self.props.value}
               label='title'
               options={nodes()}
               onChange={self.props.onChange}
           />
-          <RouteHandler myPath={self.state.myPath} {...self.props} />
+          <RouteHandler {...self.props} />
         </div>
   )
   .list(
@@ -42,23 +44,24 @@ var exp = crudFactory(crud, "Agent", Actions, Store, "agentId")
       return function () {
         return (
           <div>
-            <p>Agent Bank:</p>
-            <span className="navLink"><Link to="agent">Create</Link></span>
+            <p>Opportunity Rate Period Bank:</p>
+            <span className="navLink"><Link to="opportunityRatePeriod">Create</Link></span>
             {nodes()}
-            <RouteHandler myPath={self.state.myPath} {...self.props} />
+            <RouteHandler {...self.props} />
           </div>
         );
       };
     },
     function (data) {
-      var params={agentId:data.get('_id')};
+      var params={opportunityRatePeriodId:data.get('_id')};
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="agent-view" params={params}>View</Link></span>
-          <span><Link to="agent-edit" params={params}>Edit</Link></span>
-          <span><Link to="agent-delete" params={params}>Delete</Link></span>
+          <span><Link to="opportunityRatePeriod-view" params={params}>View</Link></span>
+          <span><Link to="opportunityRatePeriod-edit" params={params}>Edit</Link></span>
+          <span><Link to="opportunityRatePeriod-delete" params={params}>Delete</Link></span>
         </div>
+        //<Agency agency={data} key={data.get('_id')} />
       );
     }
   )
@@ -101,5 +104,3 @@ var exp = crudFactory(crud, "Agent", Actions, Store, "agentId")
   .make();
 
 export default  exp;
-
-

@@ -10,26 +10,45 @@ import {agency as Actions} from "../actions/actions";
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
 
+import crudFactory from './crud-factory';
 
-  
 
 
-export default  
-{
 
-  list:crud.lister(
-    "Agencies",
-    Actions,
-    Store.list,
-    Store.error,
+var exp = crudFactory(crud, "Agency", Actions, Store, "agencyId")
+  .head(
+    function(){   
+      return (
+        <div >
+           <h1>{this.props.item.get('title')}</h1>
+        </div>
+      );
+    }
+  )
+  .select( 
+    (self,nodes)=>
+        <div>
+          <p>Agency Selector:</p>
+          <FieldSelect
+              name="Agencies-selecter"
+              value={self.props.value}
+              label='title'
+              options={nodes()}
+              onChange={self.props.onChange}
+          />
+          <RouteHandler myPath={self.state.myPath} {...self.props} />
+        </div>
+  )
+  .list(
     function(nodes){
       var self=this;
       return function () {
         return (
           <div>
             <p>Agency Bank:</p>
+            <span className="navLink"><Link to="agency">Create</Link></span>
             {nodes()}
-            <RouteHandler {...self.props} />
+            <RouteHandler myPath={self.state.myPath} {...self.props} />
           </div>
         );
       };
@@ -39,71 +58,51 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="agency-item" params={params}>View</Link></span>
+          <span><Link to="agency-view" params={params}>View</Link></span>
           <span><Link to="agency-edit" params={params}>Edit</Link></span>
           <span><Link to="agency-delete" params={params}>Delete</Link></span>
         </div>
-        //<Agency agency={data} key={data.get('_id')} />
       );
     }
-  ),
-  view:crud.viewer (
-     "AgencyView",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-             <div>{this.props.item.get('website')}</div>   
-          </div>
-        );
-      },
-      "agencyId"
-  ),
-  edit:module.exports = crud.editor (
-    "AgencyEdit",
-     Actions,
-     Store.get,
-     Store.error,
-     function(){
-        return (
-          <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-             <FormInput id='website' title='Web site'  value={this.props.item.get('website')} onChange={this.props.handleChange('website')} />
-          </div>
-        );
-     },
-     "agencyId"
-  ),
-  del:crud.deleter (
-    "AgencyDelete",
-    Actions,
-    Store.get,
-    Store.error,
+  )
+  .view(
+    function(){   
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .del(
     function(){
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-             <div>{this.props.item.get('website')}</div>
-          </div>
-        );
-     },
-     "agencyId"
-  ),
-  create:crud.creator (
-    "AgencyNew",
-    Actions,
-    Store.get,
-    Store.error,
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .edit(
      function(){
         return (
-          <div>
+          <div >
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-             <FormInput id='website' title='Web site'  value={this.props.item.get('website')} onChange={this.props.handleChange('website')} />
           </div>
         );
      }
   )
-}
+  .create(
+    function(){
+        return (
+          <div>
+             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
+          </div>
+        );
+     }
+  )
+  .make();
+
+export default  exp;
+
+

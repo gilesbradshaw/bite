@@ -8,23 +8,42 @@ import {profile as Actions} from "../actions/actions";
 
 import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
+import FieldSelect from './fieldSelect';
 
+import crudFactory from './crud-factory';
 
-
-export default 
-{
-
-  list:crud.lister(
-    "Profiles",
-    Actions,
-    Store.list,
-    Store.error,
+var exp = crudFactory(crud, "Profiles", Actions, Store, "profileId")
+  .head(
+    function(){   
+      return (
+        <div >
+           <h1>{this.props.item.get('displayName')}</h1>
+        </div>
+      );
+    }
+  )
+  .select( 
+    (self,nodes)=>
+        <div>
+          <p>Profile selector:</p>
+            <FieldSelect
+                name="Profiles-selecter"
+                value={self.props.value}
+                label='displayName'
+                options={nodes()}
+                onChange={self.props.onChange}
+            />
+          <RouteHandler {...self.props} />
+        </div>
+  )
+  .list(
     function(nodes){
       var self=this;
       return function () {
         return (
           <div>
             <p>Profile Bank:</p>
+            <span className="navLink"><Link to="profile">Create</Link></span>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -42,76 +61,49 @@ export default
           <span><Link to="profile-edit" params={params}>Edit</Link></span>
           <span><Link to="profile-delete" params={params}>Delete</Link></span>
         </div>
+        //<Agency agency={data} key={data.get('_id')} />
       );
     }
-  ),
-  view:crud.viewer (
-     "ProfileView",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{this.props.item.get('firstName')}</div>
-          </div>
-        );
-      },
-      "profileId"
-  ),
-  head:crud.viewer (
-     "ProfileHead",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>Profile header</div>
-          </div>
-        );
-      },
-      "profileId"
-  ),
-  edit:module.exports = crud.editor (
-    "ProfileEdit",
-     Actions,
-     Store.get,
-     Store.error,
-     function(){
-        return (
-          <div >
-             <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('firstName')} />
-          </div>
-        );
-     },
-     "profileId"
-  ),
-  del:crud.deleter (
-    "ProfileDelete",
-    Actions,
-    Store.get,
-    Store.error,
-    function(){
-        return (
-          <div >
-             <div>{this.props.item.get('profile')}</div>
-          </div>
-        );
-     },
-     "profileId"
-  ),
-  create:crud.creator(
-    "ProfileCreate",
-    Actions,
-    Store.get,
-    Store.error,
-    function(){
+  )
+  .view(
+    function(){   
       return (
-        <div>
-           <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('title')} />
+        <div >
+          <div>{this.props.item.get('firstName')}</div>
         </div>
       );
     }
   )
-}
+  .del(
+    function(){
+      return (
+        <div >
+           <div>{this.props.item.get('firstName')}</div>
+        </div>
+      );
+    }
+  )
+  .edit(
+     function(){
+        return (
+          <div>
+            <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('firstName')} />
+          </div>
+        );
+     }
+  )
+  .create(
+    function(){
+        return (
+          <div>
+            <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('title')} />
+          </div>
+        );
+     }
+  )
+  .make();
+
+export default  exp;
+
+
+

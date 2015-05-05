@@ -5,7 +5,11 @@ var webpack = require("webpack");
 module.exports = {
   cache: true,
   context: path.join(__dirname, "client"),
-  entry: "./app.js",
+  entry: {
+    app:"./app.js",
+    css:"../Styles/main.css"
+  },
+
   output: {
     path: path.join(__dirname, "app/js-dist"),
     filename: "bundle.js"
@@ -14,10 +18,11 @@ module.exports = {
     loaders: [
       { test: /\.jsx$/, loader: "babel-loader" },
       { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.css$/, loader: "style-loader!css-loader" }
     ]
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"]
+    extensions: ["", ".js", ".jsx", "css"]
   },
   plugins: [
     // Optimize

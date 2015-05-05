@@ -14,20 +14,41 @@ import FormInput from "./formInput";
   
 
 
-export default  
-{
 
-  list:crud.lister(
-    "Emails",
-    Actions,
-    Store.list,
-    Store.error,
+import crudFactory from './crud-factory';
+
+var exp = crudFactory(crud, "Email", Actions, Store, "emailId")
+  .head(
+    function(){   
+      return (
+        <div >
+           <h1>{this.props.item.get('title')}</h1>
+        </div>
+      );
+    }
+  )
+  .select( 
+    (self,nodes)=>
+        <div>
+          <p>Email Selector:</p>
+          <FieldSelect
+              name="Emails-selecter"
+              value={self.props.value}
+              label='title'
+              options={nodes()}
+              onChange={self.props.onChange}
+          />
+          <RouteHandler {...self.props} />
+        </div>
+  )
+  .list(
     function(nodes){
       var self=this;
       return function () {
         return (
           <div>
             <p>Email Bank:</p>
+            <span className="navLink"><Link to="email">Create</Link></span>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -45,69 +66,36 @@ export default
         </div>
       );
     }
-  ),
-  view:crud.viewer (
-     "EmailView",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-          </div>
-        );
-      },
-      "emailId"
-  ),
-  head:crud.viewer (
-     "EmailHead",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{'ok this is the head ' + this.props.item.get('title')}</div>
-          </div>
-        );
-      },
-      "emailId"
-  ),
-  edit:module.exports = crud.editor (
-    "EmailEdit",
-     Actions,
-     Store.get,
-     Store.error,
+  )
+  .view(
+    function(){   
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .del(
+    function(){
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .edit(
      function(){
         return (
           <div >
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
           </div>
         );
-     },
-     "emailId"
-  ),
-  del:crud.deleter (
-    "EmailDelete",
-    Actions,
-    Store.get,
-    Store.error,
+     }
+  )
+  .create(
     function(){
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-          </div>
-        );
-     },
-     "emailId"
-  ),
-  create:crud.creator (
-    "EmailNew",
-    Actions,
-    Store.get,
-    Store.error,
-     function(){
         return (
           <div>
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
@@ -115,4 +103,9 @@ export default
         );
      }
   )
-}
+  .make();
+
+export default  exp;
+
+
+

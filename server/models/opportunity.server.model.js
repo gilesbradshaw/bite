@@ -21,6 +21,22 @@ var OpportunitySchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
+	},
+	type: {
+		type: Schema.ObjectId,
+		ref: 'OpportunityType'
+	},
+	status: {
+		type: Schema.ObjectId,
+		ref: 'OpportunityStatus'
+	},
+	ratePeriod: {
+		type: Schema.ObjectId,
+		ref: 'OpportunityRatePeriod'
+	},
+	agentRating: {
+		type: Schema.ObjectId,
+		ref: 'OpportunityAgentRating'
 	}
 });
 

@@ -11,23 +11,43 @@ import  {RouteHandler, Link} from "react-router";
 import FormInput from "./formInput";
 
 
-  
+import FieldSelect from './fieldSelect';
 
+import crudFactory from './crud-factory';
 
-export default  
-{
+var exp = crudFactory(crud, "OpportunityType", Actions, Store, "opportunityTypeId")
+  .head(
+    function(){   
+      return (
+        <div >
+           <h1>{this.props.item.get('title')}</h1>
+        </div>
+      );
+    }
+  )
+  .select( 
+    (self,nodes)=>
+        <div>
+          <p>Opportunity Type Selector:</p>
 
-  list:crud.lister(
-    "OpportunityTypes",
-    Actions,
-    Store.list,
-    Store.error,
+          <FieldSelect
+              name="OpportunityTypes-selecter"
+              value={self.props.value}
+              label='title'
+              options={nodes()}
+              onChange={self.props.onChange}
+          />
+          <RouteHandler {...self.props} />
+        </div>
+  )
+  .list(
     function(nodes){
       var self=this;
       return function () {
         return (
           <div>
             <p>Opportunity Type Bank:</p>
+            <span className="navLink"><Link to="opportunityType">Create</Link></span>
             {nodes()}
             <RouteHandler {...self.props} />
           </div>
@@ -39,62 +59,43 @@ export default
       return (
         <div key={data.get('_id')}>
           <div>{data.get('title')}</div>
-          <span><Link to="opportunityType" params={params}>View</Link></span>
+          <span><Link to="opportunityType-view" params={params}>View</Link></span>
           <span><Link to="opportunityType-edit" params={params}>Edit</Link></span>
           <span><Link to="opportunityType-delete" params={params}>Delete</Link></span>
         </div>
         //<Agency agency={data} key={data.get('_id')} />
       );
     }
-  ),
-  view:crud.viewer (
-     "OpportunityTypeView",
-      Actions,
-      Store.get,
-      Store.error,
-      function(){   
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-          </div>
-        );
-      },
-      "opportunityTypeId"
-  ),
-  edit:module.exports = crud.editor (
-    "OpportunityTypeEdit",
-     Actions,
-     Store.get,
-     Store.error,
+  )
+  .view(
+    function(){   
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .del(
+    function(){
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )
+  .edit(
      function(){
         return (
           <div >
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
           </div>
         );
-     },
-     "opportunityTypeId"
-  ),
-  del:crud.deleter (
-    "OpportunityTypeDelete",
-    Actions,
-    Store.get,
-    Store.error,
+     }
+  )
+  .create(
     function(){
-        return (
-          <div >
-             <div>{this.props.item.get('title')}</div>
-          </div>
-        );
-     },
-     "opportunityTypeId"
-  ),
-  create:crud.creator (
-    "OpportunityTypeNew",
-    Actions,
-    Store.get,
-    Store.error,
-     function(){
         return (
           <div>
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
@@ -102,4 +103,6 @@ export default
         );
      }
   )
-}
+  .make();
+
+export default  exp;

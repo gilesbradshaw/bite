@@ -5,6 +5,9 @@ import request from "superagent";
 import App from "./components/app"
 import Home from "./components/home";
 import OpportunityTypes from "./components/opportunityTypes";
+import OpportunityStatuses from "./components/opportunityStatuses";
+import OpportunityAgentRatings from "./components/opportunityAgentRatings";
+import OpportunityRatePeriods from "./components/opportunityRatePeriods";
 import Agencies from "./components/agencies";
 import Agents from "./components/agents";
 import Profiles from "./components/profiles";
@@ -19,6 +22,9 @@ import UserSignUp from "./components/user.sign.up";
 import UserSignIn from "./components/user.sign.in";
 import UserSignOut from "./components/user.sign.out";
 import NotFound from "./components/notfound";
+
+
+
 
 
 // Declare routes
@@ -40,9 +46,9 @@ var routes = (
             <DefaultRoute name="agency-agents-view" handler={Agents.view} />
             <Route name="agency-agents-edit" path='edit' handler={Agents.edit} />
             <Route name="agency-agents-delete" path='delete' handler={Agents.del} />
-          </Route>
-        </Route> 
-      </Route>   
+          </Route> 
+        </Route>  
+      </Route>    
     </Route>
     
 
@@ -53,7 +59,7 @@ var routes = (
         <DefaultRoute name="agent-view" handler={Agents.view} />
         <Route name="agent-edit"  path="edit" handler={Agents.edit} />
         <Route name="agent-delete"  path="delete" handler={Agents.del} />    
-      </Route>   
+      </Route>    
     </Route>
 
 
@@ -71,7 +77,7 @@ var routes = (
             <DefaultRoute name="profile-opportunities-view" handler={Opportunities.view} />
             <Route name="profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
             <Route name="profile-opportunities-delete" path='delete' handler={Opportunities.del} />
-          </Route>
+          </Route> 
         </Route>
         <Route name="profile-tasks" path='tasks'  >
           <DefaultRoute handler={Tasks.list} />
@@ -80,8 +86,8 @@ var routes = (
             <DefaultRoute name="profile-tasks-view" handler={Tasks.view} />
             <Route name="profile-tasks-edit" path='edit' handler={Tasks.edit} />
             <Route name="profile-tasks-delete" path='delete' handler={Tasks.del} />
-          </Route>
-        </Route>
+          </Route> 
+        </Route> 
         <Route name="profile-notes" path='notes'  >
           <DefaultRoute handler={Notes.list} />
           <Route name="profile-notes-create" path='create' handler={Notes.create} />
@@ -90,7 +96,7 @@ var routes = (
             <Route name="profile-notes-edit" path='edit' handler={Notes.edit} />
             <Route name="profile-notes-delete" path='delete' handler={Notes.del} />
           </Route>
-        </Route> 
+        </Route>
         <Route name="profile-emails" path='emails'  >
           <DefaultRoute handler={Emails.list} />
           <Route name="profile-emails-create" path='create' handler={Emails.create} />
@@ -98,10 +104,10 @@ var routes = (
             <DefaultRoute name="profile-emails-view" handler={Emails.view} />
             <Route name="profile-emails-edit" path='edit' handler={Emails.edit} />
             <Route name="profile-emails-delete" path='delete' handler={Emails.del} />
-          </Route>
-        </Route>
-      </Route>   
-    </Route>
+          </Route> 
+        </Route> 
+      </Route>    
+    </Route> 
 
 
     <Route name="opportunities" handler={Opportunities.list} />   
@@ -172,6 +178,7 @@ var routes = (
         <Route name="email-delete"  path="delete" handler={Emails.del} />    
       </Route>   
     </Route>
+
     <Route name="opportunityTypes" handler={OpportunityTypes.list} />   
     <Route name="opportunityType" path="opportunityType">
       <DefaultRoute handler={OpportunityTypes.create} />
@@ -182,12 +189,54 @@ var routes = (
       </Route>   
     </Route>
    
+    <Route name="opportunityStatuses" handler={OpportunityStatuses.list} />   
+    <Route name="opportunityStatus" path="opportunityStatus">
+      <DefaultRoute handler={OpportunityStatuses.create} />
+      <Route name="opportunityStatus-item" path=":opportunityStatusId" handler={OpportunityStatuses.head}>
+        <DefaultRoute name="opportunityStatus-view" handler={OpportunityStatuses.view} />
+        <Route name="opportunityStatus-edit"  path="edit" handler={OpportunityStatuses.edit} />
+        <Route name="opportunityStatus-delete"  path="delete" handler={OpportunityStatuses.del} />    
+      </Route>   
+    </Route>
+
+    <Route name="opportunityAgentRatings" handler={OpportunityAgentRatings.list} />   
+    <Route name="opportunityAgentRating" path="opportunityAgentRating">
+      <DefaultRoute handler={OpportunityAgentRatings.create} />
+      <Route name="opportunityAgentRating-item" path=":opportunityAgentRatingId" handler={OpportunityAgentRatings.head}>
+        <DefaultRoute name="opportunityAgentRating-view" handler={OpportunityAgentRatings.view} />
+        <Route name="opportunityAgentRating-edit"  path="edit" handler={OpportunityAgentRatings.edit} />
+        <Route name="opportunityAgentRating-delete"  path="delete" handler={OpportunityAgentRatings.del} />    
+      </Route>   
+    </Route>
+
+    <Route name="opportunityRatePeriods" handler={OpportunityRatePeriods.list} />   
+    <Route name="opportunityRatePeriod" path="opportunityRatePeriod">
+      <DefaultRoute handler={OpportunityRatePeriods.create} />
+      <Route name="opportunityRatePeriod-item" path=":opportunityRatePeriodId" handler={OpportunityRatePeriods.head}>
+        <DefaultRoute name="opportunityRatePeriod-view" handler={OpportunityRatePeriods.view} />
+        <Route name="opportunityRatePeriod-edit"  path="edit" handler={OpportunityRatePeriods.edit} />
+        <Route name="opportunityRatePeriod-delete"  path="delete" handler={OpportunityRatePeriods.del} />    
+      </Route>   
+    </Route>
 
     <Route name="users" handler={Users}>
       <Route name="user" path="user/:userId" handler={User} />
 
     </Route>
-    <Route name="me" path="me" handler={Me} props={{userId:'hey'}} />
+    <Route name="me" path="me" handler={Me} >
+      <Route name="me-profile" path=":profileId">
+          <DefaultRoute handler={Opportunities.list} />
+         <Route name="me-profile-opportunities" path='opportunities'  >
+          <DefaultRoute handler={Opportunities.list} />
+          <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
+          <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
+            <Route name="me-profile-opportunities-view" path='view' handler={Opportunities.view} />
+            <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
+            <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+          </Route>
+        </Route>
+      </Route>
+    </Route>
     <Route name="signup" handler={UserSignUp} />
     <Route name="signin" handler={UserSignIn} />
     <Route name="signout" handler={UserSignOut} />
