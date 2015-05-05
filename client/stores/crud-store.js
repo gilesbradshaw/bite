@@ -41,7 +41,7 @@ function getStore(name)
     get: function(index) {
      _item=_item.update(index,(val)=>val||Map());
      return _item.get(index);
-    },
+    }
   }, function (payload) {
     if (payload.actionType === name + "_GOT") {
       _item=_item.set(payload.index,payload.item);

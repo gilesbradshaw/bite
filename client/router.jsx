@@ -4,6 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
+import {userNav, adminNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -24,46 +25,58 @@ import UserSignOut from "./components/user.sign.out";
 import NotFound from "./components/notfound";
 
 
-
+var getRoute=(name, pluralName, id, components)=> 
+  <Route name={pluralName} handler={components.listHead} >
+    <DefaultRoute name={pluralName + ".list"} handler={components.list}/>   
+    <Route name={name} path={name}>
+      <DefaultRoute handler={components.create} />
+      <Route name={name + "-item"} path={":" + id} handler={components.head}>
+        <DefaultRoute name={name + "-view"}  handler={components.view} />
+        <Route name={name + "-edit"}  path="edit" handler={components.edit} />
+        <Route name={name + "-delete"}  path="delete" handler={components.del} />    
+      </Route>   
+    </Route>
+  </Route>
 
 
 // Declare routes
 var routes = (
   <Route handler={App} path="/">
     <DefaultRoute name="app" handler={Home} />
-   
-    <Route name="agencies" handler={Agencies.list} />   
-    <Route name="agency" path="agency">
-      <DefaultRoute handler={Agencies.create} />
-      <Route name="agency-item" path=":agencyId" handler={Agencies.head}>
-        <DefaultRoute name="agency-view" handler={Agencies.view} />
-        <Route name="agency-edit"  path="edit" handler={Agencies.edit} />
-        <Route name="agency-delete"  path="delete" handler={Agencies.del} />    
-        <Route name="agency-agents" path='agents'  >
-          <DefaultRoute handler={Agents.list} />
-          <Route name="agency-agents-create" path='create' handler={Agents.create} />
-          <Route name="agency-agents-id" path=':agentId' handler={Agents.head}>
-            <DefaultRoute name="agency-agents-view" handler={Agents.view} />
-            <Route name="agency-agents-edit" path='edit' handler={Agents.edit} />
-            <Route name="agency-agents-delete" path='delete' handler={Agents.del} />
-          </Route> 
-        </Route>  
-      </Route>    
-    </Route>
+    <Route name="userArea" path="userArea" handler={userNav} > 
+      <Route name="Agencies" path="agencies" handler={Agencies.listHead} > 
+        <DefaultRoute name="Agencies.list" handler={Agencies.list}/>  
+        <Route name="Agency" path="agency">
+          <DefaultRoute handler={Agencies.create} />
+          <Route name="Agency-item" path=":agencyId" handler={Agencies.head}>
+            <DefaultRoute name="Agency-view" handler={Agencies.view} />
+            <Route name="Agency-edit"  path="edit" handler={Agencies.edit} />
+            <Route name="Agency-delete"  path="delete" handler={Agencies.del} />    
+            <Route name="Agency-agents" path='agents'  >
+              <DefaultRoute handler={Agents.list} />
+              <Route name="Agency-agents-create" path='create' handler={Agents.create} />
+              <Route name="Agency-agents-id" path=':agentId' handler={Agents.head}>
+                <DefaultRoute name="agency-agents-view" handler={Agents.view} />
+                <Route name="Agency-agents-edit" path='edit' handler={Agents.edit} />
+                <Route name="Agency-agents-delete" path='delete' handler={Agents.del} />
+              </Route> 
+            </Route>  
+          </Route>    
+        </Route>
+      </Route>
+      <Route name="Agents" handler={Agents.listHead} >
+        <DefaultRoute name= "Agents-list" handler={Agents.list}/>  
+        <Route name="Agent" path="agent">
+          <DefaultRoute handler={Agents.create} />
+          <Route name="Agent-item" path=":agentId" handler={Agents.head}>
+            <DefaultRoute name="Agent-view" handler={Agents.view} />
+            <Route name="Agent-edit"  path="edit" handler={Agents.edit} />
+            <Route name="Agent-delete"  path="delete" handler={Agents.del} />    
+          </Route>    
+        </Route>
+      </Route>
     
-
-  <Route name="agents" handler={Agents.list} />   
-    <Route name="agent" path="agent">
-      <DefaultRoute handler={Agents.create} />
-      <Route name="agent-item" path=":agentId">
-        <DefaultRoute name="agent-view" handler={Agents.view} />
-        <Route name="agent-edit"  path="edit" handler={Agents.edit} />
-        <Route name="agent-delete"  path="delete" handler={Agents.del} />    
-      </Route>    
-    </Route>
-
-
-    <Route name="profiles" handler={Profiles.list} />   
+    <Route name="profiles" handler={Profiles.list}/>   
     <Route name="profile" path="profile">
       <DefaultRoute handler={Profiles.create} />
       <Route name="profile-item" path=":profileId" handler={Profiles.head}>
@@ -110,38 +123,38 @@ var routes = (
     </Route> 
 
 
-    <Route name="opportunities" handler={Opportunities.list} />   
-    <Route name="opportunity" path="opportunity">
+    <Route name="Opportunities" handler={Opportunities.list} />   
+    <Route name="Opportunity" path="opportunity">
       <DefaultRoute handler={Opportunities.create} />
-      <Route name="opportunity-item" path=":opportunityId" handler={Opportunities.head}>
-        <DefaultRoute name="opportunity-view" handler={Opportunities.view} />
-        <Route name="opportunity-edit"  path="edit" handler={Opportunities.edit} />
-        <Route name="opportunity-delete"  path="delete" handler={Opportunities.del} />    
-        <Route name="opportunity-tasks" path='tasks'  >
+      <Route name="Opportunity-item" path=":opportunityId" handler={Opportunities.head}>
+        <DefaultRoute name="Opportunity-view" handler={Opportunities.view} />
+        <Route name="Opportunity-edit"  path="edit" handler={Opportunities.edit} />
+        <Route name="Opportunity-delete"  path="delete" handler={Opportunities.del} />    
+        <Route name="Opportunity-tasks" path='tasks'  >
           <DefaultRoute handler={Tasks.list} />
-          <Route name="opportunity-tasks-create" path='create' handler={Tasks.create} />
-          <Route name="opportunity-tasks-id" path=':taskId' handler={Tasks.head}>
-            <DefaultRoute name="opportunity-tasks-view" handler={Tasks.view} />
-            <Route name="opportunity-tasks-edit" path='edit' handler={Tasks.edit} />
-            <Route name="opportunity-tasks-delete" path='delete' handler={Tasks.del} />
+          <Route name="Oppportunity-tasks-create" path='create' handler={Tasks.create} />
+          <Route name="Opportunity-tasks-id" path=':taskId' handler={Tasks.head}>
+            <DefaultRoute name="Opportunity-tasks-view" handler={Tasks.view} />
+            <Route name="Opportunity-tasks-edit" path='edit' handler={Tasks.edit} />
+            <Route name="Opportunity-tasks-delete" path='delete' handler={Tasks.del} />
           </Route>
         </Route> 
-        <Route name="opportunity-notes" path='notes'  >
+        <Route name="Opportunity-notes" path='notes'  >
           <DefaultRoute handler={Notes.list} />
-          <Route name="opportunity-notes-create" path='create' handler={Notes.create} />
-          <Route name="opportunity-notes-id" path=':noteId' handler={Notes.head}>
-            <DefaultRoute name="opportunity-notes-view" handler={Notes.view} />
-            <Route name="opportunity-notes-edit" path='edit' handler={Notes.edit} />
-            <Route name="opportunity-notes-delete" path='delete' handler={Notes.del} />
+          <Route name="Opportunity-notes-create" path='create' handler={Notes.create} />
+          <Route name="Opportunity-notes-id" path=':noteId' handler={Notes.head}>
+            <DefaultRoute name="Opportunity-notes-view" handler={Notes.view} />
+            <Route name="Opportunity-notes-edit" path='edit' handler={Notes.edit} />
+            <Route name="Opportunity-notes-delete" path='delete' handler={Notes.del} />
           </Route>
         </Route> 
-        <Route name="opportunity-emails" path='emails'  >
+        <Route name="Opportunity-emails" path='emails'  >
           <DefaultRoute handler={Emails.list} />
-          <Route name="opportunity-emails-create" path='create' handler={Emails.create} />
-          <Route name="opportunity-emails-id" path=':emailId' handler={Emails.head}>
-            <DefaultRoute name="opportunity-emails-view" handler={Emails.view} />
-            <Route name="opportunity-emails-edit" path='edit' handler={Emails.edit} />
-            <Route name="opportunity-emails-delete" path='delete' handler={Emails.del} />
+          <Route name="Opportunity-emails-create" path='create' handler={Emails.create} />
+          <Route name="Opportunity-emails-id" path=':emailId' handler={Emails.head}>
+            <DefaultRoute name="Opportunity-emails-view" handler={Emails.view} />
+            <Route name="Opportunity-emails-edit" path='edit' handler={Emails.edit} />
+            <Route name="Opportunity-emails-delete" path='delete' handler={Emails.del} />
           </Route>
         </Route> 
       </Route>   
@@ -149,94 +162,37 @@ var routes = (
 
 
 
-    <Route name="notes" handler={Notes.list} />   
-    <Route name="note" path="note">
-      <DefaultRoute handler={Notes.create} />
-      <Route name="note-item" path=":noteId" handler={Notes.head}>
-        <DefaultRoute name="note-view" handler={Notes.view} />
-        <Route name="note-edit"  path="edit" handler={Notes.edit} />
-        <Route name="note-delete"  path="delete" handler={Notes.del} />    
-      </Route>   
-    </Route>
-
-    <Route name="tasks" handler={Tasks.list} /> 
-    <Route name="task" path="task">
-      <DefaultRoute handler={Tasks.create} />
-      <Route name="task-item" path=":taskId" handler={Tasks.head}>
-        <DefaultRoute name="task-view"  handler={Tasks.view} />
-        <Route name="task-edit"  path="edit" handler={Tasks.edit} />
-        <Route name="task-delete"  path="delete" handler={Tasks.del} />    
-      </Route>   
+    {getRoute("Note", "Notes", "noteId" , Notes)}
+    {getRoute("Task", "Tasks", "taskId" , Tasks)}
+    {getRoute("Email", "Emails", "emailId" , Emails)}
+    
+    <Route name="me" path="me" handler={Me} >
+        <DefaultRoute handler={Opportunities.list} />
+         <Route name="me-profile-opportunities" path='opportunities'  >
+          <DefaultRoute handler={Opportunities.list} />
+          <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
+          <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
+            <DefaultRoute name="me-profile-opportunities-view" handler={Opportunities.view} />
+            <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
+            <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+          </Route>
+        </Route>
     </Route>
     
-    <Route name="emails" handler={Emails.list} />   
-    <Route name="email" path="email">
-      <DefaultRoute handler={Emails.create} />
-      <Route name="email-item" path=":emailId" handler={Emails.head}>
-        <DefaultRoute name="email-view" handler={Emails.view} />
-        <Route name="email-edit"  path="edit" handler={Emails.edit} />
-        <Route name="email-delete"  path="delete" handler={Emails.del} />    
-      </Route>   
-    </Route>
+</Route>
+<Route name="adminArea" path="adminArea" handler={adminNav} > 
 
-    <Route name="opportunityTypes" handler={OpportunityTypes.list} />   
-    <Route name="opportunityType" path="opportunityType">
-      <DefaultRoute handler={OpportunityTypes.create} />
-      <Route name="opportunityType-item" path=":opportunityTypeId" handler={OpportunityTypes.head}>
-        <DefaultRoute name="opportunityType-view" handler={OpportunityTypes.view} />
-        <Route name="opportunityType-edit"  path="edit" handler={OpportunityTypes.edit} />
-        <Route name="opportunityType-delete"  path="delete" handler={OpportunityTypes.del} />    
-      </Route>   
-    </Route>
-   
-    <Route name="opportunityStatuses" handler={OpportunityStatuses.list} />   
-    <Route name="opportunityStatus" path="opportunityStatus">
-      <DefaultRoute handler={OpportunityStatuses.create} />
-      <Route name="opportunityStatus-item" path=":opportunityStatusId" handler={OpportunityStatuses.head}>
-        <DefaultRoute name="opportunityStatus-view" handler={OpportunityStatuses.view} />
-        <Route name="opportunityStatus-edit"  path="edit" handler={OpportunityStatuses.edit} />
-        <Route name="opportunityStatus-delete"  path="delete" handler={OpportunityStatuses.del} />    
-      </Route>   
-    </Route>
+  {getRoute("OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
+  {getRoute("OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}
+  {getRoute("OpportunityAgentRating", "OpportunityAgentRatings", "opportunityAgentRatingId" , OpportunityAgentRatings)}
+  {getRoute("OpportunityRatePeriod", "OpportunityRatePeriods", "opportunityRatePeriodId" , OpportunityRatePeriods)}
 
-    <Route name="opportunityAgentRatings" handler={OpportunityAgentRatings.list} />   
-    <Route name="opportunityAgentRating" path="opportunityAgentRating">
-      <DefaultRoute handler={OpportunityAgentRatings.create} />
-      <Route name="opportunityAgentRating-item" path=":opportunityAgentRatingId" handler={OpportunityAgentRatings.head}>
-        <DefaultRoute name="opportunityAgentRating-view" handler={OpportunityAgentRatings.view} />
-        <Route name="opportunityAgentRating-edit"  path="edit" handler={OpportunityAgentRatings.edit} />
-        <Route name="opportunityAgentRating-delete"  path="delete" handler={OpportunityAgentRatings.del} />    
-      </Route>   
-    </Route>
-
-    <Route name="opportunityRatePeriods" handler={OpportunityRatePeriods.list} />   
-    <Route name="opportunityRatePeriod" path="opportunityRatePeriod">
-      <DefaultRoute handler={OpportunityRatePeriods.create} />
-      <Route name="opportunityRatePeriod-item" path=":opportunityRatePeriodId" handler={OpportunityRatePeriods.head}>
-        <DefaultRoute name="opportunityRatePeriod-view" handler={OpportunityRatePeriods.view} />
-        <Route name="opportunityRatePeriod-edit"  path="edit" handler={OpportunityRatePeriods.edit} />
-        <Route name="opportunityRatePeriod-delete"  path="delete" handler={OpportunityRatePeriods.del} />    
-      </Route>   
-    </Route>
 
     <Route name="users" handler={Users}>
       <Route name="user" path="user/:userId" handler={User} />
 
     </Route>
-    <Route name="me" path="me" handler={Me} >
-      <Route name="me-profile" path=":profileId">
-          <DefaultRoute handler={Opportunities.list} />
-         <Route name="me-profile-opportunities" path='opportunities'  >
-          <DefaultRoute handler={Opportunities.list} />
-          <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
-          <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
-            <Route name="me-profile-opportunities-view" path='view' handler={Opportunities.view} />
-            <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
-            <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
-          </Route>
-        </Route>
-      </Route>
-    </Route>
+</Route>
     <Route name="signup" handler={UserSignUp} />
     <Route name="signin" handler={UserSignIn} />
     <Route name="signout" handler={UserSignOut} />

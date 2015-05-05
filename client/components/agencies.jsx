@@ -7,7 +7,7 @@ import crud from "./crud-creator";
 import {agency as Store} from "../stores/store";
 import {agency as Actions} from "../actions/actions";
 
-import  {RouteHandler, Link} from "react-router";
+import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
@@ -15,16 +15,7 @@ import crudFactory from './crud-factory';
 
 
 
-var exp = crudFactory(crud, "Agency", Actions, Store, "agencyId")
-  .head(
-    function(){   
-      return (
-        <div >
-           <h1>{this.props.item.get('title')}</h1>
-        </div>
-      );
-    }
-  )
+var exp = crudFactory(crud, "agencyId", "Agency", "Agencies", Actions, Store, "agencyId")
   .select( 
     (self,nodes)=>
         <div>
@@ -36,43 +27,15 @@ var exp = crudFactory(crud, "Agency", Actions, Store, "agencyId")
               options={nodes()}
               onChange={self.props.onChange}
           />
-          <RouteHandler myPath={self.state.myPath} {...self.props} />
         </div>
-  )
-  .list(
-    function(nodes){
-      var self=this;
-      return function () {
-        return (
-          <div>
-            <p>Agency Bank:</p>
-            <span className="navLink"><Link to="agency">Create</Link></span>
-            {nodes()}
-            <RouteHandler myPath={self.state.myPath} {...self.props} />
-          </div>
-        );
-      };
-    },
-    function (data) {
-      var params={agencyId:data.get('_id')};
-      return (
-        <div key={data.get('_id')}>
-          <div>{data.get('title')}</div>
-          <span><Link to="agency-view" params={params}>View</Link></span>
-          <span><Link to="agency-edit" params={params}>Edit</Link></span>
-          <span><Link to="agency-delete" params={params}>Delete</Link></span>
-        </div>
-      );
-    }
   )
   .view(
-    function(){   
-      return (
-        <div >
-           <div>{this.props.item.get('title')}</div>
+    (self,item)=>   
+    {
+        return <div >
+           <div>{item.get('title')}</div>
         </div>
-      );
-    }
+      }
   )
   .del(
     function(){

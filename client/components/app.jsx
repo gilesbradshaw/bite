@@ -8,7 +8,6 @@ var RouteHandler = Router.RouteHandler;
 
 // Child Components
 import Nav from "./nav";
-import UserLoggedIn from "./user.LoggedIn";
 
 // Component
 var App = React.createClass({
@@ -26,7 +25,6 @@ var App = React.createClass({
     return (
       <div className="epicureContainer">
         <Nav />
-        <UserLoggedIn/>
         <RouteHandler {...this.props} />
       </div>
     );

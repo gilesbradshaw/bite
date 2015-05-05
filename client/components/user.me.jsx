@@ -1,6 +1,6 @@
 import React from "react";
 import UserStore from "../stores/user-current-store";
-
+import _ from 'lodash';
 import  {RouteHandler, Link} from "react-router";
 
 function getState() {
@@ -25,12 +25,11 @@ var User = React.createClass({
     
       if(this.state.user)
       {
-        this.params={profileId:this.state.user.get('_id')};
+        var params = _.extend({}, this.params,{profileId:this.state.user.get('_id')});
         return (
           <div className="user">
-          <span><Link to="me-profile" params={this.params}>View</Link></span>
-           {this.state.user.get('displayName')}
-            <RouteHandler myPath={this.state.myPath} {...this.props}/>
+            {this.state.user.get('displayName')}
+            <RouteHandler {...this.props} myPath={this.state.myPath}/>          
           </div>
         );
       }

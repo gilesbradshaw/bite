@@ -12,7 +12,7 @@ var Button = require("./button");
 var index=0;
 
 module.exports= {
-	lister:function lister(displayName,actions, store,errorStore, render, itemRender)
+	lister:function lister(singleId, name,pluralName,displayName,actions, store,errorStore, itemRender, render)
 	{
 	// Component
 	  function getState(index) {
@@ -21,14 +21,22 @@ module.exports= {
 	      error: errorStore.get(index)
 	    };
 	  }
-	   function nodes () {
-	      var nodes = this.state.data.get('store').toArray().map(itemRender);
-	      return nodes;
-	    }
-	  var Item = React.createClass({
-	    displayName: displayName+'Item', 
-	    render: itemRender
-	  });
+	  function nodes () {
+	  	  
+	      var nodes = this.state.data.get('store').toArray().map( (data)=>
+	      {
+	      	var params= {};
+	  	  	params[singleId] = data.get('_id');
+	        return<div key={data.get('_id')}>
+		          {itemRender(data)}
+		          <span><Link to={name + "-view"} params={params}>View</Link></span>
+		          <span><Link to={name + "-edit"} params={params}>Edit</Link></span>
+		          <span><Link to={name + "-delete"} params={params}>Delete</Link></span>
+	          	</div>
+	         }
+      	  );
+    	  return nodes;
+	  }
 
 	  return  React.createClass({
 	    displayName: displayName,
@@ -46,19 +54,17 @@ module.exports= {
 	      return {
 	      	data:Map(getState(index)),
 	      	index:index++,
-			myPath:(this.props.myPath || '') + "|" + displayName 
+			myPath:(this.props.myPath || '') + "|" + pluralName 
 
 	      };
 	    },
 
 	    componentWillMount: function () {
-	      console.log('list mounting ' + displayName);
 	      actions.load(
 	      	{
 	      		index:this.state.index,
 	      		props:this.props
 	      	});
-	      console.log('list mounted ' + displayName);
 	    },
 
 	    componentWillUnmount: function () {
@@ -75,11 +81,18 @@ module.exports= {
 
 	    render: function()
 	      {
-	        return render.bind(this)(nodes.bind(this))();
+	      	return( 
+	      		<div>
+	                <span className="navLink"><Link to={name}>Create</Link></span>
+		            {nodes.bind(this)()}
+		  			<RouteHandler myPath={this.state.myPath} {...self.props} />
+	      		</div>
+	    	)
+	        
 	      }
 	  });
 	},
-	creator:function creator(displayName,actions, store,errorStore, render, getInitial)
+	creator:function creator(routePart, displayName,actions, store,errorStore, render, getInitial)
 	{
 	  // Component
 	  function getState(index) {
@@ -107,7 +120,7 @@ module.exports= {
 	      return {
 	      	data:Map(),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "|" + displayName 
+	      	myPath:(this.props.myPath || '') + "|" + routePart 
 	      };
 	    },
 
@@ -158,7 +171,7 @@ module.exports= {
 	    }
 	  })
 	},
-	deleter:function deleter(displayName,actions, store,errorStore, render, paramName)
+	deleter:function deleter(routePart,displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
 	  function getState(index) {
@@ -191,7 +204,7 @@ module.exports= {
 	      return {
 	      	data:Map(),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "|" + displayName 
+	      	myPath:(this.props.myPath || '') + "|" + routePart 
 	      };
 	    },
 
@@ -238,7 +251,36 @@ module.exports= {
 	    }
 	  });
 	},
-	viewer:function viewer(displayName,actions, store,errorStore, render, paramName)
+	viewer:function viewer(routePart, displayName,actions, store,errorStore, render, paramName)
+	{
+	  return React.createClass({
+	    displayName: displayName,
+	    propTypes: {},
+	    mixins: [
+	    	PureRenderMixin
+	    ],
+		getInitialState: function () {  
+	      return {
+	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      };
+	    },
+	    render: function () { 
+	      if(this.props.item)
+	      {	      	
+	      	return <div>
+		      		{render(this,this.props.item)}
+		      		<RouteHandler {...this.props}  myPath={this.state.myPath} />
+		      	</div>
+	      }
+	      else
+	      {
+	      	return <div/>
+	      }
+	      
+	    }
+	  });
+	},
+	getter:function viewer(routePart, displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
 	  function getState(index) {
@@ -247,10 +289,6 @@ module.exports= {
 	      error:errorStore.get(index)
 	    };
 	  }
-	  var Item = React.createClass({
-	    displayName: displayName+'Item', 
-	    render: render
-	  });
 	  function init(props){
 		actions.get({
 	       	index:this.state.index,
@@ -273,7 +311,7 @@ module.exports= {
 	      return {
 	      	data:Map(),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "|" + displayName 
+	      	myPath:(this.props.myPath || '') + "|" + routePart 
 	      };
 	    },
 
@@ -300,27 +338,27 @@ module.exports= {
 	      {
 	       return(
 	          <div>
-	          	<div>here</div>
-	          	<div>{displayName}</div>
-	          	<div >{this.state.myPath}</div>
-	             <Item item={this.state.data.get('item')}/>
+	          	{render(this,this.state.data.get('item'))}
 	             <Error error={this.state.data.get('error')}/>
-	             <div>rhandler here passing </div>
-	             <RouteHandler {...this.props} myPath={this.state.myPath} />
-	             <div>rhandler was here </div>
+	             <RouteHandler {...this.props} item={this.state.data.get('item')} myPath={this.state.myPath} index={this.state.index} />
 	          </div>
 	        );
 	      }
 	      else
 	      {
-	        return (<Error error={this.state.data.get('error')}/>);
+	        return (
+	        	<div>
+	        		<Error error={this.state.data.get('error')}/>
+	        	</div>
+	        );
 	      }
 	    }
 	  });
 	},
-	editor:function editor(displayName,actions, store,errorStore, render, paramName)
+
+	editor:function editor(routePart,displayName,actions, store,errorStore, render, paramName)
 	{
-	  // Component
+		// Component
 	  function getState(index) {
 	    return {
 	      item:store.get(index)||null,
@@ -331,13 +369,6 @@ module.exports= {
 	    displayName: displayName+'Item', 
 	    render: render
 	  });
-	  function init(props){
-		  actions.get({
-	      	index:this.state.index,
-	      	id:props.params[paramName],
-	      	props:props
-	      });
-	  };
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
@@ -348,30 +379,26 @@ module.exports= {
 	    ],
 
 	    getInitialState: function () {
-	      
 	      return {
-	      	data:Map(),
+	      	data:Map(this.props),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "" + displayName 
+	      	myPath:(this.props.myPath || '') + "" + routePart 
 	      };
 	    },
-
-	    componentWillMount: function () {
-	    	init.bind(this)(this.props);
+		componentWillMount: function () {
+			actions.set({
+	      		index:this.state.index,
+	      		item:this.state.data.get('item')
+	      	});
 	    },
 
 	    componentWillUnmount: function () {
 	    	actions.dispose(this.state.index);
 	    },
-	    componentWillReceiveProps: function (props) 
-	    {
-	    	init.bind(this)(props);
-	    },
-	    storeDidChange: function () {
+ 		storeDidChange: function () {
 	      var s=getState(this.state.index);
 	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
 	    },
-
 	    handleChange:function(field){
 	      return function(evt){
 	      	actions.set({
@@ -411,5 +438,34 @@ module.exports= {
 	      }
 	    }
 	  });
+	},
+	listHead:function viewer(routePart, displayName,render)
+	{
+	  return React.createClass({
+	    displayName: displayName,
+	    propTypes: {},
+	    mixins: [
+	    	PureRenderMixin
+	    ],
+
+	    getInitialState: function () {
+	      
+	      return {
+	      	displayName:displayName,
+	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      };
+	    },
+	    render: function () {   
+	       return(
+	          <div>
+	          	{render(this)}
+	          	
+	          	<RouteHandler {...this.props} myPath={this.state.myPath} />
+	          </div>
+	        );
+	    
+	    }
+	  });
 	}
+	
 };

@@ -1,44 +1,65 @@
 import React from "react";
 
-import {Link} from "react-router";
+import {RouteHandler, Link} from "react-router";
+import UserLoggedIn from "./user.LoggedIn";
+
 
 // Component
 var Nav = React.createClass({
   displayName: "Nav",
-  propTypes: {},
-  mixins: [],
-
-  getInitialState: function () { return null; },
-
-  componentWillMount: function () {},
-
-  componentWillUnmount: function () {},
-
   render: function () {
     return (
       <div>
         <span className="navLink"><Link to="app">Home</Link> </span>
-        <span className="navLink"><Link to="opportunityTypes">OpportunityTypes</Link></span>
-        <span className="navLink"><Link to="opportunityStatuses">OpportunityStatuses</Link></span>
-        <span className="navLink"><Link to="opportunityAgentRatings">OpportunityAgentRatings</Link></span>
-        <span className="navLink"><Link to="opportunityRatePeriods">OpportunityRatePeriods</Link></span>
-        <span className="navLink"><Link to="agencies">Agencies</Link></span>
-        <span className="navLink"><Link to="agents">Agents</Link></span>
-        <span className="navLink"><Link to="profiles">Profiles</Link></span>
-        <span className="navLink"><Link to="opportunities">Opportunities</Link></span>
-        <span className="navLink"><Link to="notes">Notes</Link></span>
-        <span className="navLink"><Link to="tasks">Tasks</Link></span>
-        <span className="navLink"><Link to="emails">Emails</Link></span>
-        <span className="navLink"><Link to="users">Users</Link></span>
-        <span className="navLink"><Link to="me">Me</Link></span>
+        <span className="navLink"><Link to="userArea">Main</Link></span>
+        <span className="navLink"><Link to="adminArea">Admin</Link></span>
         <span className="navLink"><Link to="signup">Sign up</Link></span>
         <span className="navLink"><Link to="signin">Sign in</Link></span>
+        <UserLoggedIn/>
       </div>
     );
   }
 });
 
 export default Nav;
+
+var userNav = React.createClass({
+  displayName: "userNav",
+  render: function () {
+    return (
+      <div>
+        <span className="navLink"><Link to="Agencies">Agencies</Link></span>
+        <span className="navLink"><Link to="Agents">Agents</Link></span>
+        <span className="navLink"><Link to="Opportunities">Opportunities</Link></span>
+        <span className="navLink"><Link to="Notes">Notes</Link></span>
+        <span className="navLink"><Link to="Tasks">Tasks</Link></span>
+        <span className="navLink"><Link to="Emails">Emails</Link></span>
+        <span className="navLink"><Link to="me">Me</Link></span>
+        <RouteHandler {...this.props} />
+       </div>
+    );
+  }
+});
+
+export {userNav as userNav};
+
+var adminNav = React.createClass({
+  displayName: "adminNav",
+  render: function () {
+    return (
+      <div>
+        <span className="navLink"><Link to="OpportunityTypes">OpportunityTypes</Link></span>
+        <span className="navLink"><Link to="OpportunityStatuses">OpportunityStatuses</Link></span>
+        <span className="navLink"><Link to="OpportunityAgentRatings">OpportunityAgentRatings</Link></span>
+        <span className="navLink"><Link to="OpportunityRatePeriods">OpportunityRatePeriods</Link></span>
+        <RouteHandler {...this.props} />
+       </div>
+    );
+  }
+});
+
+export {adminNav as adminNav};
+
 
 // Note {...this.props}, see:
 // http://facebook.github.io/react/docs/jsx-spread.html

@@ -96,13 +96,16 @@ exports.listByOpportunity = function(req, res) {
  * Task middleware
  */
 exports.taskByID = function(req, res, next, id) {
-	Task.findById(id).populate('user', 'displayName').exec(function(err, task) {
-		if (err) return next(err);
-		if (!task) return next(new Error('Failed to load task ' + id));
-		req.task = task;
-		next();
-	});
-};
+	Task.findById(id)
+		.populate('user', 'displayName')
+		.populate('opportunity', 'title')
+		.exec(function(err, task) {
+			if (err) return next(err);
+			if (!task) return next(new Error('Failed to load task ' + id));
+			req.task = task;
+			next();
+		});
+	};
 
 exports.tasksByOpportunityID = function(req, res, next, id) {
 	Task.find({'opportunity':new mongoose.Types.ObjectId(id)}).exec(function(err,tasks){

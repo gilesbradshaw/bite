@@ -1,5 +1,6 @@
+import React from "react";
 
-var crudFactory=(crud, name, actions, store, id)=>
+var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
 {
   var cruded={};
 
@@ -7,12 +8,14 @@ var crudFactory=(crud, name, actions, store, id)=>
     make:(()=>cruded),
     select:(renderer)=>{
       cruded.select = crud.lister(
+        singleId,
+        name,
+        pluralName,
         name + ".select",
         actions,
         store.list,
         store.error,
-        function(nodes){
-          var self=this;
+        function(self, nodes){
           return function () {
             return renderer(self,nodes);
           };
@@ -21,20 +24,23 @@ var crudFactory=(crud, name, actions, store, id)=>
       );
       return factory;
     },
-    list:(render, nodeRender)=>{
+    list:(nodeRender,render)=>{
       cruded.list=crud.lister(
+        singleId,
+        name,
+        pluralName,
         name + ".list",
         actions,
         store.list,
         store.error,
-        render,
-        nodeRender
-        
+        nodeRender,
+        render  
       );
       return factory;
     },
     view: (render)=>{
       cruded.view = crud.viewer (
+        "view",
          name + ".view",
           actions,
           store.get,
@@ -45,7 +51,8 @@ var crudFactory=(crud, name, actions, store, id)=>
       return factory;
     },
     head: (render)=>{
-      cruded.head=crud.viewer (
+      cruded.head=crud.getter (
+        name,
          name + ".head",
           actions,
           store.get,
@@ -58,6 +65,7 @@ var crudFactory=(crud, name, actions, store, id)=>
     },
     edit:(render)=>{
       cruded.edit = crud.editor (
+        "edit",
         name + ".edit",
          actions,
          store.get,
@@ -69,6 +77,7 @@ var crudFactory=(crud, name, actions, store, id)=>
     },
     del:(render)=>{
       cruded.del = crud.deleter (
+        "delete",
         name + ".delete",
         actions,
         store.get,
@@ -80,6 +89,7 @@ var crudFactory=(crud, name, actions, store, id)=>
     },
     create:(render)=>{
       cruded.create= crud.creator (
+        "create",
         name + ".create",
         actions,
         store.get,
@@ -87,9 +97,44 @@ var crudFactory=(crud, name, actions, store, id)=>
         render
       );
       return factory;
+    },
+    listHead:(render)=>{
+      cruded.listHead= crud.listHead (
+        pluralName,
+        pluralName,
+        render
+      );
+      return factory;
     }
   }
-  return factory;
+
+
+  //defaults
+  return factory.listHead(
+      (self)=> <h1>{self.state.displayName}</h1>
+    )
+    .head( 
+        (self,item)=>   
+          <div >
+             <h1>{item.get('title')}</h1>
+          </div>
+    )
+    .list( 
+      (data) => <div>{data.get('title')}</div>
+    );
+  
+    /*.list(
+      function(self,nodes){
+        return function () {
+          return (
+            <div>
+              <p>Agency Bank:</p>
+              <span className="navLink"><Link to="agency">Create</Link></span>
+              {nodes()}
+            </div>
+          );
+        };
+    })*/;
 }
 
 export default crudFactory;
