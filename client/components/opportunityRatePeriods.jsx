@@ -22,7 +22,7 @@ var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","
               name="OpportunityRatePeriods-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>

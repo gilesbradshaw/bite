@@ -19,12 +19,11 @@ var exp = crudFactory(crud, "opportunityTypeId", "OpportunityType","OpportunityT
     (self,nodes)=>
         <div>
           <p>Opportunity Type Selector:</p>
-
           <FieldSelect
               name="OpportunityTypes-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>

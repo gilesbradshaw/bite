@@ -24,7 +24,7 @@ var exp = crudFactory(crud, "taskId", "Task", "Tasks", Actions, Store, "taskId")
               name="Tasks-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>

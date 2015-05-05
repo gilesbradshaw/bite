@@ -25,7 +25,7 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
                 name="Profiles-selecter"
                 value={self.props.value}
                 label='displayName'
-                options={nodes()}
+                options={nodes}
                 onChange={self.props.onChange}
             />
         </div>

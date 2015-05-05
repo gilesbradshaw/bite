@@ -15,12 +15,13 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
         actions,
         store.list,
         store.error,
+        (data)=>data,
         function(self, nodes){
           return function () {
             return renderer(self,nodes);
           };
-        },
-        (data)=>data
+        }
+        
       );
       return factory;
     },

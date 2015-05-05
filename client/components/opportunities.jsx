@@ -31,7 +31,7 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
               name="Opportunities-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>
@@ -58,7 +58,7 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
      function(){
         return (
           <div >
-           <SelectProfile value={this.props.item.getIn(["user", "displayName"])} onChange={this.props.handleRawChange('user')}/>
+            <SelectProfile value={this.props.item.getIn(["user", "displayName"])} onChange={this.props.handleRawChange('user')}/>
             <SelectType value={this.props.item.getIn(["type", "title"])} onChange={this.props.handleRawChange('type')}/>
             <SelectStatus value={this.props.item.getIn(["status", "title"])} onChange={this.props.handleRawChange('status')}/>
             <SelectRatePeriod value={this.props.item.getIn(["ratePeriod", "title"])} onChange={this.props.handleRawChange('ratePeriod')}/>
@@ -72,6 +72,11 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
     function(){
         return (
           <div>
+            <SelectProfile value={this.props.item.getIn(["user", "displayName"])} onChange={this.props.handleRawChange('user')}/>
+            <SelectType value={this.props.item.getIn(["type", "title"])} onChange={this.props.handleRawChange('type')}/>
+            <SelectStatus value={this.props.item.getIn(["status", "title"])} onChange={this.props.handleRawChange('status')}/>
+            <SelectRatePeriod value={this.props.item.getIn(["ratePeriod", "title"])} onChange={this.props.handleRawChange('ratePeriod')}/>
+            <SelectAgentRating value={this.props.item.getIn(["agentRating", "title"])} onChange={this.props.handleRawChange('agentRating')}/>  
              <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
           </div>
         );

@@ -6,13 +6,19 @@ var Input = React.createClass({
   propTypes: {},
   mixins: [],
 
-  getInitialState: function () { return null; },
+  getInitialState: function () { return {value:this.props.value}; },
 
   componentWillMount: function () {},
 
   componentWillUnmount: function () {},
+  handleChange:function(evt,item){
+    this.setState({value: event.target.value});
+    this.props.onChange(evt,item);
+
+  },
 
   render: function () {
+    var value=this.state.value;
     return (
       <span>
         <label htmlFor={this.props.id}>
@@ -20,8 +26,8 @@ var Input = React.createClass({
         </label>
         <input
           id={this.props.id}
-          value={this.props.value}
-          onChange={this.props.onChange} />
+          value={value}
+          onChange={this.handleChange} />
       </span>
     );
   }

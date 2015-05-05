@@ -55,6 +55,38 @@ function getStore(name)
       _item= _item.remove(payload.index);
       this.emitChange();
     }
+    if (payload.actionType === name + "_CREATE") {
+      let changed= false;
+      _item.forEach(function(value,key)
+        {
+          if(key === payload.index || (value!==payload.item && value.get('_id') === payload.item.get('_id')))
+          {
+            _item= _item.set(key,payload.item);
+            changed=true;
+            
+          }    
+        }
+      );
+      if(changed){
+        this.emitChange();
+      }
+    }
+    if (payload.actionType === name + "_DELETE") {
+      let changed= false;
+      _item.forEach(function(value,key)
+        {
+          if(value.get('_id') === payload.id)
+          {
+            _item= _item.delete(key);
+            changed=true;
+            
+          }    
+        }
+      );
+      if(changed){
+        this.emitChange();
+      }
+    }
   });
 }
 function errorStore(name)

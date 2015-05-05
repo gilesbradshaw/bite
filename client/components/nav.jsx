@@ -48,6 +48,7 @@ var adminNav = React.createClass({
   render: function () {
     return (
       <div>
+        <span className="navLink"><Link to="Profiles">Profiles</Link></span>
         <span className="navLink"><Link to="OpportunityTypes">OpportunityTypes</Link></span>
         <span className="navLink"><Link to="OpportunityStatuses">OpportunityStatuses</Link></span>
         <span className="navLink"><Link to="OpportunityAgentRatings">OpportunityAgentRatings</Link></span>

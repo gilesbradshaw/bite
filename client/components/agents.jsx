@@ -21,7 +21,7 @@ var exp = crudFactory(crud, "agentId", "Agent", "Agents", Actions, Store, "agent
               name="Agents-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>

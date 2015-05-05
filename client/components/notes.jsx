@@ -23,7 +23,7 @@ var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
               name="Notes-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>

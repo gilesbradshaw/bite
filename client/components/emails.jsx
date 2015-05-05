@@ -25,7 +25,7 @@ var exp = crudFactory(crud, "emailId", "Email", "Emails", Actions, Store, "email
               name="Emails-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>

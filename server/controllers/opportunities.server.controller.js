@@ -18,14 +18,21 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var opportunity = new Opportunity(req.body);
 	opportunity.user = req.user;
-	console.log('atricle updating');
 	opportunity.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json(opportunity);
+			Opportunity.findById(opportunity._id)
+			.populate('type', 'title')
+			.populate('status', 'title')
+			.populate('agentRating', 'title')
+			.populate('ratePeriod', 'title')
+			.populate('user', 'displayName').
+			exec(function(err, opportunity) {
+				res.json(opportunity);
+			});
 		}
 	});
 };
@@ -57,11 +64,6 @@ exports.addTask = function(req, res) {
 exports.addNote = function(req, res) {
 	var note = new Note(req.body);
 	note.user = req.user;
-	if(!req.user)
-	{
-		ret.gg='kkk';
-		throw "nahhhhh";
-	}
 	note.opportunity=req.opportunity;
 	note.save(function(err) {
 		if (err) {
@@ -105,13 +107,22 @@ exports.update = function(req, res) {
 	var opportunity = req.opportunity;
 
 	opportunity = _.extend(opportunity, req.body);
-	opportunity.save(function(err) {
+	opportunity
+	.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json(opportunity);
+			Opportunity.findById(opportunity._id)
+			.populate('type', 'title')
+			.populate('status', 'title')
+			.populate('agentRating', 'title')
+			.populate('ratePeriod', 'title')
+			.populate('user', 'displayName').
+			exec(function(err, opportunity) {
+				res.json(opportunity);
+			});
 		}
 	});
 };
@@ -149,6 +160,7 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+
 			res.json(opportunities);
 		}
 	});

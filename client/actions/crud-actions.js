@@ -77,10 +77,11 @@ function crudActions(single, plural,path)
     post: function (params) {
       setTimeout(()=>
       {
+        var item = params.item.delete('_id');
         var self = this;
         request
         .post(path(params))
-        .send(params.item)
+        .send(item)
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)

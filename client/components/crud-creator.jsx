@@ -79,15 +79,23 @@ module.exports= {
 	    	);
 	    },
 
-	    render: function()
+	    render:  function()
 	      {
-	      	return( 
-	      		<div>
-	                <span className="navLink"><Link to={name}>Create</Link></span>
-		            {nodes.bind(this)()}
-		  			<RouteHandler myPath={this.state.myPath} {...self.props} />
-	      		</div>
-	    	)
+	      	var res =this.state.data.get('store').toArray();// nodes.bind(this)();
+	      	if(render)
+	      	{
+	      		return render(this,res).bind(this)()
+	      	}
+	      	else
+	      	{
+		      	return( 
+		      		<div>
+		                <span className="navLink"><Link to={name}>Create</Link></span>
+			            {nodes.bind(this)()}
+			  			<RouteHandler myPath={this.state.myPath} {...self.props} />
+		      		</div>
+		    	);
+		    }
 	        
 	      }
 	  });
@@ -148,18 +156,27 @@ module.exports= {
 	      	});
 	      }.bind(this);
 	    },
+	    handleRawChange:function(field){
+	      return function(evt, value){
+	      	actions.set({
+	      		index:this.state.index,
+	      		item:this.state.data.setIn(['item',field],evt).get('item')
+	      	});
+	      }.bind(this);
+	    },
 	    post:function() {
 	      actions.post({
 	      	index:this.state.index,
 	      	item:this.state.data.get('item'),
 	      	props:this.props
 	      });
+
 	    },
 	    render: function () {
 	      if(this.state.data.get('item'))
 	      {
 	        return <div >
-	           <Item handleChange={this.handleChange} item={this.state.data.get('item')}/>
+	           <Item handleRawChange={this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.post} value="Create" />
 	           <Error error={this.state.data.get('error')}/>
 	        </div>

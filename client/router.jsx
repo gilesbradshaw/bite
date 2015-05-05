@@ -76,47 +76,47 @@ var routes = (
         </Route>
       </Route>
     
-    <Route name="profiles" handler={Profiles.list}/>   
-    <Route name="profile" path="profile">
+    <Route name="Profiles" handler={Profiles.list}/>   
+    <Route name="Profile" path="profile">
       <DefaultRoute handler={Profiles.create} />
-      <Route name="profile-item" path=":profileId" handler={Profiles.head}>
+      <Route name="Profile-item" path=":profileId" handler={Profiles.head}>
         <DefaultRoute name="profile-view" handler={Profiles.view} />
-        <Route name="profile-edit"  path="edit" handler={Profiles.edit} />
-        <Route name="profile-delete"  path="delete" handler={Profiles.del} />    
-        <Route name="profile-opportunities" path='opportunities'  >
+        <Route name="Profile-edit"  path="edit" handler={Profiles.edit} />
+        <Route name="Profile-delete"  path="delete" handler={Profiles.del} />    
+        <Route name="Profile-opportunities" path='opportunities'  >
           <DefaultRoute handler={Opportunities.list} />
-          <Route name="profile-opportunities-create" path='create' handler={Opportunities.create} />
-          <Route name="profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
+          <Route name="Profile-opportunities-create" path='create' handler={Opportunities.create} />
+          <Route name="Profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
             <DefaultRoute name="profile-opportunities-view" handler={Opportunities.view} />
-            <Route name="profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
-            <Route name="profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+            <Route name="Profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
+            <Route name="Profile-opportunities-delete" path='delete' handler={Opportunities.del} />
           </Route> 
         </Route>
-        <Route name="profile-tasks" path='tasks'  >
+        <Route name="Profile-tasks" path='tasks'  >
           <DefaultRoute handler={Tasks.list} />
-          <Route name="profile-tasks-create" path='create' handler={Tasks.create} />
-          <Route name="profile-tasks-id" path=':taskId' handler={Tasks.head}>
-            <DefaultRoute name="profile-tasks-view" handler={Tasks.view} />
-            <Route name="profile-tasks-edit" path='edit' handler={Tasks.edit} />
-            <Route name="profile-tasks-delete" path='delete' handler={Tasks.del} />
+          <Route name="Profile-tasks-create" path='create' handler={Tasks.create} />
+          <Route name="Profile-tasks-id" path=':taskId' handler={Tasks.head}>
+            <DefaultRoute name="Profile-tasks-view" handler={Tasks.view} />
+            <Route name="Profile-tasks-edit" path='edit' handler={Tasks.edit} />
+            <Route name="Profile-tasks-delete" path='delete' handler={Tasks.del} />
           </Route> 
         </Route> 
-        <Route name="profile-notes" path='notes'  >
+        <Route name="Profile-notes" path='notes'  >
           <DefaultRoute handler={Notes.list} />
-          <Route name="profile-notes-create" path='create' handler={Notes.create} />
-          <Route name="profile-notes-id" path=':noteId'  handler={Notes.head} >
-            <DefaultRoute name="profile-notes-view" handler={Notes.view} />
-            <Route name="profile-notes-edit" path='edit' handler={Notes.edit} />
-            <Route name="profile-notes-delete" path='delete' handler={Notes.del} />
+          <Route name="Profile-notes-create" path='create' handler={Notes.create} />
+          <Route name="Profile-notes-id" path=':noteId'  handler={Notes.head} >
+            <DefaultRoute name="Profile-notes-view" handler={Notes.view} />
+            <Route name="Profile-notes-edit" path='edit' handler={Notes.edit} />
+            <Route name="Profile-notes-delete" path='delete' handler={Notes.del} />
           </Route>
         </Route>
-        <Route name="profile-emails" path='emails'  >
+        <Route name="Profile-emails" path='emails'  >
           <DefaultRoute handler={Emails.list} />
-          <Route name="profile-emails-create" path='create' handler={Emails.create} />
-          <Route name="profile-emails-id" path=':emailId' handler={Emails.head}>
-            <DefaultRoute name="profile-emails-view" handler={Emails.view} />
-            <Route name="profile-emails-edit" path='edit' handler={Emails.edit} />
-            <Route name="profile-emails-delete" path='delete' handler={Emails.del} />
+          <Route name="Profile-emails-create" path='create' handler={Emails.create} />
+          <Route name="Profile-emails-id" path=':emailId' handler={Emails.head}>
+            <DefaultRoute name="Profile-emails-view" handler={Emails.view} />
+            <Route name="Profile-emails-edit" path='edit' handler={Emails.edit} />
+            <Route name="Profile-emails-delete" path='delete' handler={Emails.del} />
           </Route> 
         </Route> 
       </Route>    

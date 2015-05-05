@@ -19,12 +19,11 @@ var exp = crudFactory(crud, "agencyId", "Agency", "Agencies", Actions, Store, "a
   .select( 
     (self,nodes)=>
         <div>
-          <p>Agency Selector:</p>
           <FieldSelect
               name="Agencies-selecter"
               value={self.props.value}
               label='title'
-              options={nodes()}
+              options={nodes}
               onChange={self.props.onChange}
           />
         </div>
