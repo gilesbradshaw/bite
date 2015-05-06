@@ -96,6 +96,7 @@ function crudActions(single, plural,path)
               actionType: single + "_NOERROR",
               index:params.index
             }); 
+            //params.router.transitionTo('app');
           }
           else
           {

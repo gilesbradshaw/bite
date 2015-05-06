@@ -11,6 +11,10 @@ var Input = React.createClass({
   componentWillMount: function () {},
 
   componentWillUnmount: function () {},
+  componentWillReceiveProps: function (props) 
+  {
+    this.setState(prev=>{value:props.initial ? props.value: prev.value});
+  },
   handleChange:function(evt,item){
     this.setState({value: event.target.value});
     this.props.onChange(evt,item);
@@ -18,7 +22,7 @@ var Input = React.createClass({
   },
 
   render: function () {
-    var value=this.state.value;
+    var value=this.props.initial ? this.props.value : this.state.value;
     return (
       <span>
         <label htmlFor={this.props.id}>

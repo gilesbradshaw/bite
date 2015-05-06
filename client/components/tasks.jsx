@@ -52,16 +52,7 @@ var exp = crudFactory(crud, "taskId", "Task", "Tasks", Actions, Store, "taskId")
      function(){
         return (
           <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )
-  .create(
-    function(){
-        return (
-          <div>
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
+             <FormInput id='title' title='Title' initial={this.props.initial} value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
           </div>
         );
      }

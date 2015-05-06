@@ -44,18 +44,22 @@ function getStore(name)
     }
   }, function (payload) {
     if (payload.actionType === name + "_GOT") {
+      console.log(payload.actionType + "  " + payload.index + " " + payload.item.get("title"));
       _item=_item.set(payload.index,payload.item);
       this.emitChange();
     }
     if (payload.actionType === name + "_NEW") {
+      console.log(payload.actionType  + "  " + payload.index + " " );
       _item=_item.set(payload.index,payload.item || Map()); 
       this.emitChange();
     }
     if (payload.actionType === name + "_DISPOSE") {
+      console.log(payload.actionType  + "  " + payload.index + " " );
       _item= _item.remove(payload.index);
       this.emitChange();
     }
     if (payload.actionType === name + "_CREATE") {
+      console.log(payload.actionType  + "  " + payload.index + " " );
       let changed= false;
       _item.forEach(function(value,key)
         {
@@ -72,6 +76,7 @@ function getStore(name)
       }
     }
     if (payload.actionType === name + "_DELETE") {
+      console.log(payload.actionType);
       let changed= false;
       _item.forEach(function(value,key)
         {
@@ -101,7 +106,7 @@ function errorStore(name)
   }, function (payload) {
     if (payload.actionType === name + "_ERROR") {
       _error=_error.set(payload.index, payload.item);
-      this.emitChange();
+        this.emitChange();
     }
     if (payload.actionType === name + "_NOERROR") {
       _error=_error.remove(payload.index);

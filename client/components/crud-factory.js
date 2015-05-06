@@ -1,4 +1,6 @@
 import React from "react";
+import FormInput from "./formInput";
+import Silly from "./Silly";
 
 var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
 {
@@ -78,7 +80,9 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
     },
     del:(render)=>{
       cruded.del = crud.deleter (
-        "delete",
+        name,
+        pluralName,
+       "delete",
         name + ".delete",
         actions,
         store.get,
@@ -90,17 +94,22 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
     },
     create:(render)=>{
       cruded.create= crud.creator (
+        name,
+        pluralName,
         "create",
         name + ".create",
         actions,
         store.get,
         store.error,
-        render
+        render,
+        id
       );
       return factory;
     },
     listHead:(render)=>{
       cruded.listHead= crud.listHead (
+        name,
+        pluralName,
         pluralName,
         pluralName,
         render
@@ -117,11 +126,23 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
     .head( 
         (self,item)=>   
           <div >
+
              <h1>{item.get('title')}</h1>
+             <h4 style={{background:'red'}}>{self.state.myPath}</h4>
+            <Silly myPath= {self.props.myPath}>
+              <h1>can I out stuff in hre???</h1>
+              <Silly myPath= {self.props.myPath}/>
+            </Silly>
           </div>
     )
     .list( 
       (data) => <div>{data.get('title')}</div>
+    )
+    .create(
+      (self)=>
+          <div>
+             <FormInput id='title' title='Title' value={self.props.item.get('title')} onChange={self.props.handleChange('title')} />
+          </div>
     );
   
     /*.list(

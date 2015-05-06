@@ -19,7 +19,9 @@ module.exports = function(app) {
 
 	app.route('/opportunities/:opportunityId/tasks/:taskId')
 		.get(tasks.read)
-		.put(users.requiresLogin, tasks.hasAuthorization, tasks.update);
+		.put(users.requiresLogin, tasks.hasAuthorization, tasks.update)
+		.delete(users.requiresLogin, tasks.hasAuthorization, tasks.delete);
+		
 
 
 	// Finish by binding the task middleware

@@ -28,12 +28,12 @@ var userNav = React.createClass({
   render: function () {
     return (
       <div>
-        <span className="navLink"><Link to="Agencies">Agencies</Link></span>
-        <span className="navLink"><Link to="Agents">Agents</Link></span>
-        <span className="navLink"><Link to="Opportunities">Opportunities</Link></span>
-        <span className="navLink"><Link to="Notes">Notes</Link></span>
-        <span className="navLink"><Link to="Tasks">Tasks</Link></span>
-        <span className="navLink"><Link to="Emails">Emails</Link></span>
+        <span className="navLink"><Link to="Agency-list">Agencies</Link></span>
+        <span className="navLink"><Link to="Agent-list">Agents</Link></span>
+        <span className="navLink"><Link to="Opportunity-list">Opportunities</Link></span>
+        <span className="navLink"><Link to="Note-list">Notes</Link></span>
+        <span className="navLink"><Link to="Task-list">Tasks</Link></span>
+        <span className="navLink"><Link to="Email-list">Emails</Link></span>
         <span className="navLink"><Link to="me">Me</Link></span>
         <RouteHandler {...this.props} />
        </div>
@@ -48,11 +48,11 @@ var adminNav = React.createClass({
   render: function () {
     return (
       <div>
-        <span className="navLink"><Link to="Profiles">Profiles</Link></span>
-        <span className="navLink"><Link to="OpportunityTypes">OpportunityTypes</Link></span>
-        <span className="navLink"><Link to="OpportunityStatuses">OpportunityStatuses</Link></span>
-        <span className="navLink"><Link to="OpportunityAgentRatings">OpportunityAgentRatings</Link></span>
-        <span className="navLink"><Link to="OpportunityRatePeriods">OpportunityRatePeriods</Link></span>
+        <span className="navLink"><Link to="Profile-list">Profiles</Link></span>
+        <span className="navLink"><Link to="OpportunityType-list">OpportunityTypes</Link></span>
+        <span className="navLink"><Link to="OpportunityStatus-list">OpportunityStatuses</Link></span>
+        <span className="navLink"><Link to="OpportunityAgentRating-list">OpportunityAgentRatings</Link></span>
+        <span className="navLink"><Link to="OpportunityRatePeriod-list">OpportunityRatePeriods</Link></span>
         <RouteHandler {...this.props} />
        </div>
     );

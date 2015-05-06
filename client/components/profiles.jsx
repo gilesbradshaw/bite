@@ -30,6 +30,9 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
             />
         </div>
   )
+  .list( 
+      (data) => <div>{data.get('displayName')}</div>
+  )
   .view(
     function(self,item){   
       return (
@@ -57,14 +60,10 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
         );
      }
   )
-  .create(
-    function(){
-        return (
-          <div>
-            <FormInput id='firstName' title='First Name' value={this.props.item.get('firstName')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
+  .create( (self)=>
+    <div>
+      <FormInput id='firstName' title='First Name' value={self.props.item.get('firstName')} onChange={self.props.handleChange('title')} />
+    </div>
   )
   .make();
 

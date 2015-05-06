@@ -1,11 +1,10 @@
 import React from "react";
 import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
-
 import {Map,toJS} from "immutable";
 // Router
-import  {RouteHandler, Link} from "react-router";
-
+import  {Navigation, RouteHandler, Link} from "react-router";
+import _ from 'lodash';
 var Error = require("./error");
 var Button = require("./button");
 
@@ -22,16 +21,19 @@ module.exports= {
 	    };
 	  }
 	  function nodes () {
-	  	  
+	  	  var self =this;
 	      var nodes = this.state.data.get('store').toArray().map( (data)=>
 	      {
+
 	      	var params= {};
 	  	  	params[singleId] = data.get('_id');
+	  	  	params = _.extend(params,self.props.params);
 	        return<div key={data.get('_id')}>
 		          {itemRender(data)}
-		          <span><Link to={name + "-view"} params={params}>View</Link></span>
-		          <span><Link to={name + "-edit"} params={params}>Edit</Link></span>
-		          <span><Link to={name + "-delete"} params={params}>Delete</Link></span>
+		          <h4 style={{background:'pink'}}>{self.state.myPath}</h4>
+		          <span><Link to={self.state.myPath + "-view"} params={params}>View</Link></span>
+		          <span><Link to={self.state.myPath + "-edit"} params={params}>Edit</Link></span>
+		          <span><Link to={self.state.myPath + "-delete"} params={params}>Delete</Link></span>
 	          	</div>
 	         }
       	  );
@@ -43,7 +45,8 @@ module.exports= {
 	    mixins: [
 	    	PureRenderMixin,
 	    	store.mixin,
-	    	errorStore.mixin
+	    	errorStore.mixin,
+	    	Navigation
 	    ],
 	    propTypes: {
     		onChange: React.PropTypes.func,
@@ -54,7 +57,7 @@ module.exports= {
 	      return {
 	      	data:Map(getState(index)),
 	      	index:index++,
-			myPath:(this.props.myPath || '') + "|" + pluralName 
+			myPath:this.props.myPath
 
 	      };
 	    },
@@ -90,7 +93,7 @@ module.exports= {
 	      	{
 		      	return( 
 		      		<div>
-		                <span className="navLink"><Link to={name}>Create</Link></span>
+		                
 			            {nodes.bind(this)()}
 			  			<RouteHandler myPath={this.state.myPath} {...self.props} />
 		      		</div>
@@ -100,20 +103,21 @@ module.exports= {
 	      }
 	  });
 	},
-	creator:function creator(routePart, displayName,actions, store,errorStore, render, getInitial)
+	creator:function creator(name, pluralName, routePart, displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
 	  function getState(index) {
-	  	console.log(displayName + ' getting state ' + index + ' rets ' + store.get(index));
-	    return {
+	  	return {
 	      item:store.get(index),
 	      error:errorStore.get(index)
 	    };
 	  }
 	  var Item = React.createClass({
-	  	mixins:[PureRenderMixin],
+	  	mixins:[PureRenderMixin,Navigation],
 	    displayName: displayName+'Item', 
-	    render: render
+	    render: function(){
+	    	return render(this);
+	    }
 	  });
 	  return React.createClass({
 	    displayName: displayName,
@@ -121,14 +125,15 @@ module.exports= {
 	    mixins: [
 	    	PureRenderMixin,
 	    	store.mixin,
-	    	errorStore.mixin
+	    	errorStore.mixin,
+	    	Navigation
 	    ],
 
 	    getInitialState: function () {	      
 	      return {
 	      	data:Map(),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      	myPath:this.props.myPath + '-create'
 	      };
 	    },
 
@@ -145,7 +150,16 @@ module.exports= {
 
 	    storeDidChange: function () {
 	      var s=getState(this.state.index);
-	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
+	      if(s.item.get("_id"))
+	      {
+	      	let params = {};
+	      	params[paramName]= s.item.get("_id");
+	      	this.context.router.transitionTo(this.props.myPath + "-edit", _.extend(params, this.props.params));	
+	      }
+	      else
+	      {
+	      	this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
+	      }
 	    },
 
 	    handleChange:function(field){
@@ -165,17 +179,21 @@ module.exports= {
 	      }.bind(this);
 	    },
 	    post:function() {
+	      //I dont understand why router is only available now
+
 	      actions.post({
 	      	index:this.state.index,
 	      	item:this.state.data.get('item'),
-	      	props:this.props
+	      	props:this.props,
+	      	//router:this.context.router
 	      });
-
+	      
 	    },
 	    render: function () {
 	      if(this.state.data.get('item'))
 	      {
 	        return <div >
+	        	<h4 style={{background:'red'}}>{this.state.myPath}</h4>
 	           <Item handleRawChange={this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.post} value="Create" />
 	           <Error error={this.state.data.get('error')}/>
@@ -188,7 +206,7 @@ module.exports= {
 	    }
 	  })
 	},
-	deleter:function deleter(routePart,displayName,actions, store,errorStore, render, paramName)
+	deleter:function deleter(name, pluralName, routePart,displayName,actions, store,errorStore, render, paramName)
 	{
 	  // Component
 	  function getState(index) {
@@ -214,19 +232,19 @@ module.exports= {
 	    mixins: [
 	    	PureRenderMixin,
 	    	store.mixin,
-	    	errorStore.mixin
+	    	errorStore.mixin,
+	    	Navigation
 	    ],
 	    getInitialState: function () {
 	      
 	      return {
 	      	data:Map(),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      	myPath:this.props.myPath + '-delete'
 	      };
 	    },
 
 	    componentWillMount: function () {
-	    	console.log("deleter mount " + this.props.params.agencyId);
 	    	init.bind(this)(this.props);
 	    },
 
@@ -236,10 +254,27 @@ module.exports= {
 	   	componentWillReceiveProps: function (props) 
 	    {
 	    	init.bind(this)(props);
+	    	this.setState(prev=>({data:prev.data.set("dataFetched", false)}));
 	    },
 	    storeDidChange: function () {
-	      var s=getState(this.state.index);
-	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
+	      	if(!this.state.data.get("finished"))
+		    {
+		      var s=getState(this.state.index);
+		      if(s.item && this.state.data.get("dataFetched")  && !s.item.get("_id"))
+		      {
+		      	let params = {};
+	      		params[paramName]= s.item.get("_id");
+	      		this.context.router.transitionTo(this.props.myPath + '-list', _.extend(params, this.props.params));	
+		      	//this.setState(prev=>({data:prev.data.set("finished", true)}));
+		      }
+		      else
+		      {
+		      	if(s.item.get("_id"))
+		      	{
+		      		this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error).set("dataFetched", true)}));
+		      	}
+		      }
+		    }
 	    },
 
 	    del:function() {
@@ -255,6 +290,7 @@ module.exports= {
 	      {
 	       return(
 	          <div>
+	          	<h4 style={{background:'purple'}}>{this.props.myPath}</h4>
 	             <Item item={this.state.data.get('item')}/>
 	             <Button buttonCallback={this.del} value="Delete" />
 	             <Error error={this.state.data.get('error')}/>
@@ -274,11 +310,12 @@ module.exports= {
 	    displayName: displayName,
 	    propTypes: {},
 	    mixins: [
-	    	PureRenderMixin
+	    	PureRenderMixin,
+	    	Navigation
 	    ],
 		getInitialState: function () {  
 	      return {
-	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      	myPath:this.props.myPath  + '-view' 
 	      };
 	    },
 	    render: function () { 
@@ -320,7 +357,8 @@ module.exports= {
 	    mixins: [
 	    	PureRenderMixin,
 	    	store.mixin,
-	    	errorStore.mixin
+	    	errorStore.mixin,
+	    	Navigation
 	    ],
 
 	    getInitialState: function () {
@@ -328,7 +366,7 @@ module.exports= {
 	      return {
 	      	data:Map(),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      	myPath:this.props.myPath
 	      };
 	    },
 
@@ -342,7 +380,8 @@ module.exports= {
 
 	    componentWillReceiveProps: function (props) 
 	    {
-	    	init.bind(this)(props);
+	    	if(props.params[paramName]!= this.props.params[paramName])
+	    		init.bind(this)(props);
 	    },
 
 	    storeDidChange: function () {
@@ -386,35 +425,51 @@ module.exports= {
 	    displayName: displayName+'Item', 
 	    render: render
 	  });
+	  var init= function(props){
+		  actions.set({
+	  		index:this.state.index,
+	  		item:props.item
+	  	});
+	  };
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
 	    mixins: [
 	    	PureRenderMixin,
 	    	store.mixin,
-	    	errorStore.mixin
+	    	errorStore.mixin,
+	    	Navigation
 	    ],
 
 	    getInitialState: function () {
 	      return {
 	      	data:Map(this.props),
 	      	index:index++,
-	      	myPath:(this.props.myPath || '') + "" + routePart 
+	      	myPath:this.props.myPath + '-edit'
+	      	
 	      };
 	    },
 		componentWillMount: function () {
-			actions.set({
-	      		index:this.state.index,
-	      		item:this.state.data.get('item')
-	      	});
+			init.bind(this)(this.props);
 	    },
 
 	    componentWillUnmount: function () {
 	    	actions.dispose(this.state.index);
 	    },
+	    componentWillReceiveProps: function (props) 
+	    {
+	    	if(props.item!= this.props.item)
+	    	{
+		    	init.bind(this)(props);
+	    	}
+	    },
  		storeDidChange: function () {
 	      var s=getState(this.state.index);
-	      this.setState(prev=>({data:prev.data.set("item", s.item).set("error", s.error)}));
+	      if(s.item!= this.state.data.get("item"))
+	      {	
+	      	  let initial = s.item.get("_id")!= this.state.data.getIn(["item","_id"]);
+		      this.setState(prev=>({initial:initial, data:prev.data.set("item", s.item).set("error", s.error)}));
+	  		}
 	    },
 	    handleChange:function(field){
 	      return function(evt){
@@ -443,8 +498,9 @@ module.exports= {
 	    render: function () {   
 	      if(this.state.data.get('item'))
 	      {
-	      	return (<div >
-	           <Item handleRawChange= {this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
+	      	return (<div>
+	      	   <h4 style={{background:'blue'}}>{this.state.myPath}</h4>
+	           <Item initial={this.state.initial} handleRawChange= {this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
 	           <Button buttonCallback={this.put} value="Update" />
 	           <Error error={this.state.data.get('error')}/>
 	        </div>);
@@ -456,27 +512,30 @@ module.exports= {
 	    }
 	  });
 	},
-	listHead:function viewer(routePart, displayName,render)
+	listHead:function viewer(name,pluralName,routePart, displayName,render)
 	{
 	  return React.createClass({
 	    displayName: displayName,
 	    propTypes: {},
 	    mixins: [
-	    	PureRenderMixin
+	    	PureRenderMixin,
+	    	Navigation
 	    ],
 
 	    getInitialState: function () {
 	      
 	      return {
 	      	displayName:displayName,
-	      	myPath:(this.props.myPath || '') + "|" + routePart 
+	      	myPath:(this.props.myPath ? this.props.myPath + '-' : '')  + name 
 	      };
 	    },
 	    render: function () {   
+
 	       return(
 	          <div>
 	          	{render(this)}
-	          	
+	          	<h4 style={{background:'yellow'}}>{this.state.myPath}  --  {pluralName + '-' + name}</h4>
+	          	<span className="navLink"><Link to={this.state.myPath + '-create'} params={this.props.params}>Create</Link></span>
 	          	<RouteHandler {...this.props} myPath={this.state.myPath} />
 	          </div>
 	        );

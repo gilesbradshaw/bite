@@ -68,19 +68,15 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
         );
      }
   )
-  .create(
-    function(){
-        return (
-          <div>
-            <SelectProfile value={this.props.item.getIn(["user", "displayName"])} onChange={this.props.handleRawChange('user')}/>
-            <SelectType value={this.props.item.getIn(["type", "title"])} onChange={this.props.handleRawChange('type')}/>
-            <SelectStatus value={this.props.item.getIn(["status", "title"])} onChange={this.props.handleRawChange('status')}/>
-            <SelectRatePeriod value={this.props.item.getIn(["ratePeriod", "title"])} onChange={this.props.handleRawChange('ratePeriod')}/>
-            <SelectAgentRating value={this.props.item.getIn(["agentRating", "title"])} onChange={this.props.handleRawChange('agentRating')}/>  
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
+  .create( (self) =>
+      <div>
+        <SelectProfile value={self.props.item.getIn(["user", "displayName"])} onChange={self.props.handleRawChange('user')}/>
+        <SelectType value={self.props.item.getIn(["type", "title"])} onChange={self.props.handleRawChange('type')}/>
+        <SelectStatus value={self.props.item.getIn(["status", "title"])} onChange={self.props.handleRawChange('status')}/>
+        <SelectRatePeriod value={self.props.item.getIn(["ratePeriod", "title"])} onChange={self.props.handleRawChange('ratePeriod')}/>
+        <SelectAgentRating value={self.props.item.getIn(["agentRating", "title"])} onChange={self.props.handleRawChange('agentRating')}/>  
+        <FormInput id='title' title='Title' value={self.props.item.get('title')} onChange={self.props.handleChange('title')} />
+      </div>             
   )
   .make();
 

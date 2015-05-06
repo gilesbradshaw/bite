@@ -19,6 +19,8 @@ module.exports = function(app) {
 		.get(tasks.listByOpportunity)
 		.post(users.requiresLogin, opportunities.hasAuthorization,opportunities.addTask);
 
+
+
 	app.route('/opportunities/:opportunityId/notes')
 		.get(notes.listByOpportunity)
 		.post(users.requiresLogin, opportunities.hasAuthorization,opportunities.addNote);

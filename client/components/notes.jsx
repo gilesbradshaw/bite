@@ -55,15 +55,6 @@ var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
         );
      }
   )
-  .create(
-    function(){
-        return (
-          <div>
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )
   .make();
 
 export default  exp;

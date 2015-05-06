@@ -54,15 +54,6 @@ var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","
         );
      }
   )
-  .create(
-    function(){
-        return (
-          <div>
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )
   .make();
 
 export default  exp;
