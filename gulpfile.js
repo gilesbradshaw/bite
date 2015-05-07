@@ -131,7 +131,9 @@ gulp.task("build:dev", function (done) {
 
 gulp.task("watch:dev", function () {
   gulp.watch([
-    "client/**/*.{js,jsx}"
+    "client/**/*.{js,jsx}",
+    "node_modules/react-router/**/*.{js,jsx}",
+
   ], ["build:dev"]);
 });
 gulp.task("watch", ["watch:dev"]);
@@ -175,7 +177,7 @@ gulp.task("server", function () {
     ext: "js,jsx",
     watch: [
       "server",
-      "client"
+      "client",
     ]
   });
 });

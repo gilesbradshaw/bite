@@ -3,11 +3,11 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-	errorHandler = require('./errors.server.controller'),
-	Agency = mongoose.model('Agency'),
-	Agent = mongoose.model('Agent'),
-	_ = require('lodash');
+import mongoose from 'mongoose';
+import errorHandler from './errors.server.controller';
+var Agency = mongoose.model('Agency'),
+	Agent = mongoose.model('Agent');
+import _ from 'lodash';
 
 /**
  * Create an agency

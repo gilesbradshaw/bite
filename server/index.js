@@ -1,7 +1,9 @@
 // Patch require
 require("node-jsx").install({ extension: ".jsx" });
-
-// Server
+// maybe es6??
+require("babel/register")({
+  sourceMap: "inline"
+});
 var path = require("path");
 var express = require("express");
 var compress = require("compression");

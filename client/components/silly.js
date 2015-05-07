@@ -16,7 +16,7 @@ var Silly = React.createClass({
 	var lastRoute = currentRoutes[currentRoutes.length - 1];
 	console.log(lastRoute.name);
 	var params = this.context.router.getCurrentParams();
-
+    return <script/>
     return(
       <div>
       	<span><Link to="Opportunity-Task-list" params={params} >Tasks</Link></span>
@@ -28,4 +28,19 @@ var Silly = React.createClass({
   }
 });
 
+var Billy = React.createClass({
+  mixins: [
+    Navigation
+  ],
+  displayName: "Billy",
+  propTypes: {},
+  render: function () {  
+    return(
+      <div>I am a silly billy!</div>
+      ); 
+  }
+});
+
+
 export default Silly;
+export {Billy};
