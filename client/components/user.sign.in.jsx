@@ -64,7 +64,7 @@ var UserSignInForm = React.createClass({
         <div className="user">
            <FormInput id='username' title='User name' value={get('username')} onChange={this.handleChange('username')} />
            <FormInput id='password' title='Password' value={get('password')} onChange={this.handleChange('password')} />
-           <Button buttonCallback={this.signIn} value="Sign In`" />
+           <Button buttonCallback={this.signIn} value="Sign In" />
            <Error error={this.state.error}/>
            <RouteHandler {...this.props} />
         </div>

@@ -12,11 +12,11 @@ import FieldSelect from './fieldSelect';
 import crudFactory from './crud-factory';
 
 var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, "profileId")
-  .head((self,item)=>
+  .head().render((self,item)=>
     <div>
        <h1>{item.get('displayName')}</h1>
     </div>
-  )
+  )()
   .select( 
     (self,nodes)=>
         <div>

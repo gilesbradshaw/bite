@@ -1,13 +1,29 @@
 import React from "react";
 import FormInput from "./formInput";
 import Silly from "./Silly";
+import _ from 'lodash';
 
 var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
 {
   var cruded={};
-
+  var cruder={};
   var factory= {
-    make:(()=>cruded),
+    make:()=>{
+      if(cruder.head)
+      {
+        cruded.head=crud.getter (
+          name,
+           name + ".head",
+            actions,
+            store.get,
+            store.error,
+            cruder.head.render,
+            id,
+            cruder.head.menuRender
+        );
+      }
+      return cruded
+    },
     select:(renderer)=>{
       cruded.select = crud.lister(
         singleId,
@@ -41,7 +57,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
       );
       return factory;
     },
-    view: (render)=>{
+    view: (render, menuRender)=>{
       cruded.view = crud.viewer (
         "view",
          name + ".view",
@@ -49,22 +65,22 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
           store.get,
           store.error,
           render,
-          id
+          id,
+          menuRender
       );
       return factory;
     },
-    head: (render)=>{
-      cruded.head=crud.getter (
-        name,
-         name + ".head",
-          actions,
-          store.get,
-          store.error,
-          render,
-          id
-      );
-
-      return factory;
+    head:()=>{
+      var ret = ()=>factory;
+      ret.render=(render)=>{
+        cruder.head=_.extend(cruder.head||{},{render});
+        return ret;
+      };
+      ret.menuRender=(menuRender)=>{
+        cruder.head=_.extend(cruder.head||{},{menuRender});
+        return ret;
+      };
+      return ret;
     },
     edit:(render)=>{
       cruded.edit = crud.editor (
@@ -123,7 +139,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
   return factory.listHead(
       (self)=> <h1>{self.state.displayName}</h1>
     )
-    .head( 
+    .head().render(
         (self,item)=>   
           <div >
 
@@ -134,7 +150,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
               <Silly myPath= {self.props.myPath}/>
             </Silly>
           </div>
-    )
+    )()
     .list( 
       (data) => <div>{data.get('title')}</div>
     )

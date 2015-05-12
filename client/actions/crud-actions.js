@@ -20,7 +20,7 @@ function logError(error,res, single, index){
         }
       }
      this.dispatch({
-        actionType: single + "_ERROR",
+        actionType: `${single}_ERROR`,
         index:index,
         item:err
       }); 
@@ -32,9 +32,10 @@ function crudActions(single, plural,path)
 {
   return Biff.createActions({
     load: function (params) {
-      var self = this;
+        var self = this;
         setTimeout(()=>
         {
+          let test = `${plural}_LOAD`;
           request
           .get(path(params))
           .set("Accept", "application/json")
@@ -42,12 +43,12 @@ function crudActions(single, plural,path)
             if(res && res.ok)
             {
               self.dispatch({
-                actionType: plural + "_LOAD",
+                actionType: `${plural}_LOAD`,
                 items:JSON.parse(res.text),
                 index:params.index  
               });
               self.dispatch({
-                actionType: single + "_NOERROR",
+                actionType: `${single}_NOERROR`,
                 index:params.index
               }); 
             }
@@ -62,13 +63,13 @@ function crudActions(single, plural,path)
       setTimeout(()=>
       {
         this.dispatch({
-          actionType: single + "_NEW",
+          actionType: `${single}_NEW`,
           index: params.index,
           item:params.item
         });
         if(!params.item){
           this.dispatch({
-            actionType: single+ "_NOERROR",
+            actionType: `${single}_NOERROR`,
             index:params.index
           }); 
         }
@@ -88,12 +89,12 @@ function crudActions(single, plural,path)
           {
             var data=fromJS(JSON.parse(res.text));
             self.dispatch({
-              actionType: single + "_CREATE",
+              actionType: `${single}_CREATE`,
               item:data,
               index:params.index
             });
             self.dispatch({
-              actionType: single + "_NOERROR",
+              actionType: `${single}_NOERROR`,
               index:params.index
             }); 
             //params.router.transitionTo('app');
@@ -111,7 +112,7 @@ function crudActions(single, plural,path)
       {
         var self = this;
         request
-        .put(path(params) + "/" + params.item.get('_id'))
+        .put(`${path(params)}/${params.item.get("_id")}`)
         .send(params.item)
         .set("Accept", "application/json")
         .end( (error, res)=> {
@@ -119,12 +120,12 @@ function crudActions(single, plural,path)
           {
             var data=fromJS(JSON.parse(res.text));
             self.dispatch({
-              actionType: single + "_CREATE",
+              actionType: `${single}_CREATE`,
               item:data,
               index:params.index
             });
             self.dispatch({
-              actionType: single + "_NOERROR",
+              actionType: `${single}_NOERROR`,
               index:params.index
             }); 
           }
@@ -140,23 +141,23 @@ function crudActions(single, plural,path)
       {
         var self = this;
         request
-        .del(path(params) + "/" + params.id)
+        .del(`${path(params)}/${params.id}`)
         .send()
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)
           {
             self.dispatch({
-              actionType: single + "_DELETE",
+              actionType: `${single}_DELETE`,
               index: params.index,
               id:params.id
             });
             this.dispatch({
-              actionType: single + "_NEW",
+              actionType: `${single}_NEW`,
               index:params.index
             });
             self.dispatch({
-              actionType: single + "_NOERROR",
+              actionType: `${single}_NOERROR`,
               index:params.index
             }); 
           }
@@ -172,19 +173,19 @@ function crudActions(single, plural,path)
       {
         var self = this;
         request
-        .get(path(params) + "/" + params.id)
+        .get(`${path(params)}/${params.id}`)
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)
           {
             var data=fromJS(JSON.parse(res.text));
             self.dispatch({
-              actionType: single + "_GOT",
+              actionType: `${single}_GOT`,
               item:data,
               index:params.index
             });
             self.dispatch({
-              actionType: single + "_NOERROR",
+              actionType: `${single}_NOERROR`,
               index:params.index
             }); 
           }
@@ -197,11 +198,11 @@ function crudActions(single, plural,path)
     },
     dispose: function (index) {
       this.dispatch({
-        actionType: single + "_DISPOSE",
+        actionType: `${single}_DISPOSE`,
         index:index
       });
       this.dispatch({
-        actionType: plural + "_DISPOSE",
+        actionType: `${plural}_DISPOSE`,
         index:index
       });
     }

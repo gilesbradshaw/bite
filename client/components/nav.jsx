@@ -2,14 +2,16 @@ import React from "react";
 
 import {RouteHandler, Link} from "react-router";
 import UserLoggedIn from "./user.LoggedIn";
+import {PathDisplay} from "./path-display";
 
-
-// Component
-var Nav = React.createClass({
-  displayName: "Nav",
-  render: function () {
+export default class Nav extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
     return (
       <div>
+        <PathDisplay/>
         <span className="navLink"><Link to="app">Home</Link> </span>
         <span className="navLink"><Link to="userArea">Main</Link></span>
         <span className="navLink"><Link to="adminArea">Admin</Link></span>
@@ -19,13 +21,15 @@ var Nav = React.createClass({
       </div>
     );
   }
-});
+}
+Nav.displayName = "Nav";
 
-export default Nav;
 
-var userNav = React.createClass({
-  displayName: "userNav",
-  render: function () {
+export class UserNav extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
     return (
       <div>
         <span className="navLink"><Link to="Agency-list">Agencies</Link></span>
@@ -39,13 +43,14 @@ var userNav = React.createClass({
        </div>
     );
   }
-});
+}
+UserNav.displayName = "UserNav";
 
-export {userNav as userNav};
-
-var adminNav = React.createClass({
-  displayName: "adminNav",
-  render: function () {
+export class AdminNav extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
     return (
       <div>
         <span className="navLink"><Link to="Profile-list">Profiles</Link></span>
@@ -57,10 +62,8 @@ var adminNav = React.createClass({
        </div>
     );
   }
-});
-
-export {adminNav as adminNav};
-
+}
+AdminNav.displayName = "AdminNav";
 
 // Note {...this.props}, see:
 // http://facebook.github.io/react/docs/jsx-spread.html

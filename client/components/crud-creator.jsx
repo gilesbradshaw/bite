@@ -5,10 +5,23 @@ import {Map,toJS} from "immutable";
 // Router
 import  {Navigation, RouteHandler, Link} from "react-router";
 import _ from 'lodash';
-var Error = require("./error");
-var Button = require("./button");
+import Error from "./error";
+import Button from "./button";
+import reactMixin from 'react-mixin';
+import {Enhance} from "./higherOrder/enhance"
+import {Path, pathRender} from './Path';
 
 var index=0;
+
+
+const doAPath= (name)=> function()
+	{
+		return( 
+			<div> {name} path will be rendered here  !!!!</div>
+		);
+	}
+
+
 
 module.exports= {
 	lister:function lister(singleId, name,pluralName,displayName,actions, store,errorStore, itemRender, render)
@@ -20,15 +33,12 @@ module.exports= {
 	      error: errorStore.get(index)
 	    };
 	  }
-	  function nodes () {
-	  	  var self =this;
-	      var nodes = this.state.data.get('store').toArray().map( (data)=>
+	  function nodes (items) {
+	  	  const self =this;
+	  	  return items.map( (data)=>
 	      {
-
-	      	var params= {};
-	  	  	params[singleId] = data.get('_id');
-	  	  	params = _.extend(params,self.props.params);
-	        return<div key={data.get('_id')}>
+	  	  	const params = _.extend({[singleId] : data.get('_id')},self.props.params);
+	  	   	return <div key={data.get('_id')}>
 		          {itemRender(data)}
 		          <h4 style={{background:'pink'}}>{self.state.myPath}</h4>
 		          <span><Link to={self.state.myPath + "-view"} params={params}>View</Link></span>
@@ -37,10 +47,10 @@ module.exports= {
 	          	</div>
 	         }
       	  );
-    	  return nodes;
+    	  
 	  }
 
-	  return  React.createClass({
+	  return React.createClass({
 	    displayName: displayName,
 	    mixins: [
 	    	PureRenderMixin,
@@ -54,6 +64,7 @@ module.exports= {
 
 
 	    getInitialState: function () {
+	    	var catchit={singleId, name,pluralName,displayName,actions, store,errorStore, itemRender, render};
 	      return {
 	      	data:Map(getState(index)),
 	      	index:index++,
@@ -68,6 +79,7 @@ module.exports= {
 	      		index:this.state.index,
 	      		props:this.props
 	      	});
+	      	console.log(`lister -- mount -- ${this.state.myPath} : ${this.props.myPath}` );
 	    },
 
 	    componentWillUnmount: function () {
@@ -81,25 +93,33 @@ module.exports= {
 	    		})
 	    	);
 	    },
+	    componentWillReceiveProps: function (props) 
+	    {
+	    	console.log(`lister rec props::::  ${this.state.myPath} : ${this.props.myPath}` );
+	    },
 
 	    render:  function()
 	      {
-	      	var res =this.state.data.get('store').toArray();// nodes.bind(this)();
-	      	if(render)
-	      	{
-	      		return render(this,res).bind(this)()
-	      	}
-	      	else
-	      	{
-		      	return( 
-		      		<div>
-		                
-			            {nodes.bind(this)()}
-			  			<RouteHandler myPath={this.state.myPath} {...self.props} />
-		      		</div>
-		    	);
-		    }
-	        
+	      	var res=this.state.data.get('store').toArray();
+	      	return pathRender(
+	      		this,
+	      		()=> {
+		      		if(render)
+				      	{
+				      		return render(this,res).bind(this)()
+				      	}
+				      	else
+				      	{
+				      	  	return( 
+					      		<div> 
+						            {nodes.bind(this)(res)}
+						  			<RouteHandler myPath={this.state.myPath} {...this.props} />
+					      		</div>
+					    	);
+					    }
+		      		},
+		      	doAPath('lister').bind(this)
+    	  	);
 	      }
 	  });
 	},
@@ -142,6 +162,7 @@ module.exports= {
 	      	{
 	      		index:this.state.index
 	      	});
+	      console.log(`${this.state.myPath} : ${this.props.myPath}` );
 	    },
 
 	    componentWillUnmount: function () {
@@ -189,21 +210,45 @@ module.exports= {
 	      });
 	      
 	    },
-	    render: function () {
-	      if(this.state.data.get('item'))
+   	    render:  function()
 	      {
-	        return <div >
-	        	<h4 style={{background:'red'}}>{this.state.myPath}</h4>
-	           <Item handleRawChange={this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
-	           <Button buttonCallback={this.post} value="Create" />
-	           <Error error={this.state.data.get('error')}/>
-	        </div>
-	      }
-	      else
-	      {
-	        return (<Error error={this.state.data.get('error')}/>);
-	      }
-	    }
+	      	return pathRender(
+	      		this,
+	      		()=> {
+		      		if(this.state.data.get('item'))
+			        {
+				        return <div >
+				           <Item handleRawChange={this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
+				           <Button buttonCallback={this.post} value="Create" />
+				           <Error error={this.state.data.get('error')}/>
+				        </div>
+			        }
+			        else
+			        {
+			            return (<Error error={this.state.data.get('error')}/>);
+			        }
+	      		},doAPath('creator').bind(this));
+	      	return <Path myPath={this.state.myPath}>
+	      		{
+	      			(function(){
+	      				if(this.state.data.get('item'))
+				        {
+					        return <div >
+					           <Item handleRawChange={this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
+					           <Button buttonCallback={this.post} value="Create" />
+					           <Error error={this.state.data.get('error')}/>
+					        </div>
+				        }
+				        else
+				        {
+				            return (<Error error={this.state.data.get('error')}/>);
+				        }
+					 }).bind(this)()
+	      		}</Path>
+	      	
+	      },
+
+	    
 	  })
 	},
 	deleter:function deleter(name, pluralName, routePart,displayName,actions, store,errorStore, render, paramName)
@@ -226,6 +271,8 @@ module.exports= {
 	      	props:props
 	      });
 	  };
+
+
 	  return React.createClass({
 	  	displayName: displayName,
 	    propTypes: {},
@@ -246,6 +293,7 @@ module.exports= {
 
 	    componentWillMount: function () {
 	    	init.bind(this)(this.props);
+	    	console.log(`${this.state.myPath} : ${this.props.myPath}` );
 	    },
 
 	    componentWillUnmount: function () {
@@ -284,24 +332,33 @@ module.exports= {
 	      	props:this.props
 	      });
 	    },
+		render:  function()
+	      {
+	      	return pathRender(
+	      		this,
+	      		()=> {
+		      		if(this.state.data.get('item'))
+				      {
+				       return(
+				          <div>
+				          	<h4 style={{background:'purple'}}>{this.props.myPath}</h4>
+				             <Item item={this.state.data.get('item')}/>
+				             <Button buttonCallback={this.del} value="Delete" />
+				             <Error error={this.state.data.get('error')}/>
+				          </div>
+				        );
+				      }
+				      else
+				      {
+				        return (<Error error={this.state.data.get('error')}/>);
+				      }
+	      		},
+	      		doAPath('deleter').bind(this)
+	      	);
+	      	
+	      },
 
-	    render: function () {   
-	      if(this.state.data.get('item'))
-	      {
-	       return(
-	          <div>
-	          	<h4 style={{background:'purple'}}>{this.props.myPath}</h4>
-	             <Item item={this.state.data.get('item')}/>
-	             <Button buttonCallback={this.del} value="Delete" />
-	             <Error error={this.state.data.get('error')}/>
-	          </div>
-	        );
-	      }
-	      else
-	      {
-	        return (<Error error={this.state.data.get('error')}/>);
-	      }
-	    }
+
 	  });
 	},
 	viewer:function viewer(routePart, displayName,actions, store,errorStore, render, paramName)
@@ -318,23 +375,29 @@ module.exports= {
 	      	myPath:this.props.myPath  + '-view' 
 	      };
 	    },
+
 	    render: function () { 
-	      if(this.props.item)
-	      {	      	
-	      	return <div>
-		      		{render(this,this.props.item)}
-		      		<RouteHandler {...this.props}  myPath={this.state.myPath} />
-		      	</div>
-	      }
-	      else
-	      {
-	      	return <div/>
-	      }
-	      
+	    	return pathRender(
+	      		this,
+	      		()=> {
+			      if(this.props.item)
+			      {	      	
+			      	return <div> VIER!!!!!!
+			      		{this.state.myPath}
+				      		{render(this,this.props.item)}
+				      		<RouteHandler {...this.props}  myPath={this.state.myPath} />
+				      	</div>
+			      }
+			      else
+			      {
+			      	return <div/>
+			      }
+				}
+			);	      
 	    }
 	  });
 	},
-	getter:function viewer(routePart, displayName,actions, store,errorStore, render, paramName)
+	getter:function viewer(routePart, displayName,actions, store,errorStore, render, paramName,menuRender)
 	{
 	  // Component
 	  function getState(index) {
@@ -372,6 +435,7 @@ module.exports= {
 
 	    componentWillMount: function () {
 	    	init.bind(this)(this.props);
+	    	console.log(`${this.state.myPath} : ${this.props.myPath}` );
 	    },
 
 	    componentWillUnmount: function () {
@@ -390,24 +454,31 @@ module.exports= {
 	    },
 
 	    render: function () {   
-	      if(this.state.data.get('item'))
-	      {
-	       return(
-	          <div>
-	          	{render(this,this.state.data.get('item'))}
-	             <Error error={this.state.data.get('error')}/>
-	             <RouteHandler {...this.props} item={this.state.data.get('item')} myPath={this.state.myPath} index={this.state.index} />
-	          </div>
-	        );
-	      }
-	      else
-	      {
-	        return (
-	        	<div>
-	        		<Error error={this.state.data.get('error')}/>
-	        	</div>
-	        );
-	      }
+	    	return pathRender(
+	    		this,
+	    		()=> {
+			      if(this.state.data.get('item'))
+			      {
+			       return(
+			          <div>
+			            <h1>getter {this.state.myPath}</h1>
+			          	{render(this,this.state.data.get('item'))}
+			             <Error error={this.state.data.get('error')}/>
+			             <RouteHandler {...this.props} item={this.state.data.get('item')} myPath={this.state.myPath} index={this.state.index} />
+			          </div>
+			        );
+			      }
+			      else
+			      {
+			        return (
+			        	<div>
+			        		<Error error={this.state.data.get('error')}/>
+			        	</div>
+			        );
+			      }
+			    },
+			    menuRender ? menuRender.bind(this) : doAPath('getter').bind(this)
+			 );
 	    }
 	  });
 	},
@@ -451,6 +522,7 @@ module.exports= {
 	    },
 		componentWillMount: function () {
 			init.bind(this)(this.props);
+			console.log(`${this.state.myPath} : ${this.props.myPath}` );
 	    },
 
 	    componentWillUnmount: function () {
@@ -496,19 +568,25 @@ module.exports= {
 	    },
 
 	    render: function () {   
-	      if(this.state.data.get('item'))
-	      {
-	      	return (<div>
-	      	   <h4 style={{background:'blue'}}>{this.state.myPath}</h4>
-	           <Item initial={this.state.initial} handleRawChange= {this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
-	           <Button buttonCallback={this.put} value="Update" />
-	           <Error error={this.state.data.get('error')}/>
-	        </div>);
-	      }
-	      else
-	      {
-	        return (<Error error={this.state.data.get('error')}/>);
-	      }
+	    	return pathRender(
+	    		this,
+	    		()=> {
+			      if(this.state.data.get('item'))
+			      {
+			      	return (<div>
+			      	   <h4 style={{background:'blue'}}>{this.state.myPath}</h4>
+			           <Item initial={this.state.initial} handleRawChange= {this.handleRawChange} handleChange={this.handleChange} item={this.state.data.get('item')}/>
+			           <Button buttonCallback={this.put} value="Update" />
+			           <Error error={this.state.data.get('error')}/>
+			        </div>);
+			      }
+			      else
+			      {
+			        return (<Error error={this.state.data.get('error')}/>);
+			      }
+			 	},
+			 	doAPath('editor').bind(this)
+			 );
 	    }
 	  });
 	},
@@ -530,16 +608,20 @@ module.exports= {
 	      };
 	    },
 	    render: function () {   
-
-	       return(
-	          <div>
-	          	{render(this)}
-	          	<h4 style={{background:'yellow'}}>{this.state.myPath}  --  {pluralName + '-' + name}</h4>
-	          	<span className="navLink"><Link to={this.state.myPath + '-create'} params={this.props.params}>Create</Link></span>
-	          	<RouteHandler {...this.props} myPath={this.state.myPath} />
-	          </div>
-	        );
-	    
+	    	return pathRender(
+	    		this,
+	    		()=>
+		          <div>
+		          	<h1>list head {this.state.myPath}</h1>
+		          	{render(this)}
+		          	<h4 style={{background:'yellow'}}>{this.state.myPath}  --  {pluralName + '-' + name}</h4>
+		          	<span className="navLink"><Link to={this.state.myPath + '-create'} params={this.props.params}>Create</Link></span>
+		          	<RouteHandler {...this.props} myPath={this.state.myPath} />
+		          </div>
+		          ,
+		          doAPath('listhead').bind(this)
+		     );
+	       
 	    }
 	  });
 	}

@@ -4,7 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
-import {userNav, adminNav} from "./components/nav";
+import {UserNav, AdminNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -28,13 +28,12 @@ import NotFound from "./components/notfound";
 var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=> 
   //React.addOns.createFragment(
     <Route key={prefix} name={prefix} path={pluralName} handler={components.listHead} >
-      <DefaultRoute name={prefix + "-list"} handler={components.list}/>   
+      <DefaultRoute name={prefix + "-list"}  handler={components.list}/>   
       <Route path={name}>
         <DefaultRoute name={prefix + "-create"}  handler={components.create} />
         <Route path={":" + id} handler={components.head}>
           <DefaultRoute name={prefix + "-view"}  handler={components.view} />
           <Route name={prefix + "-edit"}  path="edit" handler={components.edit} />
-          <Route name={prefix + "-edit1"}  path="edit" handler={components.edit} />
           <Route name={prefix + "-delete"}  path="delete" handler={components.del} />    
           {childRoutes}
         </Route>   
@@ -46,7 +45,7 @@ var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=>
 var routes = (
   <Route handler={App} path="/">
     <DefaultRoute name="app" handler={Home} />
-    <Route name="userArea" path="userArea" handler={userNav} > 
+    <Route name="userArea" path="userArea" handler={UserNav} > 
 
 
     {getRoute("Agency", "Agency", "Agencies", "agencyId" , Agencies,
@@ -86,7 +85,7 @@ var routes = (
     </Route>
     
 </Route>
-<Route name="adminArea" path="adminArea" handler={adminNav} > 
+<Route name="adminArea" path="adminArea" handler={AdminNav} > 
 
   {getRoute("OpportunityType", "OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
   {getRoute("OpportunityStatus", "OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}

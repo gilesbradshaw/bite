@@ -35,7 +35,16 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
               onChange={self.props.onChange}
           />
         </div>
-  )
+  ).head().menuRender( 
+    function(){
+      return <div>
+        <span className="navLink"><Link to="Opportunity-Task" params={this.props.params}>Tasks</Link> </span>
+        <span className="navLink"><Link to="Opportunity-Note" params={this.props.params}>Notes</Link> </span>
+        <span className="navLink"><Link to="Opportunity-Email" params={this.props.params}>Emails</Link> </span>
+        
+      </div>
+    }
+  )()
   .view(
     function(self,item){   
       return (
@@ -43,7 +52,7 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
            <div>{item.get('title')}</div>
         </div>
       );
-    }
+    }   
   )
   .del(
     function(){
