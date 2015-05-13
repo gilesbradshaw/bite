@@ -17,6 +17,7 @@ var index=0;
 
 var Radium = require('radium');
 var color = require('color');
+
 const nullPath= (name)=> function()
 	{
 		return <script key={name} />
@@ -24,11 +25,16 @@ const nullPath= (name)=> function()
 
 const style = {
 	link:{
-		background:'ghostwhite',//lightgray',
+		background:'pink',//lightgray',
 		padding:'.5em',
 		':hover': {
       		background: color('#0074d9').lighten(0.2).hexString()
-    	}
+    	},
+    	'@media (min-width: 320px)': { background: 'red',
+    		':hover': {
+      			background: 'green'
+    		},
+    	 }
 	}
 }
 
@@ -50,9 +56,9 @@ const crudcreator= (name)=> {
 		  	  	const params = _.extend({[singleId] : data.get('_id')},self.props.params);
 		  	   	return <div key={data.get('_id')}>
 			          {itemRender(data)}
-			          <span style={[style.link]}><Link to={self.state.myPath + "-view"} params={params}>View!!</Link></span>
-			          <span><Link to={self.state.myPath + "-edit"} params={params}>Edit</Link></span>
-			          <span><Link to={self.state.myPath + "-delete"} params={params}>Delete</Link></span>
+			          <span key={`${data.get('_id')}-view`} style={[style.link]}><Link to={self.state.myPath + "-view"} params={params}>View</Link></span>
+			          <span key={`${data.get('_id')}-edit`} style={[style.link]}><Link to={self.state.myPath + "-edit"} params={params}>Edit</Link></span>
+			          <span key={`${data.get('_id')}-delete`} style={[style.link]}><Link to={self.state.myPath + "-delete"} params={params}>Delete</Link></span>
 		          	</div>
 		         }
 	      	  );
@@ -122,8 +128,8 @@ const crudcreator= (name)=> {
 					      	{
 					      	  	return( 
 						      		<div> 
-						      			<h1>hey!</h1>
-							            {nodes.bind(this)(res)}
+
+						      			{nodes.bind(this)(res)}
 							  			<RouteHandler myPath={this.state.myPath} {...this.props} />
 						      		</div>
 						    	);

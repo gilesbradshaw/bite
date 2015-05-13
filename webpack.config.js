@@ -19,11 +19,13 @@ module.exports = {
       { test: /\.jsx$/, loader: "babel-loader" },
       { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/react-router"), loader: 'babel-loader' },
-      { test: /\.css$/, loader: "style-loader!css-loader" }
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test: /\.json$/, loader: "json-loader" }
+
     ]
   },
   resolve: {
-    extensions: ["", ".js", ".jsx", "css"]
+    extensions: ["", ".js", ".jsx", "css", ".json"]
   },
   plugins: [
     // Optimize
