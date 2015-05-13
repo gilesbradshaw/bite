@@ -13,7 +13,7 @@ import FormInput from "./formInput";
 import crudFactory from './crud-factory';
 
 var exp = crudFactory(crud, "agentId", "Agent", "Agents", Actions, Store, "agentId")
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <p>Agent Selector:</p>
@@ -25,8 +25,8 @@ var exp = crudFactory(crud, "agentId", "Agent", "Agents", Actions, Store, "agent
               onChange={self.props.onChange}
           />
         </div>
-  )
-  .view(
+  )()
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -34,8 +34,8 @@ var exp = crudFactory(crud, "agentId", "Agent", "Agents", Actions, Store, "agent
         </div>
       );
     }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -43,8 +43,8 @@ var exp = crudFactory(crud, "agentId", "Agent", "Agents", Actions, Store, "agent
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -52,7 +52,7 @@ var exp = crudFactory(crud, "agentId", "Agent", "Agents", Actions, Store, "agent
           </div>
         );
      }
-  )
+  )()
   .make();
 
 export default  exp;

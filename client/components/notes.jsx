@@ -15,7 +15,7 @@ import FormInput from "./formInput";
 import crudFactory from './crud-factory';
 
 var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <p>Note Selector:</p>
@@ -27,8 +27,8 @@ var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
               onChange={self.props.onChange}
           />
         </div>
-  )
-  .view(
+  )()
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -36,8 +36,8 @@ var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
         </div>
       );
     }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -45,8 +45,8 @@ var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -54,7 +54,7 @@ var exp = crudFactory(crud, "noteId", "Note", "Notes", Actions, Store, "noteId")
           </div>
         );
      }
-  )
+  )()
   .make();
 
 export default  exp;

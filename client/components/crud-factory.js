@@ -3,10 +3,29 @@ import FormInput from "./formInput";
 import Silly from "./Silly";
 import _ from 'lodash';
 
+
+
+
 var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
 {
+  crud=crud(name);
   var cruded={};
   var cruder={};
+  function makeCruder(name, cruders){
+    return ()=>
+    {
+      const ret = ()=>factory;
+        for(let cruderField of cruders)
+        {
+          ret[cruderField]=(i)=>{
+            cruder[name]=_.extend(cruder[name]||{},{[cruderField]:i});
+            return ret;
+          };  
+        }
+      
+      return ret;
+     } 
+  }
   var factory= {
     make:()=>{
       if(cruder.head)
@@ -22,144 +41,130 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
             cruder.head.menuRender
         );
       }
-      return cruded
-    },
-    select:(renderer)=>{
-      cruded.select = crud.lister(
-        singleId,
-        name,
-        pluralName,
-        name + ".select",
-        actions,
-        store.list,
-        store.error,
-        (data)=>data,
-        function(self, nodes){
-          return function () {
-            return renderer(self,nodes);
-          };
-        }
-        
-      );
-      return factory;
-    },
-    list:(nodeRender,render)=>{
-      cruded.list=crud.lister(
-        singleId,
-        name,
-        pluralName,
-        name + ".list",
-        actions,
-        store.list,
-        store.error,
-        nodeRender,
-        render  
-      );
-      return factory;
-    },
-    view: (render, menuRender)=>{
-      cruded.view = crud.viewer (
-        "view",
-         name + ".view",
+      if(cruder.select)
+      {
+        cruded.select = crud.lister(
+          singleId,
+          pluralName,
+          name + ".select",
+          actions,
+          store.list,
+          store.error,
+          (data)=>data,
+          function(self, nodes){
+            return function () {
+              return cruder.select.renderer(self,nodes);
+            };
+          }
+          
+        );
+      }
+      if(cruder.list)
+      {
+        cruded.list=crud.lister(
+          singleId,
+          pluralName,
+          name + ".list",
+          actions,
+          store.list,
+          store.error,
+          cruder.list.nodeRender,
+          cruder.list.render  
+        );
+      }
+      if(cruder.view)
+      {
+        cruded.view = crud.viewer (
+          "view",
+           name + ".view",
+            actions,
+            store.get,
+            store.error,
+            cruder.view.render,
+            id,
+            cruder.view.menuRender
+        );
+      }
+      if(cruder.edit)
+      {
+        cruded.edit = crud.editor (
+          "edit",
+          name + ".edit",
+           actions,
+           store.get,
+           store.error,
+           cruder.edit.render,
+           id
+        );
+      }
+      if(cruder.del)
+      {
+        cruded.del = crud.deleter (
+          pluralName,
+         "delete",
+          name + ".delete",
           actions,
           store.get,
           store.error,
-          render,
-          id,
-          menuRender
-      );
-      return factory;
+          cruder.del.render,
+          id
+        );
+      }
+      if(cruder.create)
+      {
+        cruded.create= crud.creator (
+          pluralName,
+          "create",
+          name + ".create",
+          actions,
+          store.get,
+          store.error,
+          cruder.create.render,
+          id
+        );
+      }
+      if(cruder.listHead)
+      {
+        cruded.listHead= crud.listHead (
+          pluralName,
+          pluralName,
+          pluralName,
+          cruder.listHead.render
+        );
+      }
+
+      return cruded
     },
-    head:()=>{
-      var ret = ()=>factory;
-      ret.render=(render)=>{
-        cruder.head=_.extend(cruder.head||{},{render});
-        return ret;
-      };
-      ret.menuRender=(menuRender)=>{
-        cruder.head=_.extend(cruder.head||{},{menuRender});
-        return ret;
-      };
-      return ret;
-    },
-    edit:(render)=>{
-      cruded.edit = crud.editor (
-        "edit",
-        name + ".edit",
-         actions,
-         store.get,
-         store.error,
-         render,
-         id
-      );
-      return factory;
-    },
-    del:(render)=>{
-      cruded.del = crud.deleter (
-        name,
-        pluralName,
-       "delete",
-        name + ".delete",
-        actions,
-        store.get,
-        store.error,
-        render,
-        id
-      );
-      return factory;
-    },
-    create:(render)=>{
-      cruded.create= crud.creator (
-        name,
-        pluralName,
-        "create",
-        name + ".create",
-        actions,
-        store.get,
-        store.error,
-        render,
-        id
-      );
-      return factory;
-    },
-    listHead:(render)=>{
-      cruded.listHead= crud.listHead (
-        name,
-        pluralName,
-        pluralName,
-        pluralName,
-        render
-      );
-      return factory;
-    }
+    select:makeCruder('select',['renderer']),
+    list:makeCruder('list', ['render', 'nodeRender']),
+    head:makeCruder('head', ['render', 'menuRender']),
+    view:makeCruder('view', ['render']),
+    edit:makeCruder('edit', ['render']),
+    del:makeCruder('del', ['render']),
+    create:makeCruder('create', ['render']),
+    listHead:makeCruder('listHead', ['render'])
   }
 
 
   //defaults
-  return factory.listHead(
+  return factory.listHead().render(
       (self)=> <h1>{self.state.displayName}</h1>
-    )
+    )()
     .head().render(
         (self,item)=>   
-          <div >
-
+          <div>
              <h1>{item.get('title')}</h1>
-             <h4 style={{background:'red'}}>{self.state.myPath}</h4>
-            <Silly myPath= {self.props.myPath}>
-              <h1>can I out stuff in hre???</h1>
-              <Silly myPath= {self.props.myPath}/>
-            </Silly>
           </div>
     )()
-    .list( 
+    .list().nodeRender(
       (data) => <div>{data.get('title')}</div>
-    )
-    .create(
+    )()
+    .create().render(
       (self)=>
           <div>
              <FormInput id='title' title='Title' value={self.props.item.get('title')} onChange={self.props.handleChange('title')} />
           </div>
-    );
+    )();
   
     /*.list(
       function(self,nodes){

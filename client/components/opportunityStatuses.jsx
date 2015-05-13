@@ -16,7 +16,7 @@ import crudFactory from './crud-factory';
 
   
 var exp = crudFactory(crud,"opportunityStatusId", "OpportunityStatus", "OpportunityStatuses", Actions, Store, "opportunityStatusId")
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <p>Opportunity Status Selector:</p>
@@ -28,8 +28,8 @@ var exp = crudFactory(crud,"opportunityStatusId", "OpportunityStatus", "Opportun
               onChange={self.props.onChange}
           />
         </div>
-  )
-  .view(
+  )()
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -37,8 +37,8 @@ var exp = crudFactory(crud,"opportunityStatusId", "OpportunityStatus", "Opportun
         </div>
       );
     }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -46,8 +46,8 @@ var exp = crudFactory(crud,"opportunityStatusId", "OpportunityStatus", "Opportun
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -55,7 +55,7 @@ var exp = crudFactory(crud,"opportunityStatusId", "OpportunityStatus", "Opportun
           </div>
         );
      }
-  )
+  )()
   .make();
 
 export default  exp;

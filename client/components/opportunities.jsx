@@ -23,7 +23,7 @@ import crudFactory from './crud-factory';
 
 
 var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Actions, Store, "opportunityId")
-  .select( 
+  .select().renderer( 
     (self,nodes)=>
         <div>
           <p>Opportunity Type Selector:</p>
@@ -35,7 +35,8 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
               onChange={self.props.onChange}
           />
         </div>
-  ).head().menuRender( 
+  )()
+  .head().menuRender( 
     function(){
       return <div>
         <span className="navLink"><Link to="Opportunity-Task" params={this.props.params}>Tasks</Link> </span>
@@ -45,7 +46,7 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
       </div>
     }
   )()
-  .view(
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -53,8 +54,8 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
         </div>
       );
     }   
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -62,8 +63,8 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -76,8 +77,8 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
           </div>
         );
      }
-  )
-  .create( (self) =>
+  )()
+  .create().render((self) =>
       <div>
         <SelectProfile value={self.props.item.getIn(["user", "displayName"])} onChange={self.props.handleRawChange('user')}/>
         <SelectType value={self.props.item.getIn(["type", "title"])} onChange={self.props.handleRawChange('type')}/>
@@ -86,7 +87,7 @@ var exp = crudFactory(crud, "opportunityId", "Opportunity", "Opportunities", Act
         <SelectAgentRating value={self.props.item.getIn(["agentRating", "title"])} onChange={self.props.handleRawChange('agentRating')}/>  
         <FormInput id='title' title='Title' value={self.props.item.get('title')} onChange={self.props.handleChange('title')} />
       </div>             
-  )
+  )()
   .make();
 
 export default  exp;

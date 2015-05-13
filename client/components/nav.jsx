@@ -11,7 +11,6 @@ export default class Nav extends React.Component {
   render() {
     return (
       <div>
-        <PathDisplay/>
         <span className="navLink"><Link to="app">Home</Link> </span>
         <span className="navLink"><Link to="userArea">Main</Link></span>
         <span className="navLink"><Link to="adminArea">Admin</Link></span>

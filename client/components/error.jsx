@@ -9,7 +9,7 @@ var Error = React.createClass({
   propTypes: {},
   
   
-  render: function () {  
+  render() {  
     return(
       <div>{this.props.error}</div>
       ); 

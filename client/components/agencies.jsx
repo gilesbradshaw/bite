@@ -16,7 +16,7 @@ import crudFactory from './crud-factory';
 
 
 var exp = crudFactory(crud, "agencyId", "Agency", "Agencies", Actions, Store, "agencyId")
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <FieldSelect
@@ -27,16 +27,16 @@ var exp = crudFactory(crud, "agencyId", "Agency", "Agencies", Actions, Store, "a
               onChange={self.props.onChange}
           />
         </div>
-  )
-  .view(
+  )()
+  .view().render(
     (self,item)=>   
     {
         return <div >
            <div>{item.get('title')}</div>
         </div>
       }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -44,8 +44,8 @@ var exp = crudFactory(crud, "agencyId", "Agency", "Agencies", Actions, Store, "a
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -53,7 +53,7 @@ var exp = crudFactory(crud, "agencyId", "Agency", "Agencies", Actions, Store, "a
           </div>
         );
      }
-  )
+  )()
   
   .make();
 

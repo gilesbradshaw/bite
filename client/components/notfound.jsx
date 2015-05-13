@@ -7,11 +7,11 @@ var NotFound = React.createClass({
   propTypes: {},
   mixins: [],
 
-  getInitialState: function () { return null; },
+  getInitialState() { return null; },
 
-  componentWillMount: function () {},
+  componentWillMount() {},
 
-  componentWillUnmount: function () {},
+  componentWillUnmount() {},
 
   render: function () {
     return (

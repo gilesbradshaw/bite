@@ -5,15 +5,16 @@ import request from "superagent";
 import {fromJS} from "immutable";
 
 export var pathActions= Biff.createActions({
-    active: function (path,pathRender) {
+    active: function (name,path,pathRender) {
       
       if(path && pathRender)
       {
-        console.log(`path active::: ${path}`);
+        console.log(`path active:: ${name}: ${path}`);
         setTimeout(()=>
           {
             this.dispatch({
               actionType: 'PATH_ACTIVE',
+              name:name,
               path:path,
               pathRender:pathRender
             });
@@ -21,17 +22,17 @@ export var pathActions= Biff.createActions({
       }
       else
       {
-        console.log(`path NOT active::: ${path}`);
+        console.log(`path NOT active:: ${name}: ${path}`);
       }
     },
-    dispose: function (path,pathRender) {
-      console.log(`path inactive::: ${path}`);
+    dispose: function (name,path) {
+      console.log(`path inactive:: ${name}: ${path}`);
       setTimeout(()=>
         {
           this.dispatch({
             actionType: 'PATH_INACTIVE',
+            name:name,
             path:path,
-            pathRender:pathRender
           });
         },0);
     }

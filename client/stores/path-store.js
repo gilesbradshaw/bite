@@ -11,19 +11,14 @@ export var pathStore = Biff.createStore({
       return _data;
     }
   }, function (payload) {
-    if (payload.actionType.startsWith("PATH_ACTIVE")) {
-      console.log(`path store ${payload.actionType}   ${payload.path}`);
-    }
     if (payload.actionType === "PATH_ACTIVE") {
       _data= _data
-        .set("path", payload.path)
-        .set("pathRender", payload.pathRender);
+        .setIn([payload.name,payload.path], payload.pathRender);
       this.emitChange();
     }
     if (payload.actionType === name + "PATH_INACTIVE") {
       _data= _data
-        .set("path", '')
-        .set("pathRender", undefined);
+        .deleteIn([payload.name,payload.path]);
       this.emitChange();
     }
   });

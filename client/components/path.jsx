@@ -11,14 +11,14 @@ export var Path= class extends React.Component {
   componentWillUnmount() {
     if(this.props.myPath)
     {
-      pathActions.dispose(this.props.myPath, this.props.pathRender);
+      pathActions.dispose(this.props.name, this.props.myPath, this.props.pathRender);
     }
   }
   componentWillReceiveProps(props) 
   {
     if(this.props.myPath)
     {
-      pathActions.active(props.myPath, this.props.pathRender);
+      pathActions.active(this.props.name, props.myPath, this.props.pathRender);
     }
   }
   render() {
@@ -27,7 +27,7 @@ export var Path= class extends React.Component {
 }
 Path.displayName = "Path";
 
-export var pathRender = (target, render, pathRender) => 
-  <Path myPath={target.state.myPath} pathRender={pathRender}>
+export var pathRender = (target, name, render, pathRender) => 
+  <Path myPath={target.state.myPath} name={name} pathRender={pathRender}>
     {render()}
   </Path>

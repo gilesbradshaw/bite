@@ -13,7 +13,7 @@ import FieldSelect from './fieldSelect';
 import crudFactory from './crud-factory';
 
 var exp = crudFactory(crud, "opportunityAgentRatingId", "OpportunityAgentRating", "OpportunityAgentRatings", Actions, Store, "opportunityAgentRatingId")
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <p>Opportunity Agency Rating Selector:</p>
@@ -25,8 +25,8 @@ var exp = crudFactory(crud, "opportunityAgentRatingId", "OpportunityAgentRating"
               onChange={self.props.onChange}
           />
         </div>
-  )
-  .view(
+  )()
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -34,8 +34,8 @@ var exp = crudFactory(crud, "opportunityAgentRatingId", "OpportunityAgentRating"
         </div>
       );
     }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -43,8 +43,8 @@ var exp = crudFactory(crud, "opportunityAgentRatingId", "OpportunityAgentRating"
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -52,7 +52,7 @@ var exp = crudFactory(crud, "opportunityAgentRatingId", "OpportunityAgentRating"
           </div>
         );
      }
-  )
-   .make();
+  )()
+  .make();
 
 export default  exp;

@@ -14,7 +14,7 @@ import FieldSelect from './fieldSelect';
 import crudFactory from './crud-factory';
 
 var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","OpportunityRatePeriods", Actions, Store, "opportunityRatePeriodId")
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <p>Opportunity Rate Period Selector:</p>
@@ -26,8 +26,8 @@ var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","
               onChange={self.props.onChange}
           />
         </div>
-  )
-  .view(
+  )()
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -35,8 +35,8 @@ var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","
         </div>
       );
     }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -44,8 +44,8 @@ var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div >
@@ -53,7 +53,7 @@ var exp = crudFactory(crud, "opportunityRatePeriodId", "OpportunityRatePeriod","
           </div>
         );
      }
-  )
+  )()
   .make();
 
 export default  exp;

@@ -1,5 +1,7 @@
 import React from "react";
 import {pathStore} from '../stores/path-store';
+import _ from 'lodash';
+import {Map} from "immutable";
 // Child Components
 
 var getState=function()
@@ -15,20 +17,20 @@ export var PathDisplay = React.createClass({
 	],
   displayName: "PathDisplay",
   propTypes: {},
-  getInitialState:function(){
+  getInitialState(){
     return getState();
   },
-  storeDidChange: function () {
-        var s=getState();
-        this.setState(prev=>s);
-      },
-  render: function () {
-    if(this.state.path.get("pathRender"))
+  storeDidChange() {
+    var s=getState();
+    this.setState(prev=>s);
+  },
+  render() {
+    if(this.state.path.get(this.props.name))
     { 
-      return this.state.path.get("pathRender")();
+      return <div>
+        {this.state.path.get(this.props.name).toArray().map(e=>e())}
+      </div>
     }
-    return <div style={{background:'red'}}>
-      {this.state.path.get("path")}
-    </div>  
+    return <script/>
   }
 });

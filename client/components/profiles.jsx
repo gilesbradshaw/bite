@@ -17,7 +17,7 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
        <h1>{item.get('displayName')}</h1>
     </div>
   )()
-  .select( 
+  .select().renderer(
     (self,nodes)=>
         <div>
           <p>Profile selector:</p>
@@ -29,11 +29,11 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
                 onChange={self.props.onChange}
             />
         </div>
-  )
-  .list( 
+  )()
+  .list().nodeRender(
       (data) => <div>{data.get('displayName')}</div>
-  )
-  .view(
+  )()
+  .view().render(
     function(self,item){   
       return (
         <div >
@@ -41,8 +41,8 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
         </div>
       );
     }
-  )
-  .del(
+  )()
+  .del().render(
     function(){
       return (
         <div >
@@ -50,8 +50,8 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
         </div>
       );
     }
-  )
-  .edit(
+  )()
+  .edit().render(
      function(){
         return (
           <div>
@@ -59,12 +59,12 @@ var exp = crudFactory(crud, "profileId", "Profile", "Profiles", Actions, Store, 
           </div>
         );
      }
-  )
-  .create( (self)=>
+  )()
+  .create().render( (self)=>
     <div>
       <FormInput id='firstName' title='First Name' value={self.props.item.get('firstName')} onChange={self.props.handleChange('title')} />
     </div>
-  )
+  )()
   .make();
 
 export default  exp;
