@@ -36,6 +36,19 @@ process.setMaxListeners(0);
 var app = require('../config/express')(db1);
 require('../config/passport')();
 var PORT = process.env.PORT || 3000;
+var server = require('http').createServer(app);
+var io = require('socket.io')(server).of('/chat');
+io.on('connection', function(){ /* … */ });
+
+/*var wsserver = require('http').createServer();
+var io = require('socket.io')(wsserver);
+io.on('connection', function(socket){
+  console.log("CONNECTED");
+  socket.on('event', function(data){});
+  socket.on('disconnect', function(){});
+});
+wsserver.listen(3010);
+*/
 
 
 // ----------------------------------------------------------------------------
@@ -122,7 +135,7 @@ var start = function (opts, callback) {
   callback = callback || function () {};
   opts = opts || {};
   opts.port = opts.port || PORT;
-  app.listen(opts.port, callback);
+  server.listen(opts.port, callback);
 };
 
 module.exports = {
@@ -133,3 +146,14 @@ module.exports = {
 if (require.main === module) {
   start();
 }
+
+setInterval(function()
+  {
+    io.emit('test','an event sent to all connected clients');
+    
+  }
+  ,1000);
+io.on('testResult', function(data,fn){
+  console.log("got titititit");
+  //fn('yah bollocks');
+})

@@ -17,8 +17,13 @@
     <script type="text/javascript">
       var user = {{ user | json | safe }};
     </script>
+    <script src="/socket.io/socket.io.js"></script>
+    
   </head>
   <body>
+    <div id="js-ws"></div>
+    <div id="js-ws-reply">ohj</div>
+    <div id="js-ws-rx">umm</div>
     <div id="js-ticker"></div>
     <div id="js-content"></div>
     <script src="/app/js-dist/bundle.js"></script>
