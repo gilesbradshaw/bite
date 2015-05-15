@@ -1,112 +1,309 @@
 import crudActions from "./crud-actions";
+import {clientId} from "../config/mix-radio";
 
-var opportunityStatus=  crudActions(
+export var genre=  crudActions(
+	"GENRE", 
+	"GENRES",
+	{
+		many:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/genres?domain=music&client_id=${clientId}`,
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/genres?domain=music&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:(data, params)=>{
+			return data.get("items").find(item=>item.get("id")===params.id);
+		}
+	}
+);
+
+
+export var artist=  crudActions(
+	"ARTIST", 
+	"ARTISTS",
+	{
+		many:params=>{
+			if(params.props.params.genreId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=artist&genre=${params.props.params.genreId}&domain=music&itemsperpage=30&client_id=${clientId}`;
+			}
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=artist&domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=artist&domain=music&id=${params.id}&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>{
+			return data.getIn(["items",0]);
+
+		}
+	}
+);
+
+export var track=  crudActions(
+	"TRACK", 
+	"TRACKS",
+	{
+		many:params=>{
+			if(params.props.params.artistId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/creators/${params.props.params.artistId}/products?domain=music&category=track&client_id=${clientId}`;	
+			}
+			if(params.props.params.genreId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=track&genre=${params.props.params.genreId}&domain=music&itemsperpage=30&client_id=${clientId}`;
+			}			
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=track&domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.trackId}/?domain=music&category=track&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+export var album=  crudActions(
+	"ALBUM", 
+	"ALBUMS",
+	{
+		many:params=>{
+			if(params.props.params.genreId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=album&domain=music&genre=${params.props.params.genreId}&itemsperpage=30&client_id=${clientId}`;
+			}
+			if(params.props.params.artistId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/creators/${params.props.params.artistId}/products?domain=music&category=album&client_id=${clientId}`;	
+			}			
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=album&domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+export var single=  crudActions(
+	"SINGLE", 
+	"SINGLES",
+	{
+		many:params=>{
+			if(params.props.params.genreId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=single&domain=music&genre=${params.props.params.genreId}&itemsperpage=30&client_id=${clientId}`;
+			}
+
+			if(params.props.params.artistId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/creators/${params.props.params.artistId}/products?domain=music&category=single&client_id=${clientId}`;	
+			}			
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/?category=single&domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.singleId}/?domain=music&category=single&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+export var albumChart=  crudActions(
+	"ALBUMCHART", 
+	"ALBUMCHARTS",
+	{
+		many:params=>{
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/charts/album?domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+);
+
+export var trackChart=  crudActions(
+	"TRACKCHART", 
+	"TRACKCHARTS",
+	{
+		many:params=>{
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/charts/track?domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+export var albumNewRelease=  crudActions(
+	"ALBUMNEWRELEASE", 
+	"ALBUMNEWRELEASES",
+	{
+		many:params=>{
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/album?domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+export var singleNewRelease=  crudActions(
+	"SINGLENEWRELEASE", 
+	"SINGLENEWRELEASES",
+	{
+		many:params=>{
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/single?domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+export var trackNewRelease=  crudActions(
+	"TRACKNEWRELEASE", 
+	"TRACKNEWRELEASES",
+	{
+		many:params=>{
+			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/track?domain=music&itemsperpage=30&client_id=${clientId}`;
+		},
+		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
+	},
+	{
+		items:data=>data.items,
+		item:data=>data
+	}
+) ;
+
+
+export var country=  crudActions(
+	"COUNTRY", 
+	"COUNTRIES",
+	{
+		many:params=>"/COUNTRIES"
+	}
+) ;
+
+
+
+export var opportunityStatus=  crudActions(
 	"OPPORTUNITYSTATUS", 
 	"OPPORTUNITYSTATUSES",
-	(params)=>
-		"/OPPORTUNITYSTATUSES"
+	{
+		many:params=>"/OPPORTUNITYSTATUSES"
+	}
 ) ;
-export {opportunityStatus as opportunityStatus};
 
-var opportunityAgentRating=  crudActions(
+export var opportunityAgentRating=  crudActions(
 	"OPPORTUNITYAGENTRATING", 
 	"OPPORTUNITYAGENTRATINGS",
-	(params)=>
-		"/OPPORTUNITYAGENTRATINGS"
+	{
+		many:params=>"/OPPORTUNITYAGENTRATINGS"
+	}
 ) ;
-export {opportunityAgentRating as opportunityAgentRating};
 
-var opportunityRatePeriod=  crudActions(
+export var opportunityRatePeriod=  crudActions(
 	"OPPORTUNITYRATEPERIOD", 
 	"OPPORTUNITYRATEPERIODS",
-	(params)=>
-		"/OPPORTUNITYRATEPERIODS"
+	{
+		many:params=>"/OPPORTUNITYRATEPERIODS"
+	}
 ) ;
-export {opportunityRatePeriod as opportunityRatePeriod};
 
-var opportunityType=  crudActions(
+export var opportunityType=  crudActions(
 	"OPPORTUNITYTYPE", 
 	"OPPORTUNITYTYPES",
-	(params)=>
-		"/OPPORTUNITYTYPES"
+	{
+		many:params=>"/OPPORTUNITYTYPES"
+	}
 ) ;
-export {opportunityType as opportunityType};
 
-
-var agency=  crudActions(
+export var agency=  crudActions(
 	"AGENCY", 
 	"AGENCIES",
-	(params)=>
-		"/AGENCIES"
+	{
+		many:params=>"/AGENCIES"
+	}
 ) ;
-export {agency as agency};
 
-
-
-var agent = crudActions(
+export var agent = crudActions(
 	"AGENT", 
 	"AGENTS",
-	(params)=> {
-		if(params.props.params.agencyId)
-			return "/AGENCIES/" + params.props.params.agencyId + "/AGENTS";
-		else
-			return "/AGENTS";
+	{
+		many:params=> {
+			if(params.props.params.agencyId)
+				return "/AGENCIES/" + params.props.params.agencyId + "/AGENTS";
+			else
+				return "/AGENTS";
+		}
 	}
 );
-export {agent as agent};
 
-var profile = crudActions(
+export var profile = crudActions(
 	"PROFILE", 
 	"PROFILES",
-	(params)=>
-		"/PROFILES"
+	{
+		many:params=>"/PROFILES"
+	}
 );
-export {profile as profile};
 
-var opportunity = crudActions(
+export var opportunity = crudActions(
 	"OPPORTUNITY", 
 	"OPPORTUNITIES",
-	(params)=> {
-		if(params.props.params.profileId)
-			return "/PROFILES/" + params.props.params.profileId + "/OPPORTUNITIES";
-		else
-			return "/OPPORTUNITIES";
+	{
+		many:params=> {
+			if(params.props.params.profileId)
+				return "/PROFILES/" + params.props.params.profileId + "/OPPORTUNITIES";
+			else
+				return "/OPPORTUNITIES";
+		}
 	}
 );
-export {opportunity as opportunity};
 
-var note = crudActions(
+export var note = crudActions(
 	"NOTE", 
 	"NOTES",
-	(params)=> {
-		if(params.props.params.opportunityId)
-			return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/NOTES";
-		else
-			return "/NOTES";
+	{
+		many:params=> {
+			if(params.props.params.opportunityId)
+				return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/NOTES";
+			else
+				return "/NOTES";
+		}
 	}
 );
-export {note as note};
 
-var task = crudActions(
+export var task = crudActions(
 	"TASK", 
 	"TASKS",
-	(params)=> {
-		if(params.props.params.opportunityId)
-			return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/TASKS";
-		else
-			return "/TASKS";
+	{
+		many:params=> {
+			if(params.props.params.opportunityId)
+				return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/TASKS";
+			else
+				return "/TASKS";
+		}
 	}
 );
-export {task as task};
 
-var email = crudActions(
+export var email = crudActions(
 	"EMAIL", 
 	"EMAILS",
-	(params)=> {
-		if(params.props.params.opportunityId)
-			return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/EMAILS";
-		else
-			return "/EMAILS";
+	{
+		many:params=> {
+			if(params.props.params.opportunityId)
+				return "/OPPORTUNITIES/" + params.props.params.opportunityId + "/EMAILS";
+			else
+				return "/EMAILS";
+		}
 	}
 );
-export {email as email};

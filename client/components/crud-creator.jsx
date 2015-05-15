@@ -38,9 +38,10 @@ const style = {
 	}
 }
 
-const crudcreator= (name)=> {
+const crudcreator= (name, itemId)=> {
+	itemId=itemId||'_id';
 	return {
-		lister:function lister(singleId,pluralName,displayName,actions, store,errorStore, itemRender, render)
+		lister:function lister(singleId,pluralName,displayName,actions, store,errorStore, itemRender, render, menuLinks)
 		{
 		// Component
 		  function getState(index) {
@@ -53,12 +54,11 @@ const crudcreator= (name)=> {
 		  	  const self =this;
 		  	  return items.map( (data)=>
 		      {
-		  	  	const params = _.extend({[singleId] : data.get('_id')},self.props.params);
-		  	   	return <div key={data.get('_id')}>
+		  	  	const params = _.extend({[singleId] : data.get(itemId)},self.props.params);
+		  	  	
+		  	   	return <div key={data.get(itemId)}>
 			          {itemRender(data)}
-			          <span key={`${data.get('_id')}-view`} style={[style.link]}><Link to={self.state.myPath + "-view"} params={params}>View</Link></span>
-			          <span key={`${data.get('_id')}-edit`} style={[style.link]}><Link to={self.state.myPath + "-edit"} params={params}>Edit</Link></span>
-			          <span key={`${data.get('_id')}-delete`} style={[style.link]}><Link to={self.state.myPath + "-delete"} params={params}>Delete</Link></span>
+			          {menuLinks(self,data,params).map(link=><span key={`${data.get(itemId)}-${link.title}`} style={[style.link]}><Link to={link.path} params={params}>{link.title}</Link></span>)}			          
 		          	</div>
 		         }
 	      	  );
@@ -191,7 +191,7 @@ const crudcreator= (name)=> {
 		      if(s.item.get("_id"))
 		      {
 		      	let params = {};
-		      	params[paramName]= s.item.get("_id");
+		      	params[paramName]= s.item.get(itemId);
 		      	this.context.router.transitionTo(this.props.myPath + "-edit", _.extend(params, this.props.params));	
 		      }
 		      else
@@ -311,7 +311,7 @@ const crudcreator= (name)=> {
 			      if(s.item && this.state.data.get("dataFetched")  && !s.item.get("_id"))
 			      {
 			      	let params = {};
-		      		params[paramName]= s.item.get("_id");
+		      		params[paramName]= s.item.get(itemId);
 		      		this.context.router.transitionTo(this.props.myPath + '-list', _.extend(params, this.props.params));	
 			      	//this.setState(prev=>({data:prev.data.set("finished", true)}));
 			      }
@@ -328,7 +328,7 @@ const crudcreator= (name)=> {
 		    del() {
 		      actions.del({
 		      	index:this.state.index,
-		      	id:this.state.data.getIn(['item','_id']),
+		      	id:this.state.data.getIn(['item',itemId]),
 		      	props:this.props
 		      });
 		    },

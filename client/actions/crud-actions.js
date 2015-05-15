@@ -28,23 +28,24 @@ function logError(error,res, single, index){
 }
 
 
-function crudActions(single, plural,path)
+function crudActions(single, plural,path, getData)
 {
+  getData=getData||{};
+  const getItem = (text, params)=> getData.item ?  getData.item(fromJS(JSON.parse(text)), params) : fromJS(JSON.parse(text));
   return Biff.createActions({
     load: function (params) {
         var self = this;
         setTimeout(()=>
         {
-          let test = `${plural}_LOAD`;
           request
-          .get(path(params))
+          .get(path.many(params))
           .set("Accept", "application/json")
           .end(function (error, res) {
             if(res && res.ok)
             {
               self.dispatch({
                 actionType: `${plural}_LOAD`,
-                items:JSON.parse(res.text),
+                items:getData.items ? getData.items(JSON.parse(res.text)) : JSON.parse(res.text),
                 index:params.index  
               });
               self.dispatch({
@@ -81,13 +82,13 @@ function crudActions(single, plural,path)
         var item = params.item.delete('_id');
         var self = this;
         request
-        .post(path(params))
+        .post(path.many(params))
         .send(item)
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)
           {
-            var data=fromJS(JSON.parse(res.text));
+            var data=getItem(res.text, params);
             self.dispatch({
               actionType: `${single}_CREATE`,
               item:data,
@@ -112,13 +113,13 @@ function crudActions(single, plural,path)
       {
         var self = this;
         request
-        .put(`${path(params)}/${params.item.get("_id")}`)
+        .put(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
         .send(params.item)
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)
           {
-            var data=fromJS(JSON.parse(res.text));
+            var data=getItem(res.text, params);
             self.dispatch({
               actionType: `${single}_CREATE`,
               item:data,
@@ -141,7 +142,7 @@ function crudActions(single, plural,path)
       {
         var self = this;
         request
-        .del(`${path(params)}/${params.id}`)
+        .del(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
         .send()
         .set("Accept", "application/json")
         .end( (error, res)=> {
@@ -173,12 +174,12 @@ function crudActions(single, plural,path)
       {
         var self = this;
         request
-        .get(`${path(params)}/${params.id}`)
+        .get(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
         .set("Accept", "application/json")
         .end( (error, res)=> {
           if(res && res.ok)
           {
-            var data=fromJS(JSON.parse(res.text));
+            var data=getItem(res.text, params);
             self.dispatch({
               actionType: `${single}_GOT`,
               item:data,

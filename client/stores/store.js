@@ -1,37 +1,25 @@
 import crudStore from "./crud-store";
 
-var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
-export {opportunityType as opportunityType};
-
-var opportunityStatus = crudStore("OPPORTUNITYSTATUS", "OPPORTUNITYSTATUSES");
-export {opportunityStatus as opportunityStatus};
-
-var opportunityRatePeriod = crudStore("OPPORTUNITYRATEPERIOD", "OPPORTUNITYRATEPERIODS");
-export {opportunityRatePeriod as opportunityRatePeriod};
-
-var opportunityAgentRating = crudStore("OPPORTUNITYAGENTRATING", "OPPORTUNITYAGENTRATINGS");
-export {opportunityAgentRating as opportunityAgentRating};
-
-var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
-export {opportunityType as opportunityType};
-
-var agency= crudStore("AGENCY", "AGENCIES");
-export {agency as agency};	
-
-var agent = crudStore("AGENT", "AGENTS");
-export {agent as agent};
-
-var note = crudStore("NOTE", "NOTES");
-export {note as note};
-
-var opportunity = crudStore("OPPORTUNITY", "OPPORTUNITIES");
-export {opportunity as opportunity};
-
-var profile = crudStore("PROFILE", "PROFILES"); 
-export {profile as profile};
-
-var task = crudStore("TASK", "TASKS"); 
-export {task as task};
-
-var email = crudStore("EMAIL", "EMAILS"); 
-export {email as email};
+export var genre = crudStore("GENRE", "GENRES");
+export var artist = crudStore("ARTIST", "ARTISTS");
+export var track = crudStore("TRACK", "TRACKS");
+export var album = crudStore("ALBUM", "ALBUMS");
+export var single = crudStore("SINGLE", "SINGLES");
+export var albumChart = crudStore("ALBUMCHART", "ALBUMCHARTS");
+export var trackChart = crudStore("TRACKCHART", "TRACKCHARTS");
+export var albumNewRelease= crudStore("ALBUMNEWRELEASE", "ALBUMNEWRELEASES");
+export var trackNewRelease= crudStore("TRACKNEWRELEASE", "TRACKNEWRELEASES");
+export var singleNewRelease= crudStore("SINGLENEWRELEASE", "SINGLENEWRELEASES");
+export var country = crudStore("COUNTRY", "COUNTRIES");
+export var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
+export var opportunityStatus = crudStore("OPPORTUNITYSTATUS", "OPPORTUNITYSTATUSES");
+export var opportunityRatePeriod = crudStore("OPPORTUNITYRATEPERIOD", "OPPORTUNITYRATEPERIODS");
+export var opportunityAgentRating = crudStore("OPPORTUNITYAGENTRATING", "OPPORTUNITYAGENTRATINGS");
+export var opportunityType = crudStore("OPPORTUNITYTYPE", "OPPORTUNITYTYPES");
+export var agency= crudStore("AGENCY", "AGENCIES");
+export var agent = crudStore("AGENT", "AGENTS");
+export var note = crudStore("NOTE", "NOTES");
+export var opportunity = crudStore("OPPORTUNITY", "OPPORTUNITIES");
+export var profile = crudStore("PROFILE", "PROFILES"); 
+export var task = crudStore("TASK", "TASKS"); 
+export var email = crudStore("EMAIL", "EMAILS"); 

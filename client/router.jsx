@@ -4,7 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
-import {UserNav, AdminNav} from "./components/nav";
+import {MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -16,6 +16,17 @@ import Opportunities from "./components/opportunities";
 import Tasks from "./components/tasks";
 import Notes from "./components/notes";
 import Emails from "./components/emails";
+import Countries from "./components/countries";
+import Genres from "./components/genres";
+import Artists from "./components/artists";
+import Tracks from "./components/tracks";
+import Albums from "./components/albums";
+import AlbumCharts from "./components/albumCharts";
+import TrackCharts from "./components/trackCharts";
+import AlbumNewReleases from "./components/albumNewReleases";
+import TrackNewReleases from "./components/trackNewReleases";
+import SingleNewReleases from "./components/singleNewReleases";
+import Singles from "./components/singles";
 import Users from "./components/users";
 import User from "./components/user.edit";
 import Me from "./components/user.me";
@@ -45,6 +56,33 @@ var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=>
 var routes = (
   <Route handler={App} path="/">
     <DefaultRoute name="app" handler={Home} />
+    <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
+      {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
+          <Route name="Country-Chart" path="Charts" handler={ChartsNav} >
+            {getRoute("Country-AlbumChart", "AlbumChart", "AlbumCharts", "albumChartId" , AlbumCharts)}
+            {getRoute("Country-TrackChart", "TrackChart", "TrackCharts", "trackChartId" , TrackCharts)}
+          </Route>,
+          <Route name="Country-NewRelease" path="NewReleases" handler={NewReleasesNav} >
+            {getRoute("Country-AlbumNewRelease", "AlbumNewRelease", "AlbumNewReleases", "albumNewReleaseId" , AlbumNewReleases)}
+            {getRoute("Country-TrackNewRelease", "TrackNewRelease", "TrackNewReleases", "trackNewReleaseId" , TrackNewReleases)}
+            {getRoute("Country-SingleNewRelease", "SingleNewRelease", "SingleNewReleases", "trackNewReleaseId" , SingleNewReleases)}
+          </Route>,
+          getRoute("Country-Genre", "Genre", "Genres", "genreId" , Genres,            
+            getRoute("Country-Genre-Artist", "Artist", "Artists", "artistId" , Artists),
+            getRoute("Country-Genre-Album", "Album", "Albums", "albumId" , Albums),
+            getRoute("Country-Genre-Single", "Single", "Singles", "singleId" , Singles),
+            getRoute("Country-Genre-Track", "Track", "Tracks", "trackId" , Tracks)
+          ),
+          getRoute("Country-Artist", "Artist", "Artists", "artistId" , Artists,
+            getRoute("Country-Artist-Album", "Album", "Albums", "albumId" , Albums),
+            getRoute("Country-Artist-Single", "Single", "Singles", "singleId" , Singles),
+            getRoute("Country-Artist-Track", "Track", "Tracks", "trackId" , Tracks)
+          ),
+          getRoute("Country-Album", "Album", "Albums", "albumId" , Albums),
+          getRoute("Country-Single", "Single", "Singles", "singleId" , Singles),
+          getRoute("Country-Track", "Track", "Tracks", "trackId" , Tracks)
+      )},
+    </Route>
     <Route name="userArea" path="userArea" handler={UserNav} > 
 
 

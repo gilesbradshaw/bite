@@ -1,7 +1,8 @@
 import Rx from "rx";
 import React from "react";
 
-
+export default 0;
+/*
   var socket = io.connect('http://localhost:3000/chat');
   let x=0;  
   socket.on('test', function(data){
@@ -40,3 +41,4 @@ export default source.subscribe( time =>
 	)
 );
 
+*/

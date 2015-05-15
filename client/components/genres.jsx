@@ -1,0 +1,69 @@
+// React
+import React from "react";
+import {addons as ReactAddons} from 'react/addons';
+var PureRenderMixin = ReactAddons.PureRenderMixin;
+
+import crud from "./crud-creator";
+import {genre as Store} from "../stores/store";
+import {genre as Actions} from "../actions/actions";
+
+import  {Link} from "react-router";
+import FormInput from "./formInput";
+
+import crudFactory from './crud-factory';
+
+
+
+
+var exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genreId", "id")
+  .list().nodeRender(
+      (data) => 
+      <div>
+        <div>{data.get('name')}</div>
+      </div>
+    )()
+  .view().render(
+    (self,data)=>   
+    {
+        return <div >
+           <div>{data.get('name')}</div>
+        </div>
+      }
+  )()
+  .head().menuRender( 
+    function(){
+      return <div>
+        <span className="navLink"><Link to="Country-Genre-Artist" params={this.props.params}>Artists</Link> </span>
+        <span className="navLink"><Link to="Country-Genre-Album" params={this.props.params}>Albums</Link> </span>
+        <span className="navLink"><Link to="Country-Genre-Single" params={this.props.params}>Singles</Link> </span>
+        <span className="navLink"><Link to="Country-Genre-Track" params={this.props.params}>Tracks</Link> </span>
+      </div>
+    }
+  )()
+
+
+  .del().render(
+    function(){
+      return (
+        <div >
+           <div>{this.props.item.get('title')}</div>
+        </div>
+      );
+    }
+  )()
+  .edit().render(
+     function(){
+        return (
+          <div >
+             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
+          </div>
+        );
+     }
+  )()
+
+  
+  .make();
+
+export default  exp;
+
+

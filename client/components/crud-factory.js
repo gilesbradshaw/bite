@@ -6,26 +6,12 @@ import _ from 'lodash';
 
 
 
-var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
+var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
 {
-  crud=crud(name);
+  crud=crud(name, itemId);
   var cruded={};
   var cruder={};
-  function makeCruder(name, cruders){
-    return ()=>
-    {
-      const ret = ()=>factory;
-        for(let cruderField of cruders)
-        {
-          ret[cruderField]=(i)=>{
-            cruder[name]=_.extend(cruder[name]||{},{[cruderField]:i});
-            return ret;
-          };  
-        }
-      
-      return ret;
-     } 
-  }
+  
   var factory= {
     make:()=>{
       if(cruder.head)
@@ -69,7 +55,8 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
           store.list,
           store.error,
           cruder.list.nodeRender,
-          cruder.list.render  
+          cruder.list.render,
+          cruder.list.menuLinks
         );
       }
       if(cruder.view)
@@ -136,7 +123,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
       return cruded
     },
     select:makeCruder('select',['renderer']),
-    list:makeCruder('list', ['render', 'nodeRender']),
+    list:makeCruder('list', ['render', 'nodeRender', 'menuLinks']),
     head:makeCruder('head', ['render', 'menuRender']),
     view:makeCruder('view', ['render']),
     edit:makeCruder('edit', ['render']),
@@ -158,6 +145,13 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
     )()
     .list().nodeRender(
       (data) => <div>{data.get('title')}</div>
+    )
+    .menuLinks(
+      (self,data,params)=>[
+        {title:'View',path:self.state.myPath + "-view"},
+        {title:'Edit',path:self.state.myPath + "-edit"},
+        {title:'Delete',path:self.state.myPath + "-delete"},
+      ]
     )()
     .create().render(
       (self)=>
@@ -166,18 +160,21 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id)=>
           </div>
     )();
   
-    /*.list(
-      function(self,nodes){
-        return function () {
-          return (
-            <div>
-              <p>Agency Bank:</p>
-              <span className="navLink"><Link to="agency">Create</Link></span>
-              {nodes()}
-            </div>
-          );
-        };
-    })*/;
+    function makeCruder(name, cruders){
+    return ()=>
+    {
+      const ret = ()=>factory;
+        for(let cruderField of cruders)
+        {
+          ret[cruderField]=(i)=>{
+            cruder[name]=_.extend(cruder[name]||{},{[cruderField]:i});
+            return ret;
+          };  
+        }
+      
+      return ret;
+     } 
+  }
 }
 
 export default crudFactory;
