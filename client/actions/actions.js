@@ -44,6 +44,10 @@ export var track=  crudActions(
 	"TRACKS",
 	{
 		many:params=>{
+			if(params.props.params.albumId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`;
+			}
 			if(params.props.params.artistId)
 			{
 				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/creators/${params.props.params.artistId}/products?domain=music&category=track&client_id=${clientId}`;	
@@ -57,7 +61,7 @@ export var track=  crudActions(
 		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.trackId}/?domain=music&category=track&client_id=${clientId}`,
 	},
 	{
-		items:data=>data.items,
+		items:(data, params)=>(params.props.params.albumId ? data.tracks : data.items),
 		item:data=>data
 	}
 ) ;
@@ -116,7 +120,6 @@ export var albumChart=  crudActions(
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/charts/album?domain=music&itemsperpage=30&client_id=${clientId}`;
 		},
-		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
 	},
 	{
 		items:data=>data.items,
@@ -131,7 +134,6 @@ export var trackChart=  crudActions(
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/charts/track?domain=music&itemsperpage=30&client_id=${clientId}`;
 		},
-		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
 	},
 	{
 		items:data=>data.items,
@@ -146,7 +148,6 @@ export var albumNewRelease=  crudActions(
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/album?domain=music&itemsperpage=30&client_id=${clientId}`;
 		},
-		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
 	},
 	{
 		items:data=>data.items,
@@ -161,7 +162,6 @@ export var singleNewRelease=  crudActions(
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/single?domain=music&itemsperpage=30&client_id=${clientId}`;
 		},
-		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
 	},
 	{
 		items:data=>data.items,
@@ -176,7 +176,6 @@ export var trackNewRelease=  crudActions(
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/track?domain=music&itemsperpage=30&client_id=${clientId}`;
 		},
-		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`,
 	},
 	{
 		items:data=>data.items,

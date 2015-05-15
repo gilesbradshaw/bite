@@ -78,7 +78,9 @@ var routes = (
             getRoute("Country-Artist-Single", "Single", "Singles", "singleId" , Singles),
             getRoute("Country-Artist-Track", "Track", "Tracks", "trackId" , Tracks)
           ),
-          getRoute("Country-Album", "Album", "Albums", "albumId" , Albums),
+          getRoute("Country-Album", "Album", "Albums", "albumId" , Albums,
+            getRoute("Country-Album-Track", "Track", "Tracks", "trackId" , Tracks)
+          ),
           getRoute("Country-Single", "Single", "Singles", "singleId" , Singles),
           getRoute("Country-Track", "Track", "Tracks", "trackId" , Tracks)
       )},

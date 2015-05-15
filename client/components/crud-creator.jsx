@@ -57,12 +57,11 @@ const crudcreator= (name, itemId)=> {
 		  	  	const params = _.extend({[singleId] : data.get(itemId)},self.props.params);
 		  	  	
 		  	   	return <div key={data.get(itemId)}>
-			          {itemRender(data)}
+			          {itemRender(data,self)}
 			          {menuLinks(self,data,params).map(link=><span key={`${data.get(itemId)}-${link.title}`} style={[style.link]}><Link to={link.path} params={params}>{link.title}</Link></span>)}			          
 		          	</div>
 		         }
 	      	  );
-	    	  
 		  }
 
 		  return React.createClass(Radium.wrap({
@@ -364,6 +363,8 @@ const crudcreator= (name, itemId)=> {
 		viewer:function viewer(routePart, displayName,actions, store,errorStore, render, paramName)
 		{
 		  return React.createClass({
+		  	
+
 		    displayName: displayName,
 		    propTypes: {},
 		    mixins: [

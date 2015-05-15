@@ -27,6 +27,13 @@ var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "album
       );
     }
   )()
+  .head().menuRender( 
+    function(){
+      return <div>
+        <span className="navLink"><Link to="Country-Album-Track" params={this.props.params}>Tracks</Link> </span>        
+      </div>
+    }
+  )()
   .edit().render(
      function(){
         return (

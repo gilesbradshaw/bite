@@ -11,13 +11,13 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {listedPicture, viewPicture} from "./mix-radio/items";
+import {listedTrack, viewPicture} from "./mix-radio/items";
 
 
 
 
 var exp = crudFactory(crud, "trackId", "TrackChart", "TrackCharts", Actions, Store, "trackId", "id")
-  .list().nodeRender(listedPicture)
+  .list().nodeRender(listedTrack)
   .menuLinks(
     (self,data,params)=>{
       return  [

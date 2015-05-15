@@ -17,7 +17,15 @@ import {listedPicture, viewPicture} from "./mix-radio/items";
 
 var exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "artistId", "id")
   .list().nodeRender(listedPicture)()
-  .view().render(viewPicture)()
+  .view().render( (self,data)=>
+    <div>
+      {viewPicture(self,data)}
+      <p>
+        {data.get("biography")}
+      </p>
+    </div>
+    
+  )()
   .head().menuRender( 
     function(){
       return <div>

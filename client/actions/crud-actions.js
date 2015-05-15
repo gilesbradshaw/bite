@@ -39,13 +39,13 @@ function crudActions(single, plural,path, getData)
         {
           request
           .get(path.many(params))
-          .set("Accept", "application/json")
+          .set("Accept", "application/json,*/*")
           .end(function (error, res) {
             if(res && res.ok)
             {
               self.dispatch({
                 actionType: `${plural}_LOAD`,
-                items:getData.items ? getData.items(JSON.parse(res.text)) : JSON.parse(res.text),
+                items:getData.items ? getData.items(JSON.parse(res.text), params) : JSON.parse(res.text),
                 index:params.index  
               });
               self.dispatch({
@@ -84,7 +84,7 @@ function crudActions(single, plural,path, getData)
         request
         .post(path.many(params))
         .send(item)
-        .set("Accept", "application/json")
+        .set("Accept", "application/json,*/*")
         .end( (error, res)=> {
           if(res && res.ok)
           {
@@ -115,7 +115,7 @@ function crudActions(single, plural,path, getData)
         request
         .put(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
         .send(params.item)
-        .set("Accept", "application/json")
+        .set("Accept", "application/json,*/*")
         .end( (error, res)=> {
           if(res && res.ok)
           {
@@ -144,7 +144,7 @@ function crudActions(single, plural,path, getData)
         request
         .del(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
         .send()
-        .set("Accept", "application/json")
+        .set("Accept", "application/json,*/*")
         .end( (error, res)=> {
           if(res && res.ok)
           {
@@ -175,7 +175,7 @@ function crudActions(single, plural,path, getData)
         var self = this;
         request
         .get(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
-        .set("Accept", "application/json")
+        .set("Accept", "application/json,*/*")
         .end( (error, res)=> {
           if(res && res.ok)
           {
