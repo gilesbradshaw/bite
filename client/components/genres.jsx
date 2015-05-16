@@ -11,6 +11,7 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
+import {links} from './link/links';
 
 
 
@@ -33,10 +34,12 @@ var exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genre
   .head().menuRender( 
     function(){
       return <div>
-        <span className="navLink"><Link to="Country-Genre-Artist" params={this.props.params}>Artists</Link> </span>
-        <span className="navLink"><Link to="Country-Genre-Album" params={this.props.params}>Albums</Link> </span>
-        <span className="navLink"><Link to="Country-Genre-Single" params={this.props.params}>Singles</Link> </span>
-        <span className="navLink"><Link to="Country-Genre-Track" params={this.props.params}>Tracks</Link> </span>
+        {links([
+          {to:"Country-Genre-Artist", name:"Artists" },
+          {to:"Country-Genre-Album", name:"Albums" },
+          {to:"Country-Genre-Single", name:"Singles" },
+          {to:"Country-Genre-Track", name:"Tracks" }
+        ],this.context.router,this.props.params)}
       </div>
     }
   )()

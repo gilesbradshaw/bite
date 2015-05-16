@@ -11,6 +11,7 @@ import Nav from "./nav";
 
 // Component
 var App = React.createClass({
+  
   displayName: "App",
   propTypes: {},
   mixins: [],

@@ -3,25 +3,36 @@ import React from "react";
 import {RouteHandler, Link} from "react-router";
 import UserLoggedIn from "./user.LoggedIn";
 import {PathDisplay} from "./path-display";
+import {links,routeClass} from './link/links';
+import {pathRender} from './Path';
+
+
+
+
 
 export default class Nav extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
+    const route = this.context.router.getRouteAtDepth(this.context.routeDepth-1);
     return (
       <div>
-        <span className="navLink"><Link to="app">Home</Link> </span>
-        <span className="navLink"><Link to="mixRadio">Mix Radio</Link></span>
-        <span className="navLink"><Link to="userArea">Main</Link></span>
-        <span className="navLink"><Link to="adminArea">Admin</Link></span>
-        <span className="navLink"><Link to="signup">Sign up</Link></span>
-        <span className="navLink"><Link to="signin">Sign in</Link></span>
         <UserLoggedIn/>
+        {links([
+          {to:"app", name:"Home" , preserve:true},
+          {to:"mixRadio", name:"Mix Radio"},
+          {to:"userArea", name:"Main"},
+          {to:"adminArea", name:"Admin"},
+          {to:"signup", name:"SignUp"}
+        ],this.context.router)}
+        {this.context.router.getCurrentRoutes().map(route=><div><PathDisplay name={`${route.path}&&${route.name}`}/></div>)}
+        <RouteHandler {...this.props} />
       </div>
     );
   }
 }
+routeClass(Nav);
 Nav.displayName = "Nav";
 
 
@@ -52,14 +63,27 @@ export class MixRadioNav extends React.Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        <span className="navLink"><Link to="Country-list">Countries</Link></span>
+  /*return(
+    <div>
+        {links([
+          {to:"Country-list", name:"Countries"}
+        ],this.context.router,this.props.params)}
         <RouteHandler {...this.props} />
        </div>
+    );*/
+    return pathRender(
+      this,
+      ()=> <RouteHandler {...this.props} />,    
+      ()=>
+        <div>
+          {links([
+            {to:"Country-list", name:"Countries"}
+          ],this.context.router,this.props.params)}
+        </div>
     );
   }
 }
+routeClass(MixRadioNav);
 MixRadioNav.displayName = "MixRadioNav";
 
 export class AdminNav extends React.Component {
@@ -86,15 +110,20 @@ export class ChartsNav extends React.Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        <span className="navLink"><Link to="Country-AlbumChart" params={this.props.params}>Albums</Link> </span>
-        <span className="navLink"><Link to="Country-TrackChart" params={this.props.params}>Tracks</Link> </span>
-        <RouteHandler {...this.props} />
-       </div>
+    return pathRender(
+      this,
+      ()=> <RouteHandler {...this.props} />,    
+      ()=>
+        <div>
+          {links([
+            {to:"Country-AlbumChart", name:"Albums"},
+            {to:"Country-TrackChart", name:"Tracks"}
+          ],this.context.router,this.props.params)}
+        </div>
     );
   }
 }
+routeClass(ChartsNav);
 ChartsNav.displayName = "ChartsNav";
 
 
@@ -103,14 +132,19 @@ export class NewReleasesNav extends React.Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        <span className="navLink"><Link to="Country-AlbumNewRelease" params={this.props.params}>Albums</Link> </span>
-        <span className="navLink"><Link to="Country-TrackNewRelease" params={this.props.params}>Tracks</Link> </span>
-        <span className="navLink"><Link to="Country-SingleNewRelease" params={this.props.params}>Singles</Link> </span>
-        <RouteHandler {...this.props} />
-       </div>
+    return pathRender(
+      this,
+      ()=> <RouteHandler {...this.props} />,    
+      ()=>
+        <div>
+          {links([
+            {to:"Country-AlbumNewRelease", name:"Albums"},
+            {to:"Country-TrackNewRelease", name:"Tracks"},
+            {to:"Country-SingleNewRelease", name:"Singles"}
+          ],this.context.router,this.props.params)}
+        </div>
     );
   }
 }
+routeClass(NewReleasesNav);
 NewReleasesNav.displayName = "NewReleasesNav";

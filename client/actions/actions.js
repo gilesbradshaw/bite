@@ -48,6 +48,10 @@ export var track=  crudActions(
 			{
 				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.albumId}/?domain=music&category=album&client_id=${clientId}`;
 			}
+			if(params.props.params.singleId)
+			{
+				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.singleId}/?domain=music&category=single&client_id=${clientId}`;
+			}
 			if(params.props.params.artistId)
 			{
 				return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/creators/${params.props.params.artistId}/products?domain=music&category=track&client_id=${clientId}`;	
@@ -61,7 +65,7 @@ export var track=  crudActions(
 		single:params=>`http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/${params.props.params.trackId}/?domain=music&category=track&client_id=${clientId}`,
 	},
 	{
-		items:(data, params)=>(params.props.params.albumId ? data.tracks : data.items),
+		items:(data, params)=>(params.props.params.albumId || params.props.params.singleId ? data.tracks : data.items),
 		item:data=>data
 	}
 ) ;

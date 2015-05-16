@@ -1,24 +1,27 @@
 import React from "react";
 import {pathActions} from "../actions/path-actions";
 
-export var Path= class extends React.Component {
+export const Path= class extends React.Component {
   constructor(props) {
     super(props);
   }
   componentWillMount() {
-    //pathActions.active(this.props.myPath);
+    if(this.props.myPath )
+    {
+      pathActions.active(this.props.myPath, this.props.myPath, this.props.pathRender);
+    }
   }
   componentWillUnmount() {
     if(this.props.myPath)
     {
-      pathActions.dispose(this.props.name, this.props.myPath, this.props.pathRender);
+      pathActions.dispose(this.props.myPath, this.props.myPath, this.props.pathRender);
     }
   }
   componentWillReceiveProps(props) 
   {
-    if(this.props.myPath)
+    if(props.myPath )
     {
-      pathActions.active(this.props.name, props.myPath, this.props.pathRender);
+      pathActions.active(props.myPath, props.myPath, props.pathRender);
     }
   }
   render() {
@@ -27,7 +30,11 @@ export var Path= class extends React.Component {
 }
 Path.displayName = "Path";
 
-export var pathRender = (target, name, render, pathRender) => 
-  <Path myPath={target.state.myPath} name={name} pathRender={pathRender}>
+export const pathRender = (target, render, pathRender) => 
+{
+  const route = target.context.router.getRouteAtDepth(target.context.routeDepth-1);
+  console.log(`pathRender ::: ${route.path}&&${route.name}`);
+  return <Path myPath={`${route.path}&&${route.name}`} pathRender={pathRender}>
     {render()}
   </Path>
+}

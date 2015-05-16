@@ -12,7 +12,7 @@ import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
 import {listedPicture, viewPicture} from "./mix-radio/items";
-
+import {links} from './link/links';
 
 
 var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "albumId", "id")
@@ -30,7 +30,9 @@ var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "album
   .head().menuRender( 
     function(){
       return <div>
-        <span className="navLink"><Link to="Country-Album-Track" params={this.props.params}>Tracks</Link> </span>        
+        {links([
+          {to:"Country-Album-Track", name:"Tracks" }
+        ],this.context.router,this.props.params)}
       </div>
     }
   )()

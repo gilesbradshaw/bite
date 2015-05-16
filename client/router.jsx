@@ -4,7 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
-import {MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav} from "./components/nav";
+import Nav, {MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -40,9 +40,9 @@ var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=>
   //React.addOns.createFragment(
     <Route key={prefix} name={prefix} path={pluralName} handler={components.listHead} >
       <DefaultRoute name={prefix + "-list"}  handler={components.list}/>   
-      <Route path={name}>
+      <Route name={prefix + "-item"} path={name}>
         <DefaultRoute name={prefix + "-create"}  handler={components.create} />
-        <Route path={":" + id} handler={components.head}>
+        <Route name={prefix + "-head"} path={":" + id} handler={components.head}>
           <DefaultRoute name={prefix + "-view"}  handler={components.view} />
           <Route name={prefix + "-edit"}  path="edit" handler={components.edit} />
           <Route name={prefix + "-delete"}  path="delete" handler={components.del} />    
@@ -54,7 +54,7 @@ var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=>
 
 // Declare routes
 var routes = (
-  <Route handler={App} path="/">
+  <Route handler={Nav} path="/">
     <DefaultRoute name="app" handler={Home} />
     <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
       {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
@@ -81,7 +81,9 @@ var routes = (
           getRoute("Country-Album", "Album", "Albums", "albumId" , Albums,
             getRoute("Country-Album-Track", "Track", "Tracks", "trackId" , Tracks)
           ),
-          getRoute("Country-Single", "Single", "Singles", "singleId" , Singles),
+          getRoute("Country-Single", "Single", "Singles", "singleId" , Singles,
+            getRoute("Country-Single-Track", "Track", "Tracks", "trackId" , Tracks)
+          ),
           getRoute("Country-Track", "Track", "Tracks", "trackId" , Tracks)
       )},
     </Route>

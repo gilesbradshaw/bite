@@ -8,6 +8,7 @@ import {country as Store} from "../stores/store";
 import {country as Actions} from "../actions/actions";
 
 import FormInput from "./formInput";
+import {links} from './link/links';
 
 
   
@@ -39,14 +40,16 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
   .head().menuRender( 
     function(){
       return <div>
-      
-        <span className="navLink"><Link to="Country-Chart" params={this.props.params}>Charts</Link> </span>        
-        <span className="navLink"><Link to="Country-NewRelease" params={this.props.params}>New Releases</Link> </span>        
-        <span className="navLink"><Link to="Country-Genre" params={this.props.params}>Genres</Link> </span>
-        <span className="navLink"><Link to="Country-Artist" params={this.props.params}>Artists</Link> </span>
-        <span className="navLink"><Link to="Country-Album" params={this.props.params}>Albums</Link> </span>
-        <span className="navLink"><Link to="Country-Single" params={this.props.params}>Singles</Link> </span>
-        <span className="navLink"><Link to="Country-Track" params={this.props.params}>Tracks</Link> </span>
+        {links([
+          {to:"Country-view", name:"Country", preserve:true },
+          {to:"Country-Chart", name:"Charts" },
+          {to:"Country-NewRelease", name:"New Releases"},
+          {to:"Country-Genre", name:"Genres"},
+          {to:"Country-Artist", name:"Artists"},
+          {to:"Country-Album", name:"Albums"},
+          {to:"Country-Single", name:"Singles"},
+          {to:"Country-Track", name:"Tracks"}
+        ],this.context.router,this.props.params)}
       </div>
     }
   )()

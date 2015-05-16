@@ -3,20 +3,29 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 import {Map,toJS} from "immutable";
 // Router
-import  {Navigation, RouteHandler, Link} from "react-router";
+import  {PropTypes,Navigation, RouteHandler, Link} from "react-router";
 import _ from 'lodash';
 import Error from "./error";
 import Button from "./button";
 import reactMixin from 'react-mixin';
 import {Enhance} from "./higherOrder/enhance"
-import {Path, pathRender} from './Path';
+import {pathRender} from './Path';
 import {PathDisplay} from "./path-display";
 //import Radium from "radium";
 
 var index=0;
 
-var Radium = require('radium');
-var color = require('color');
+const Radium = require('radium');
+const color = require('color');
+
+const createClass = (c)=>
+{
+	c.contextTypes= _.extend(c.contextTypes||{}, {
+		routeDepth: PropTypes.number.isRequired,
+		router: PropTypes.router.isRequired
+	});
+	return React.createClass(c);
+}
 
 const nullPath= (name)=> function()
 	{
@@ -64,7 +73,7 @@ const crudcreator= (name, itemId)=> {
 	      	  );
 		  }
 
-		  return React.createClass(Radium.wrap({
+		  return createClass(Radium.wrap({
 		    displayName: displayName,
 		    mixins: [
 		    	PureRenderMixin,
@@ -117,7 +126,6 @@ const crudcreator= (name, itemId)=> {
 		      	var res=this.state.data.get('store').toArray();
 		      	return pathRender(
 		      		this,
-		      		name,
 		      		()=> {
 			      		if(render)
 					      	{
@@ -127,7 +135,6 @@ const crudcreator= (name, itemId)=> {
 					      	{
 					      	  	return( 
 						      		<div> 
-
 						      			{nodes.bind(this)(res)}
 							  			<RouteHandler myPath={this.state.myPath} {...this.props} />
 						      		</div>
@@ -148,14 +155,14 @@ const crudcreator= (name, itemId)=> {
 		      error:errorStore.get(index)
 		    };
 		  }
-		  var Item = React.createClass({
+		  var Item = createClass({
 		  	mixins:[PureRenderMixin,Navigation],
 		    displayName: displayName+'Item', 
 		    render: function(){
 		    	return render(this);
 		    }
 		  });
-		  return React.createClass({
+		  return createClass({
 		    displayName: displayName,
 		    propTypes: {},
 		    mixins: [
@@ -230,7 +237,6 @@ const crudcreator= (name, itemId)=> {
 		      {
 		      	return pathRender(
 		      		this,
-		      		name,
 		      		()=> {
 			      		if(this.state.data.get('item'))
 				        {
@@ -259,7 +265,7 @@ const crudcreator= (name, itemId)=> {
 		      error:errorStore.get(index)
 		    };
 		  }
-		  var Item = React.createClass({
+		  var Item = createClass({
 		    displayName: displayName+'Item', 
 		    render: render
 		  });
@@ -272,7 +278,7 @@ const crudcreator= (name, itemId)=> {
 		  };
 
 
-		  return React.createClass({
+		  return createClass({
 		  	displayName: displayName,
 		    propTypes: {},
 		    mixins: [
@@ -335,7 +341,6 @@ const crudcreator= (name, itemId)=> {
 		      {
 		      	return pathRender(
 		      		this,
-		      		name,
 		      		()=> {
 			      		if(this.state.data.get('item'))
 					      {
@@ -362,9 +367,8 @@ const crudcreator= (name, itemId)=> {
 		},
 		viewer:function viewer(routePart, displayName,actions, store,errorStore, render, paramName)
 		{
-		  return React.createClass({
+		  return createClass({
 		  	
-
 		    displayName: displayName,
 		    propTypes: {},
 		    mixins: [
@@ -378,9 +382,9 @@ const crudcreator= (name, itemId)=> {
 		    },
 
 		    render() { 
+		    	var route = this.context.router.getRouteAtDepth(this.context.routeDepth);
 		    	return pathRender(
 		      		this,
-		      		name,
 		      		()=> {
 				      if(this.props.item)
 				      {	      	
@@ -415,7 +419,7 @@ const crudcreator= (name, itemId)=> {
 		    });
 		  };
 
-		  return React.createClass({
+		  return createClass({
 		    displayName: displayName,
 		    propTypes: {},
 		    mixins: [
@@ -456,13 +460,12 @@ const crudcreator= (name, itemId)=> {
 		    render() {   
 		    	return pathRender(
 		    		this,
-		    		name,
 		    		()=> {
 
 				      if(this.state.data.get('item'))
 				      {
 				       return(
-				          <div>
+				          <div> 
 		   		            {render(this,this.state.data.get('item'))}
 				             <Error error={this.state.data.get('error')}/>
 				             <RouteHandler {...this.props} item={this.state.data.get('item')} myPath={this.state.myPath} index={this.state.index} />
@@ -493,7 +496,7 @@ const crudcreator= (name, itemId)=> {
 		      error:errorStore.get(index)
 		    };
 		  }
-		  var Item = React.createClass({
+		  var Item = createClass({
 		    displayName: displayName+'Item', 
 		    render: render
 		  });
@@ -503,7 +506,7 @@ const crudcreator= (name, itemId)=> {
 		  		item:props.item
 		  	});
 		  };
-		  return React.createClass({
+		  return createClass({
 		    displayName: displayName,
 		    propTypes: {},
 		    mixins: [
@@ -571,7 +574,6 @@ const crudcreator= (name, itemId)=> {
 		    render() {   
 		    	return pathRender(
 		    		this,
-		    		name,
 		    		()=> {
 				      if(this.state.data.get('item'))
 				      {
@@ -593,7 +595,7 @@ const crudcreator= (name, itemId)=> {
 		},
 		listHead:function viewer(pluralName,routePart, displayName,render)
 		{
-		  return React.createClass({
+		  return createClass({
 		    displayName: displayName,
 		    propTypes: {},
 		    mixins: [
@@ -608,13 +610,11 @@ const crudcreator= (name, itemId)=> {
 		      	myPath:(this.props.myPath ? this.props.myPath + '-' : '')  + name 
 		      };
 		    },
-		    render() {   
+		    render() {
 		    	return pathRender(
 		    		this,
-		    		name,
 		    		()=>
-			          <div>
-			          	<PathDisplay name={name}/>
+			          <div> 
 			          	{render(this)}
 			          	<span className="navLink"><Link to={this.state.myPath + '-create'} params={this.props.params}>Create</Link></span>
 			          	<RouteHandler {...this.props} myPath={this.state.myPath} />
@@ -627,4 +627,5 @@ const crudcreator= (name, itemId)=> {
 		  });
 		}
 	  }
-};export default crudcreator
+};
+export default crudcreator

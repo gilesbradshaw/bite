@@ -22,7 +22,6 @@ var Home = React.createClass({
         <p>
           home rendered
         </p>
-        <RouteHandler />
       </div>
     );
   }

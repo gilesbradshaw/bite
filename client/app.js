@@ -5,6 +5,8 @@ import Router from "./router";
 
 import ticker from "./ticker";
 
+require("./styles/main.css");
+
 // Fire up the router and attach to DOM
-Router.run(document.getElementById("js-content"));
+Router.run(document.getElementById	("js-content"));
 
