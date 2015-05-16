@@ -27,9 +27,9 @@ export var PathDisplay = React.createClass({
   render() {
     if(this.state.path.get(this.props.name))
     { 
-      return <div>
+      return <span>
         {this.state.path.get(this.props.name).toArray().map(e=>e())}
-      </div>
+      </span>
     }
     return <script/>
   }

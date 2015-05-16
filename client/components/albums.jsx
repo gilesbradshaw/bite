@@ -29,11 +29,12 @@ var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "album
   )()
   .head().menuRender( 
     function(){
-      return <div>
+      return <span>
         {links([
+          {to:"Country-Album-view", name:"Album", preserve:true },
           {to:"Country-Album-Track", name:"Tracks" }
         ],this.context.router,this.props.params)}
-      </div>
+      </span>
     }
   )()
   .edit().render(

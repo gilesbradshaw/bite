@@ -39,7 +39,7 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
   )()
   .head().menuRender( 
     function(){
-      return <div>
+      return <span>
         {links([
           {to:"Country-view", name:"Country", preserve:true },
           {to:"Country-Chart", name:"Charts" },
@@ -50,7 +50,7 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
           {to:"Country-Single", name:"Singles"},
           {to:"Country-Track", name:"Tracks"}
         ],this.context.router,this.props.params)}
-      </div>
+      </span>
     }
   )()
   .view().render(

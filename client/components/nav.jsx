@@ -26,7 +26,7 @@ export default class Nav extends React.Component {
           {to:"adminArea", name:"Admin"},
           {to:"signup", name:"SignUp"}
         ],this.context.router)}
-        {this.context.router.getCurrentRoutes().map(route=><div><PathDisplay name={`${route.path}&&${route.name}`}/></div>)}
+        {this.context.router.getCurrentRoutes().map(route=><span><PathDisplay name={`${route.path}&&${route.name}`}/></span>)}
         <RouteHandler {...this.props} />
       </div>
     );
@@ -42,7 +42,7 @@ export class UserNav extends React.Component {
   }
   render() {
     return (
-      <div>
+      <span>
         <span className="navLink"><Link to="Agency-list">Agencies</Link></span>
         <span className="navLink"><Link to="Agent-list">Agents</Link></span>
         <span className="navLink"><Link to="Opportunity-list">Opportunities</Link></span>
@@ -51,7 +51,7 @@ export class UserNav extends React.Component {
         <span className="navLink"><Link to="Email-list">Emails</Link></span>
         <span className="navLink"><Link to="me">Me</Link></span>
         <RouteHandler {...this.props} />
-       </div>
+       </span>
     );
   }
 }
@@ -75,11 +75,11 @@ export class MixRadioNav extends React.Component {
       this,
       ()=> <RouteHandler {...this.props} />,    
       ()=>
-        <div>
+        <span>
           {links([
             {to:"Country-list", name:"Countries"}
           ],this.context.router,this.props.params)}
-        </div>
+        </span>
     );
   }
 }
@@ -92,14 +92,14 @@ export class AdminNav extends React.Component {
   }
   render() {
     return (
-      <div>
+      <span>
         <span className="navLink"><Link to="Profile-list">Profiles</Link></span>
         <span className="navLink"><Link to="OpportunityType-list">OpportunityTypes</Link></span>
         <span className="navLink"><Link to="OpportunityStatus-list">OpportunityStatuses</Link></span>
         <span className="navLink"><Link to="OpportunityAgentRating-list">OpportunityAgentRatings</Link></span>
         <span className="navLink"><Link to="OpportunityRatePeriod-list">OpportunityRatePeriods</Link></span>
         <RouteHandler {...this.props} />
-       </div>
+       </span>
     );
   }
 }
@@ -114,12 +114,12 @@ export class ChartsNav extends React.Component {
       this,
       ()=> <RouteHandler {...this.props} />,    
       ()=>
-        <div>
+        <span>
           {links([
             {to:"Country-AlbumChart", name:"Albums"},
             {to:"Country-TrackChart", name:"Tracks"}
           ],this.context.router,this.props.params)}
-        </div>
+        </span>
     );
   }
 }
@@ -136,13 +136,13 @@ export class NewReleasesNav extends React.Component {
       this,
       ()=> <RouteHandler {...this.props} />,    
       ()=>
-        <div>
+        <span>
           {links([
             {to:"Country-AlbumNewRelease", name:"Albums"},
             {to:"Country-TrackNewRelease", name:"Tracks"},
             {to:"Country-SingleNewRelease", name:"Singles"}
           ],this.context.router,this.props.params)}
-        </div>
+        </span>
     );
   }
 }

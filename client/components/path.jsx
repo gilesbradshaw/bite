@@ -33,7 +33,6 @@ Path.displayName = "Path";
 export const pathRender = (target, render, pathRender) => 
 {
   const route = target.context.router.getRouteAtDepth(target.context.routeDepth-1);
-  console.log(`pathRender ::: ${route.path}&&${route.name}`);
   return <Path myPath={`${route.path}&&${route.name}`} pathRender={pathRender}>
     {render()}
   </Path>
