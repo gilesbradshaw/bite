@@ -22,8 +22,7 @@ export default class Nav extends React.Component {
         {links([
           {to:"app", name:"Home" , preserve:true},
           {to:"mixRadio", name:"Mix Radio"},
-          {to:"userArea", name:"Main"},
-          {to:"adminArea", name:"Admin"},
+          {to:"jobsArea", name:"Jobs"},
           {to:"signup", name:"SignUp"}
         ],this.context.router)}
         {this.context.router.getCurrentRoutes().map(route=><span><PathDisplay name={`${route.path}&&${route.name}`}/></span>)}
@@ -43,18 +42,22 @@ export class UserNav extends React.Component {
   render() {
     return (
       <span>
-        <span className="navLink"><Link to="Agency-list">Agencies</Link></span>
-        <span className="navLink"><Link to="Agent-list">Agents</Link></span>
-        <span className="navLink"><Link to="Opportunity-list">Opportunities</Link></span>
-        <span className="navLink"><Link to="Note-list">Notes</Link></span>
-        <span className="navLink"><Link to="Task-list">Tasks</Link></span>
-        <span className="navLink"><Link to="Email-list">Emails</Link></span>
-        <span className="navLink"><Link to="me">Me</Link></span>
+        {links([
+          {to:"Agency-list", name:"Agencies" },
+          {to:"Agent-list", name:"Agents" },
+          {to:"Opportunity-list", name:"Opportunities" },
+          {to:"Note-list", name:"Notes" },
+          {to:"Task-list", name:"Tasks" },
+          {to:"Email-list", name:"Emails" },
+          {to:"me", name:"Me" }
+        ],this.context.router)}
+        
         <RouteHandler {...this.props} />
        </span>
     );
   }
 }
+routeClass(UserNav);
 UserNav.displayName = "UserNav";
 
 
@@ -63,14 +66,6 @@ export class MixRadioNav extends React.Component {
     super(props);
   }
   render() {
-  /*return(
-    <div>
-        {links([
-          {to:"Country-list", name:"Countries"}
-        ],this.context.router,this.props.params)}
-        <RouteHandler {...this.props} />
-       </div>
-    );*/
     return pathRender(
       this,
       ()=> <RouteHandler {...this.props} />,    
@@ -93,17 +88,41 @@ export class AdminNav extends React.Component {
   render() {
     return (
       <span>
-        <span className="navLink"><Link to="Profile-list">Profiles</Link></span>
-        <span className="navLink"><Link to="OpportunityType-list">OpportunityTypes</Link></span>
-        <span className="navLink"><Link to="OpportunityStatus-list">OpportunityStatuses</Link></span>
-        <span className="navLink"><Link to="OpportunityAgentRating-list">OpportunityAgentRatings</Link></span>
-        <span className="navLink"><Link to="OpportunityRatePeriod-list">OpportunityRatePeriods</Link></span>
+        {links([
+          {to:"Profile-list", name:"Profiles" },
+          {to:"OpportunityType-list", name:"OpportunityTypes" },
+          {to:"OpportunityStatus-list", name:"OpportunityStatuses" },
+          {to:"OpportunityAgentRating-list", name:"OpportunityAgentRatings" },
+          {to:"OpportunityRatePeriod-list", name:"OpportunityRatePeriods" }
+        ],this.context.router)}
         <RouteHandler {...this.props} />
        </span>
     );
   }
 }
+routeClass(AdminNav);
 AdminNav.displayName = "AdminNav";
+
+export class JobSearchNav extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <span>
+        {links([
+          {to:"userArea", name:"Main"},
+          {to:"adminArea", name:"Admin"}
+        ],this.context.router)}
+        <RouteHandler {...this.props} />
+       </span>
+    );
+  }
+}
+routeClass(JobSearchNav);
+JobSearchNav.displayName = "JobSearchNav";
+
+
 
 export class ChartsNav extends React.Component {
   constructor(props) {

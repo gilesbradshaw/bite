@@ -4,7 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
-import Nav, {MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav} from "./components/nav";
+import Nav, {MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav,JobSearchNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -87,59 +87,61 @@ var routes = (
           getRoute("Country-Track", "Track", "Tracks", "trackId" , Tracks)
       )},
     </Route>
-    <Route name="userArea" path="userArea" handler={UserNav} > 
+    <Route name="jobsArea" path="jobsArea" handler={JobSearchNav} > 
+      <Route name="userArea" path="userArea" handler={UserNav} > 
 
 
-    {getRoute("Agency", "Agency", "Agencies", "agencyId" , Agencies,
-      getRoute("Agency-Agent", "Agent", "Agents", "agentId" , Agents)
-    )}
-    {getRoute("Agent", "Agent", "Agents", "agentId" , Agents)}
-    {getRoute("Profile", "Profiles","Profile", "Profiles", "profileId" , Profiles,
-      getRoute("Profile-Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities),
-      getRoute("Profile-Note", "Note", "Notes", "noteId" , Notes),
-      getRoute("Profile-Task", "Task", "Tasks", "taskId" , Tasks),
-      getRoute("Profile-Email","Email", "Emails", "emailId" , Emails)
-    )}
+      {getRoute("Agency", "Agency", "Agencies", "agencyId" , Agencies,
+        getRoute("Agency-Agent", "Agent", "Agents", "agentId" , Agents)
+      )}
+      {getRoute("Agent", "Agent", "Agents", "agentId" , Agents)}
+      {getRoute("Profile", "Profiles","Profile", "Profiles", "profileId" , Profiles,
+        getRoute("Profile-Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities),
+        getRoute("Profile-Note", "Note", "Notes", "noteId" , Notes),
+        getRoute("Profile-Task", "Task", "Tasks", "taskId" , Tasks),
+        getRoute("Profile-Email","Email", "Emails", "emailId" , Emails)
+      )}
 
-    {getRoute("Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities,
-      getRoute("Opportunity-Task", "Task", "Tasks", "taskId" , Tasks),
-      getRoute("Opportunity-Note", "Note", "Notes", "noteId" , Notes),
-      getRoute("Opportunity-Email", "Email", "Emails", "emailId" , Emails)      
-    )}
+      {getRoute("Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities,
+        getRoute("Opportunity-Task", "Task", "Tasks", "taskId" , Tasks),
+        getRoute("Opportunity-Note", "Note", "Notes", "noteId" , Notes),
+        getRoute("Opportunity-Email", "Email", "Emails", "emailId" , Emails)      
+      )}
 
 
 
-    {getRoute("Note", "Note", "Notes", "noteId" , Notes)}
-    {getRoute("Task", "Task", "Tasks", "taskId" , Tasks)}
-    {getRoute("Email", "Email", "Emails", "emailId" , Emails)}
-    
-    <Route name="me" path="me" handler={Me} >
-        <DefaultRoute handler={Opportunities.list} />
-         <Route name="me-profile-opportunities" path='opportunities'  >
+      {getRoute("Note", "Note", "Notes", "noteId" , Notes)}
+      {getRoute("Task", "Task", "Tasks", "taskId" , Tasks)}
+      {getRoute("Email", "Email", "Emails", "emailId" , Emails)}
+      
+      <Route name="me" path="me" handler={Me} >
           <DefaultRoute handler={Opportunities.list} />
-          <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
-          <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
-            <DefaultRoute name="me-profile-opportunities-view" handler={Opportunities.view} />
-            <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
-            <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+           <Route name="me-profile-opportunities" path='opportunities'  >
+            <DefaultRoute handler={Opportunities.list} />
+            <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
+            <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
+              <DefaultRoute name="me-profile-opportunities-view" handler={Opportunities.view} />
+              <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
+              <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+            </Route>
           </Route>
-        </Route>
-    </Route>
-    
-</Route>
-<Route name="adminArea" path="adminArea" handler={AdminNav} > 
+      </Route>
+      
+  </Route>
+  <Route name="adminArea" path="adminArea" handler={AdminNav} > 
 
-  {getRoute("OpportunityType", "OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
-  {getRoute("OpportunityStatus", "OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}
-  {getRoute("OpportunityAgentRating", "OpportunityAgentRating", "OpportunityAgentRatings", "opportunityAgentRatingId" , OpportunityAgentRatings)}
-  {getRoute("OpportunityRatePeriod", "OpportunityRatePeriod", "OpportunityRatePeriods", "opportunityRatePeriodId" , OpportunityRatePeriods)}
+    {getRoute("OpportunityType", "OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
+    {getRoute("OpportunityStatus", "OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}
+    {getRoute("OpportunityAgentRating", "OpportunityAgentRating", "OpportunityAgentRatings", "opportunityAgentRatingId" , OpportunityAgentRatings)}
+    {getRoute("OpportunityRatePeriod", "OpportunityRatePeriod", "OpportunityRatePeriods", "opportunityRatePeriodId" , OpportunityRatePeriods)}
 
 
-    <Route name="users" handler={Users}>
-      <Route name="user" path="user/:userId" handler={User} />
+      <Route name="users" handler={Users}>
+        <Route name="user" path="user/:userId" handler={User} />
 
-    </Route>
-</Route>
+      </Route>
+  </Route>
+  </Route>
     <Route name="signup" handler={UserSignUp} />
     <Route name="signin" handler={UserSignIn} />
     <Route name="signout" handler={UserSignOut} />
