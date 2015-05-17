@@ -29,13 +29,16 @@ var exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "ar
   )()
   .head().menuRender( 
     function(){
-      return <span>
-        {links([
-          {to:"Country-Artist-Album", name:"Albums" },
-          {to:"Country-Artist-Single", name:"Singles" },
-          {to:"Country-Artist-Track", name:"Tracks" }
-        ],this.context.router,this.props.params)}
-      </span>
+        return <span>
+          {links([
+            {to:this.props.params.genreId ? "Country-Genre-Artist-view" : "Country-Artist-view", name:"Artist", linkedIf:'Artist' }, 
+          ],this.context.router,this.props.params)}
+          {links([
+            {to:"Country-Artist-Album", name:"Albums" },
+            {to:"Country-Artist-Single", name:"Singles" },
+            {to:"Country-Artist-Track", name:"Tracks" }
+          ],this.context.router,this.props.params)}
+        </span>
     }
   )()
 

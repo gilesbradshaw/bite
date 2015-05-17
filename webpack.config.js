@@ -16,9 +16,10 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx$/, loader: "babel-loader" },
-      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
-      { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/react-router"), loader: 'babel-loader' },
+      { test: /\.jsx$/, loader: "babel-loader?stage=1" },
+      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader?stage=1' },
+      { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/react-router"), loader: 'babel-loader?stage=1' },
+      { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/radium"), loader: 'babel-loader?stage=1' },
       { test: /\.css$/, loader: "style-loader!css-loader" },
       { test: /\.json$/, loader: "json-loader" }
 

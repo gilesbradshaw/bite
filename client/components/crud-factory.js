@@ -2,6 +2,7 @@ import React from "react";
 import FormInput from "./formInput";
 import Silly from "./Silly";
 import _ from 'lodash';
+import {Link} from './link/links';
 
 
 
@@ -143,6 +144,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
              <h1>{item.get('title')}</h1>
           </div>
     )()
+    .listHead().render((self)=><span className="navLink"><Link to={self.state.myPath + '-create'} params={self.props.params}>Create</Link></span>)()
     .list().nodeRender(
       (data) => <div>{data.get('title')}</div>
     )

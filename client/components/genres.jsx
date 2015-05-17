@@ -31,16 +31,21 @@ var exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genre
         </div>
       }
   )()
+  .listHead().render()()
   .head().menuRender( 
     function(){
-      return <div>
+      return <span>
+        {links([
+          {to:"Country-Genre-view", name:"Genre", linkedIf:'Genre' }, 
+        ],this.context.router,this.props.params)}
+
         {links([
           {to:"Country-Genre-Artist", name:"Artists" },
           {to:"Country-Genre-Album", name:"Albums" },
           {to:"Country-Genre-Single", name:"Singles" },
           {to:"Country-Genre-Track", name:"Tracks" }
         ],this.context.router,this.props.params)}
-      </div>
+      </span>
     }
   )()
 

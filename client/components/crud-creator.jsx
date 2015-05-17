@@ -3,7 +3,7 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 import {Map,toJS} from "immutable";
 // Router
-import  {PropTypes,Navigation, RouteHandler, Link} from "react-router";
+import  {PropTypes,Navigation, RouteHandler} from "react-router";
 import _ from 'lodash';
 import Error from "./error";
 import Button from "./button";
@@ -11,12 +11,15 @@ import reactMixin from 'react-mixin';
 import {Enhance} from "./higherOrder/enhance"
 import {pathRender} from './Path';
 import {PathDisplay} from "./path-display";
+import {Grid,Row,Col} from 'react-flexgrid';
+import style from './styles/style';
+import {Link} from './link/links';
 //import Radium from "radium";
 
 var index=0;
 
 const Radium = require('radium');
-const color = require('color');
+
 
 const createClass = (c)=>
 {
@@ -32,20 +35,7 @@ const nullPath= (name)=> function()
 		return <script key={name} />
 	}
 
-const style = {
-	link:{
-		background:'pink',//lightgray',
-		padding:'.5em',
-		':hover': {
-      		background: color('#0074d9').lighten(0.2).hexString()
-    	},
-    	'@media (min-width: 320px)': { background: 'red',
-    		':hover': {
-      			background: 'green'
-    		},
-    	 }
-	}
-}
+
 
 const crudcreator= (name, itemId)=> {
 	itemId=itemId||'_id';
@@ -65,10 +55,17 @@ const crudcreator= (name, itemId)=> {
 		      {
 		  	  	const params = _.extend({[singleId] : data.get(itemId)},self.props.params);
 		  	  	
-		  	   	return <div key={data.get(itemId)}>
-			          {itemRender(data,self)}
-			          {menuLinks(self,data,params).map(link=><span key={`${data.get(itemId)}-${link.title}`} style={[style.link]}><Link to={link.path} params={params}>{link.title}</Link></span>)}			          
-		          	</div>
+		  	   	return <Row key={data.get(itemId)} style={style.row}>
+		  	   		  <Col>
+		  	   		  	<Row >
+			          		{menuLinks(self,data,params).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link  to={link.path} params={params}>{link.title}</Link></Col>)}			          
+			          	</Row>
+			          </Col>
+		  	   		  <Col>
+			          	{itemRender(data,self)}
+			          </Col>
+			          
+		          	</Row>
 		         }
 	      	  );
 		  }
@@ -134,10 +131,10 @@ const crudcreator= (name, itemId)=> {
 					      	else
 					      	{
 					      	  	return( 
-						      		<div> 
+						      		<Grid fluid> 
 						      			{nodes.bind(this)(res)}
 							  			<RouteHandler myPath={this.state.myPath} {...this.props} />
-						      		</div>
+						      		</Grid>
 						    	);
 						    }
 			      		},
@@ -615,8 +612,7 @@ const crudcreator= (name, itemId)=> {
 		    		this,
 		    		()=>
 			          <div> 
-			          	{render(this)}
-			          	<span className="navLink"><Link to={this.state.myPath + '-create'} params={this.props.params}>Create</Link></span>
+			          	{render? render(this): <script/>}		          	
 			          	<RouteHandler {...this.props} myPath={this.state.myPath} />
 			          </div>
 			          ,

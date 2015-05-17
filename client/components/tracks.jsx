@@ -12,6 +12,7 @@ import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
 import {listedTrack, viewPicture} from "./mix-radio/items";
+import {links} from './link/links';
 
 const togglePlay=(self,id)=>()=>
   self.setState({play:id})
@@ -22,6 +23,7 @@ const player=(self,data)=>
 
 
 var exp = crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "trackId", "id")
+  .listHead().render()()
   .list().nodeRender(listedTrack)()
   .view().render( (self,data)=>
     <div>
@@ -30,6 +32,39 @@ var exp = crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "track
     </div>
     
   )()
+  .head().menuRender( 
+    function(){
+      if(this.props.params.albumId)
+      {
+        return <span>
+          {links([
+              {to:"Country-Album-Track-view", name:"Track", linkedIf:'Track' },
+            ],this.context.router,this.props.params)}
+
+        </span>
+      }
+      else if(this.props.params.singleId)
+      {
+        return <span>
+          {links([
+              {to:"Country-Single-Track-view", name:"Track", linkedIf:'Track' },
+            ],this.context.router,this.props.params)}
+
+        </span>
+      }
+      else
+        {
+          return <span>
+            {links([
+                {to:"Country-Track-view", name:"Track", linkedIf:'Track' },
+              ],this.context.router,this.props.params)}
+
+          </span>
+        } 
+
+    }
+  )()
+
   .del().render(
     function(){
       return (

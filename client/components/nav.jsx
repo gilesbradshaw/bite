@@ -1,6 +1,7 @@
 import React from "react";
+import Radium from "radium";
 
-import {RouteHandler, Link} from "react-router";
+import {RouteHandler} from "react-router";
 import UserLoggedIn from "./user.LoggedIn";
 import {PathDisplay} from "./path-display";
 import {links,routeClass} from './link/links';
@@ -10,6 +11,7 @@ import {pathRender} from './Path';
 
 
 
+@Radium.Enhancer
 export default class Nav extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +74,7 @@ export class MixRadioNav extends React.Component {
       ()=>
         <span>
           {links([
-            {to:"Country-list", name:"Countries"}
+            {to:"Country-list", linkedIf:'Country' ,  name:"Countries"}
           ],this.context.router,this.props.params)}
         </span>
     );

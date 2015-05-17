@@ -9,6 +9,8 @@ import {country as Actions} from "../actions/actions";
 
 import FormInput from "./formInput";
 import {links} from './link/links';
+import {Grid,Row,Col} from 'react-flexgrid';
+import style from './styles/style';
 
 
   
@@ -31,17 +33,26 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
           />
         </div>
   )()
+  .listHead().render()()
   .list().nodeRender(
     (data) => 
-    <div>
-      <div>{data.get('name')}</div>
-    </div>
+    <Row >
+      <Col>
+        <div style={style.box}>
+          {data.get('name')}
+        </div>
+      </Col>
+    </Row>
   )()
+  //.listHead().render()()
   .head().menuRender( 
     function(){
       return <span>
+      {links([
+          {to:"Country-view", name:"Country", linkedIf:'Country' },
+         
+        ],this.context.router,this.props.params)}
         {links([
-          {to:"Country-view", name:"Country", preserve:true },
           {to:"Country-Chart", name:"Charts" },
           {to:"Country-NewRelease", name:"New Releases"},
           {to:"Country-Genre", name:"Genres"},

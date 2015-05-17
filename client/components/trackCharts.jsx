@@ -17,6 +17,7 @@ import {listedTrack, viewPicture} from "./mix-radio/items";
 
 
 var exp = crudFactory(crud, "trackId", "TrackChart", "TrackCharts", Actions, Store, "trackId", "id")
+  .listHead().render()()
   .list().nodeRender(listedTrack)
   .menuLinks(
     (self,data,params)=>{

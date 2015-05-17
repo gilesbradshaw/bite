@@ -29,11 +29,14 @@ var exp = crudFactory(crud, "singleId", "Single", "Singles", Actions, Store, "si
       );
     }
   )()
+  .listHead().render()()
   .head().menuRender( 
     function(){
       return <span>
         {links([
-          {to:"Country-Single-view", name:"Single", preserve:true },
+            {to:"Country-Single-view", name:"Single", linkedIf:"Single"}
+          ],this.context.router,this.props.params)}
+        {links([
           {to:"Country-Single-Track", name:"Tracks" }
         ],this.context.router,this.props.params)}
       </span>
