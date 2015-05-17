@@ -17,6 +17,7 @@ import {links} from './link/links';
 
 
 var exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "artistId", "id")
+  .listHead().render()()
   .list().nodeRender(listedPicture)()
   .view().render( (self,data)=>
     <div>

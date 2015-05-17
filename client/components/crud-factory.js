@@ -2,7 +2,7 @@ import React from "react";
 import FormInput from "./formInput";
 import Silly from "./Silly";
 import _ from 'lodash';
-import {Link} from './link/links';
+import {Link} from 'react-router';
 
 
 
@@ -135,9 +135,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
 
 
   //defaults
-  return factory.listHead().render(
-      (self)=> <h1>{self.state.displayName}</h1>
-    )()
+  return factory
     .head().render(
         (self,item)=>   
           <div>

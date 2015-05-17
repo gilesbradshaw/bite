@@ -1,5 +1,4 @@
 import React from "react";
-import Radium from "radium";
 
 import {RouteHandler} from "react-router";
 import UserLoggedIn from "./user.LoggedIn";
@@ -10,9 +9,8 @@ import {pathRender} from './Path';
 
 
 
-
-@Radium.Enhancer
-export default class Nav extends React.Component {
+@routeClass
+class Nav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -22,7 +20,9 @@ export default class Nav extends React.Component {
       <div>
         <UserLoggedIn/>
         {links([
-          {to:"app", name:"Home" , preserve:true},
+          {to:"app", name:"Home", linkedIf:'.'},
+        ],this.context.router)}
+        {links([
           {to:"mixRadio", name:"Mix Radio"},
           {to:"jobsArea", name:"Jobs"},
           {to:"signup", name:"SignUp"}
@@ -33,11 +33,11 @@ export default class Nav extends React.Component {
     );
   }
 }
-routeClass(Nav);
 Nav.displayName = "Nav";
+export default Nav;
 
-
-export class UserNav extends React.Component {
+@routeClass
+class UserNav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -59,11 +59,11 @@ export class UserNav extends React.Component {
     );
   }
 }
-routeClass(UserNav);
 UserNav.displayName = "UserNav";
+export {UserNav};
 
-
-export class MixRadioNav extends React.Component {
+@routeClass
+class MixRadioNav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -80,10 +80,11 @@ export class MixRadioNav extends React.Component {
     );
   }
 }
-routeClass(MixRadioNav);
 MixRadioNav.displayName = "MixRadioNav";
+export {MixRadioNav};
 
-export class AdminNav extends React.Component {
+@routeClass
+class AdminNav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -102,10 +103,11 @@ export class AdminNav extends React.Component {
     );
   }
 }
-routeClass(AdminNav);
 AdminNav.displayName = "AdminNav";
+export {AdminNav};
 
-export class JobSearchNav extends React.Component {
+@routeClass
+class JobSearchNav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -121,12 +123,11 @@ export class JobSearchNav extends React.Component {
     );
   }
 }
-routeClass(JobSearchNav);
 JobSearchNav.displayName = "JobSearchNav";
+export {JobSearchNav};
 
-
-
-export class ChartsNav extends React.Component {
+@routeClass
+class ChartsNav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -144,11 +145,11 @@ export class ChartsNav extends React.Component {
     );
   }
 }
-routeClass(ChartsNav);
 ChartsNav.displayName = "ChartsNav";
+export {ChartsNav};
 
-
-export class NewReleasesNav extends React.Component {
+@routeClass
+class NewReleasesNav extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -167,5 +168,5 @@ export class NewReleasesNav extends React.Component {
     );
   }
 }
-routeClass(NewReleasesNav);
 NewReleasesNav.displayName = "NewReleasesNav";
+export {NewReleasesNav};

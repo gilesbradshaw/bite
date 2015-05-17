@@ -3,7 +3,7 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 import {Map,toJS} from "immutable";
 // Router
-import  {PropTypes,Navigation, RouteHandler} from "react-router";
+import  {Link,PropTypes,Navigation, RouteHandler} from "react-router";
 import _ from 'lodash';
 import Error from "./error";
 import Button from "./button";
@@ -13,12 +13,9 @@ import {pathRender} from './Path';
 import {PathDisplay} from "./path-display";
 import {Grid,Row,Col} from 'react-flexgrid';
 import style from './styles/style';
-import {Link} from './link/links';
-//import Radium from "radium";
 
 var index=0;
 
-const Radium = require('radium');
 
 
 const createClass = (c)=>
@@ -70,7 +67,7 @@ const crudcreator= (name, itemId)=> {
 	      	  );
 		  }
 
-		  return createClass(Radium.wrap({
+		  return createClass({
 		    displayName: displayName,
 		    mixins: [
 		    	PureRenderMixin,
@@ -141,7 +138,7 @@ const crudcreator= (name, itemId)=> {
 			      	nullPath('lister').bind(this)
 	    	  	);
 		      }
-		  }));
+		  });
 		},
 		creator:function creator(pluralName, routePart, displayName,actions, store,errorStore, render, paramName)
 		{

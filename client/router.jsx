@@ -54,7 +54,7 @@ var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=>
 
 // Declare routes
 var routes = (
-  <Route handler={Nav} path="/">
+  <Route handler={Nav} name='.' path="/">
     <DefaultRoute name="app" handler={Home} />
     <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
       {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
