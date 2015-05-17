@@ -559,6 +559,7 @@ const crudcreator= (name, itemId)=> {
 		    },
 		    put() {
 		      actions.put({
+		      	id:this.state.data.getIn(['item',itemId]),
 		      	index:this.state.index,
 		      	item:this.state.data.get('item'),
 		      	props:this.props

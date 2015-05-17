@@ -3,6 +3,8 @@ import Biff from "../biff";
 // Request
 import request from "superagent";
 import {fromJS} from "immutable";
+import agentPromise from './superagent-promise';
+
 
 function logError(error,res, single, index){
   
@@ -35,14 +37,14 @@ function crudActions(single, plural,path, getData)
   return Biff.createActions({
     load: function (params) {
         var self = this;
-        setTimeout(()=>
+        setTimeout(async function ()
         {
-          request
-          .get(path.many(params))
-          .set("Accept", "application/json,*/*")
-          .end(function (error, res) {
-            if(res && res.ok)
-            {
+          try {
+            const res = await request
+              .get(path.many(params))
+              .set("Accept", "application/json,*/*")
+              .use(agentPromise)
+              .end();
               self.dispatch({
                 actionType: `${plural}_LOAD`,
                 items:getData.items ? getData.items(JSON.parse(res.text), params) : JSON.parse(res.text),
@@ -52,12 +54,11 @@ function crudActions(single, plural,path, getData)
                 actionType: `${single}_NOERROR`,
                 index:params.index
               }); 
-            }
-            else
-            {
-                logError.bind(self)(error,res, single, params.index);
-            }
-          });
+          } catch(error)
+          {
+            logError.bind(self)(error.error.message,error, single, params.index);
+          }
+          
         },0);
     },
     set: function(params){
@@ -77,48 +78,50 @@ function crudActions(single, plural,path, getData)
       },0);
     },
     post: function (params) {
-      setTimeout(()=>
+      var self = this;
+      setTimeout(async function ()
       {
         var item = params.item.delete('_id');
-        var self = this;
-        request
-        .post(path.many(params))
-        .send(item)
-        .set("Accept", "application/json,*/*")
-        .end( (error, res)=> {
-          if(res && res.ok)
-          {
-            var data=getItem(res.text, params);
-            self.dispatch({
-              actionType: `${single}_CREATE`,
-              item:data,
-              index:params.index
-            });
-            self.dispatch({
-              actionType: `${single}_NOERROR`,
-              index:params.index
-            }); 
-            //params.router.transitionTo('app');
-          }
-          else
-          {
-              logError.bind(self)(error,res, single, params.index);
-          }
-          
-        });
+        
+        try
+        {
+          let res = await request
+            .post(path.many(params))
+            .use(agentPromise)
+            .send(item)
+            .set("Accept", "application/json,*/*")
+            .end();
+
+          var data=getItem(res.text, params);
+          self.dispatch({
+            actionType: `${single}_CREATE`,
+            item:data,
+            index:params.index
+          });
+          self.dispatch({
+            actionType: `${single}_NOERROR`,
+            index:params.index
+          });
+        }
+        catch(error) 
+        {
+          logError.bind(self)(error.error.message,error, single, params.index);
+        }
+                    
+      
       },0);
     },
     put: function (params) {
-      setTimeout( ()=>
+      var self = this;
+      setTimeout( async function()
       {
-        var self = this;
-        request
-        .put(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
-        .send(params.item)
-        .set("Accept", "application/json,*/*")
-        .end( (error, res)=> {
-          if(res && res.ok)
-          {
+        try{
+          let res= await request
+            .put(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
+            .use(agentPromise)
+            .send(params.item)
+            .set("Accept", "application/json,*/*")
+            .end();
             var data=getItem(res.text, params);
             self.dispatch({
               actionType: `${single}_CREATE`,
@@ -129,25 +132,25 @@ function crudActions(single, plural,path, getData)
               actionType: `${single}_NOERROR`,
               index:params.index
             }); 
-          }
-          else
-          {
-              logError.bind(self)(error,res, single, params.index);
-          }
-        });
+        }
+        catch(error)
+        {
+            logError.bind(self)(error.error.message,error, single, params.index);
+        }
       },0)
     },
     del: function (params) {
-      setTimeout( ()=>
+      var self = this;
+      setTimeout( async function()
       {
-        var self = this;
-        request
-        .del(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
-        .send()
-        .set("Accept", "application/json,*/*")
-        .end( (error, res)=> {
-          if(res && res.ok)
-          {
+        try{
+          let res = await request
+            .del(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
+            .use(agentPromise)
+            .send()
+            .set("Accept", "application/json,*/*")
+            .end();
+          
             self.dispatch({
               actionType: `${single}_DELETE`,
               index: params.index,
@@ -162,23 +165,25 @@ function crudActions(single, plural,path, getData)
               index:params.index
             }); 
           }
-          else
+          catch(error)
           {
-              logError.bind(self)(error,res, single, params.index);
+              logError.bind(self)(error.error.message,error, single, params.index);
           }
-        });
+      
       },0);
     },
     get: function (params) {
-      setTimeout( ()=>
+      var self = this;
+      setTimeout(async function ()
       {
-        var self = this;
-        request
-        .get(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
-        .set("Accept", "application/json,*/*")
-        .end( (error, res)=> {
-          if(res && res.ok)
-          {
+        
+        try{
+          let res = await request
+            .get(path.single ? path.single(params) : `${path.many(params)}/${params.id}`)
+            .use(agentPromise)
+            .set("Accept", "application/json,*/*")
+            .end();
+          
             var data=getItem(res.text, params);
             self.dispatch({
               actionType: `${single}_GOT`,
@@ -190,11 +195,11 @@ function crudActions(single, plural,path, getData)
               index:params.index
             }); 
           }
-          else
+          catch(error)
           {
-              logError.bind(self)(error,res, single, params.index, params.index);
+              logError.bind(self)(error.error.message,error, single, params.index);
           }
-        });
+        
       },0);
     },
     dispose: function (index) {
