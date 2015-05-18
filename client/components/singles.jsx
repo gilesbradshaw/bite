@@ -33,9 +33,9 @@ var exp = crudFactory(crud, "singleId", "Single", "Singles", Actions, Store, "si
   .head().menuRender( 
     function(isRoute){
       return links([
-          {to:"Country-Single-view", name:"Single", isLeaf:true, linkedIf:"Single", render:menuPicture(this.state.data)},       
-          {to:"Country-Single-Track", name:"Tracks" }
-        ],this.context.router,this.props.params,);
+        {to:"Country-Single-view", name:"Single", isLeaf:true, linkedIf:"Single", render:menuPicture(this.state.data)},       
+        {to:"Country-Single-Track-list", name:"Tracks" , linkedIf:"Country-Single-Track" }
+      ],this.context.router,this.props.params,isRoute);
     }
   )()
   .edit().render(

@@ -39,7 +39,7 @@ var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "album
     function(isRoute){
       return links([
           {to:"Country-Album-view", isLeaf:true, name:"Album", linkedIf:'Album',render:menuPicture(this.state.data) },             
-          {to:"Country-Album-Track", name:"Tracks" }
+          {to:"Country-Album-Track-list", name:"Tracks", linkedIf: "Country-Album-Track" }
       ],this.context.router,this.props.params,isRoute);
     }
   )()

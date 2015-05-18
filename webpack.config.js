@@ -20,6 +20,7 @@ module.exports = {
       { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader?optional[]=runtime&stage=1' },
       { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/react-router"), loader: 'babel-loader?optional[]=runtime&stage=1' },
       { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/radium"), loader: 'babel-loader?optional[]=runtime&stage=1' },
+      { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/rc-menu"), loader: 'babel-loader?optional[]=runtime&stage=1' },
       { test: /\.css$/, loader: "style-loader!css-loader" },
       { test: /\.json$/, loader: "json-loader" }
 

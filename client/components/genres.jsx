@@ -37,10 +37,10 @@ var exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genre
     function(isRoute){
       return links([
           {to:"Country-Genre-view",isLeaf:true, name:"Genre", linkedIf:'Genre', render:name(this.state.data.get("item")) }, 
-          {to:"Country-Genre-Artist", name:"Artists" },
-          {to:"Country-Genre-Album", name:"Albums" },
-          {to:"Country-Genre-Single", name:"Singles" },
-          {to:"Country-Genre-Track", name:"Tracks" }
+          {to:"Country-Genre-Artist-list", name:"Artists", linkedIf:"Country-Genre-Artist" },
+          {to:"Country-Genre-Album-list", name:"Albums" , linkedIf:"Country-Genre-Album"},
+          {to:"Country-Genre-Single-list", name:"Singles" , linkedIf:"Country-Genre-Single"},
+          {to:"Country-Genre-Track-list", name:"Tracks" , linkedIf:"Country-Genre-Track"}
         ],this.context.router,this.props.params,isRoute);
     }
   )()

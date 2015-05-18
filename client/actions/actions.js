@@ -117,9 +117,9 @@ export var single=  crudActions(
 	}
 ) ;
 
-export var albumChart=  crudActions(
-	"ALBUMCHART", 
-	"ALBUMCHARTS",
+export var chartAlbum=  crudActions(
+	"CHARTALBUM", 
+	"CHARTALBUMS",
 	{
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/charts/album?domain=music&itemsperpage=30&client_id=${clientId}`;
@@ -131,9 +131,9 @@ export var albumChart=  crudActions(
 	}
 );
 
-export var trackChart=  crudActions(
-	"TRACKCHART", 
-	"TRACKCHARTS",
+export var chartTrack=  crudActions(
+	"CHARTTRACK", 
+	"CHARTTRACKS",
 	{
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/charts/track?domain=music&itemsperpage=30&client_id=${clientId}`;
@@ -145,9 +145,9 @@ export var trackChart=  crudActions(
 	}
 ) ;
 
-export var albumNewRelease=  crudActions(
-	"ALBUMNEWRELEASE", 
-	"ALBUMNEWRELEASES",
+export var newReleaseAlbum=  crudActions(
+	"NEWRELEASEALBUM", 
+	"NEWRELEASALBUMS",
 	{
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/album?domain=music&itemsperpage=30&client_id=${clientId}`;
@@ -159,9 +159,9 @@ export var albumNewRelease=  crudActions(
 	}
 ) ;
 
-export var singleNewRelease=  crudActions(
-	"SINGLENEWRELEASE", 
-	"SINGLENEWRELEASES",
+export var newReleaseSingle=  crudActions(
+	"NEWRELEASESINGLE", 
+	"NEWRELEASESINGLES",
 	{
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/single?domain=music&itemsperpage=30&client_id=${clientId}`;
@@ -173,9 +173,9 @@ export var singleNewRelease=  crudActions(
 	}
 ) ;
 
-export var trackNewRelease=  crudActions(
-	"TRACKNEWRELEASE", 
-	"TRACKNEWRELEASES",
+export var newReleaseTrack=  crudActions(
+	"NEWRELEASETRACK", 
+	"NEWRELEASETRACKS",
 	{
 		many:params=>{
 			return `http://api.mixrad.io/1.x/${params.props.params.countryCode}/products/new/track?domain=music&itemsperpage=30&client_id=${clientId}`;

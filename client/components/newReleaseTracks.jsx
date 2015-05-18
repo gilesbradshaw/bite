@@ -4,8 +4,8 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
-import {trackChart as Store} from "../stores/store";
-import {trackChart as Actions} from "../actions/actions";
+import {newReleaseTrack as Store} from "../stores/store";
+import {newReleaseTrack as Actions} from "../actions/actions";
 
 import  {Link} from "react-router";
 import FormInput from "./formInput";
@@ -16,8 +16,7 @@ import {listedTrack, viewPicture} from "./mix-radio/items";
 
 
 
-var exp = crudFactory(crud, "trackId", "TrackChart", "TrackCharts", Actions, Store, "trackId", "id")
-  .listHead().render()()
+var exp = crudFactory(crud, "trackId", "NewReleaseTrack", "NewReleaseTracks", Actions, Store, "trackId", "id")
   .list().nodeRender(listedTrack)
   .menuLinks(
     (self,data,params)=>{

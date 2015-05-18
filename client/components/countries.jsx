@@ -51,11 +51,11 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
           {to:"Country-view", name:"Country", isLeaf:true, linkedIf:'Country', render:()=><span>{this.state.data.getIn(["item", "name"])}</span>},      
           {to:"Country-Chart", name:"Charts" },
           {to:"Country-NewRelease", name:"New Releases"},
-          {to:"Country-Genre", name:"Genres"},
-          {to:"Country-Artist", name:"Artists"},
-          {to:"Country-Album", name:"Albums"},
-          {to:"Country-Single", name:"Singles"},
-          {to:"Country-Track", name:"Tracks"}
+          {to:"Country-Genre-list", name:"Genres", linkedIf:'Country-Genre'},
+          {to:"Country-Artist-list", name:"Artists",linkedIf:'Country-Artis'},
+          {to:"Country-Album-list", name:"Albums", linkedIf:'Country-Album'},
+          {to:"Country-Single-list", name:"Singles", linkedIf:'Country-Single'},
+          {to:"Country-Track-list", name:"Tracks", linkedIf:'Country-Track'}
         ],this.context.router,this.props.params, isRoute)
     }
   )()

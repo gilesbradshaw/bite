@@ -8,10 +8,10 @@ import {pathRender} from './Path';
 import {Grid,Row,Col} from 'react-flexgrid';
 
 
-const myPathRender =(self,myLinks)=>
+const myPathRender =(self,myLinks, myRender)=>
   pathRender(
     self,
-    ()=> <RouteHandler {...self.props} />,    
+    myRender || (()=> <RouteHandler {...self.props} />),    
     (isRoute)=>
       links(myLinks,self.context.router,self.props.params,isRoute)
   );
@@ -26,15 +26,13 @@ class NavRoot extends React.Component {
     return getState();
   }
   render() {
-    return (
-      <div>
+    return myPathRender(this,[{to:"app", name:"Home", linkedIf:'.'}],()=>
+        <div>
          <UserLoggedIn/>
          <div>
           <PathDisplay isRoute={true}/>
         </div>
-        <div>
-          <PathDisplay isRoute={false}/>
-        </div>
+       
         <RouteHandler {...this.props} />
       </div>
     );
@@ -147,8 +145,8 @@ class ChartsNav extends React.Component {
     return myPathRender(
       this,
       [
-        {to:"Country-AlbumChart", name:"Albums"},
-        {to:"Country-TrackChart", name:"Tracks"}
+        {to:"Country-ChartAlbum-list", name:"Albums"},
+        {to:"Country-ChartTrack-list", name:"Tracks"}
       ]
     );
   }
@@ -165,9 +163,9 @@ class NewReleasesNav extends React.Component {
     return myPathRender(
       this,
       [
-        {to:"Country-AlbumNewRelease", name:"Albums"},
-        {to:"Country-TrackNewRelease", name:"Tracks"},
-        {to:"Country-SingleNewRelease", name:"Singles"}
+        {to:"Country-NewReleaseAlbum-list", name:"Albums"},
+        {to:"Country-NewReleaseTrack-list", name:"Tracks"},
+        {to:"Country-NewReleaseSingle-list", name:"Singles"}
       ]
     );
   }

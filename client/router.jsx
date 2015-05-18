@@ -21,11 +21,11 @@ import Genres from "./components/genres";
 import Artists from "./components/artists";
 import Tracks from "./components/tracks";
 import Albums from "./components/albums";
-import AlbumCharts from "./components/albumCharts";
-import TrackCharts from "./components/trackCharts";
-import AlbumNewReleases from "./components/albumNewReleases";
-import TrackNewReleases from "./components/trackNewReleases";
-import SingleNewReleases from "./components/singleNewReleases";
+import ChartAlbums from "./components/chartAlbums";
+import ChartTracks from "./components/chartTracks";
+import NewReleaseAlbums from "./components/newReleaseAlbums";
+import NewReleaseTracks from "./components/newReleaseTracks";
+import NewReleaseSingles from "./components/newReleaseSingles";
 import Singles from "./components/singles";
 import Users from "./components/users";
 import User from "./components/user.edit";
@@ -60,13 +60,13 @@ var routes = (
       <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
         {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
             <Route name="Country-Chart" path="Charts" handler={ChartsNav} >
-              {getRoute("Country-AlbumChart", "AlbumChart", "AlbumCharts", "albumChartId" , AlbumCharts)}
-              {getRoute("Country-TrackChart", "TrackChart", "TrackCharts", "trackChartId" , TrackCharts)}
+              {getRoute("Country-ChartAlbum", "ChartAlbum", "ChartAlbums", "chartAlbumId" , ChartAlbums)}
+              {getRoute("Country-ChartTrack", "ChartTrack", "ChartTracks", "chartTrackId" , ChartTracks)}
             </Route>,
             <Route name="Country-NewRelease" path="NewReleases" handler={NewReleasesNav} >
-              {getRoute("Country-AlbumNewRelease", "AlbumNewRelease", "AlbumNewReleases", "albumNewReleaseId" , AlbumNewReleases)}
-              {getRoute("Country-TrackNewRelease", "TrackNewRelease", "TrackNewReleases", "trackNewReleaseId" , TrackNewReleases)}
-              {getRoute("Country-SingleNewRelease", "SingleNewRelease", "SingleNewReleases", "trackNewReleaseId" , SingleNewReleases)}
+              {getRoute("Country-NewReleaseAlbum", "NewReleaseAlbum", "NewReleaseAlbums", "newReleaseAlbumId" , NewReleaseAlbums)}
+              {getRoute("Country-NewReleaseTrack", "NewReleaseTrack", "NewReleaseTracks", "newReleaseTrackId" , NewReleaseTracks)}
+              {getRoute("Country-NewReleaseSingle", "NewReleaseSingle", "NewReleaseSingles", "newReleaseSingleId" , NewReleaseSingles)}
             </Route>,
             getRoute("Country-Genre", "Genre", "Genres", "genreId" , Genres,            
               getRoute("Country-Genre-Artist", "Artist", "Artists", "artistId" , Artists),

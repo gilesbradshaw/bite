@@ -36,9 +36,9 @@ const player=(self,data)=>
     ()=><span>{item.get("name")}</span>
   export const menuPicture = (data)=>
     ()=>{
-      return data.get("item") ? <span>{thumbnail(data.get("item"))()} {name(data.get("item"))()}</span> : <script/>
+      return data.get("item") ? <span>{thumbnail(data.get("item"),'20px')()} {name(data.get("item"))()}</span> : <script/>
     }
-  export const thumbnail = (item)=>
+  export const thumbnail = (item, scale)=>
     ()=>{
-      return <span><img src={item.getIn(["thumbnails", "50x50"])}/></span>
+      return <span><img height={scale} src={item.getIn(["thumbnails", "50x50"])}/></span>
     }

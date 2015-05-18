@@ -4,26 +4,28 @@ import {addons as ReactAddons} from 'react/addons';
 var PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
-import {trackNewRelease as Store} from "../stores/store";
-import {trackNewRelease as Actions} from "../actions/actions";
+import {chartAlbum as Store} from "../stores/store";
+import {chartAlbum as Actions} from "../actions/actions";
 
 import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {listedTrack, viewPicture} from "./mix-radio/items";
+import {listedPicture, viewPicture} from "./mix-radio/items";
 
 
 
 
-var exp = crudFactory(crud, "trackId", "TrackNewRelease", "TrackNewReleases", Actions, Store, "trackId", "id")
-  .list().nodeRender(listedTrack)
+
+var exp = crudFactory(crud, "albumId", "ChartAlbum", "ChartAlbums", Actions, Store, "albumId", "id")
+  .listHead().render()()
+  .list().nodeRender(listedPicture)
   .menuLinks(
     (self,data,params)=>{
       return  [
-        {title:'View', path:"Country-Track-view"},
-        {title:'Edit',path:"Country-Track-edit"},
-        {title:'Delete',path:"Country-Track-delete"},
+        {title:'View', path:"Country-Album-view"},
+        {title:'Edit',path:"Country-Album-edit"},
+        {title:'Delete',path:"Country-Album-delete"},
       ]
     }
   )()

@@ -32,9 +32,9 @@ var exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "ar
     function(isRoute){
         return links([
             {to:this.props.params.genreId ? "Country-Genre-Artist-view" : "Country-Artist-view", name:"Artist", isLeaf:true, linkedIf:'Artist', render:menuPicture(this.state.data) },          
-            {to:"Country-Artist-Album", name:"Albums" },
-            {to:"Country-Artist-Single", name:"Singles" },
-            {to:"Country-Artist-Track", name:"Tracks" }
+            {to:"Country-Artist-Album-list", name:"Albums", linkedIf:"Country-Artist-Album" },
+            {to:"Country-Artist-Single-list", name:"Singles" , linkedIf:"Country-Artist-Single" },
+            {to:"Country-Artist-Track-list", name:"Tracks" , linkedIf:"Country-Artist-Track" }
           ],this.context.router,this.props.params,isRoute)
     }
   )()

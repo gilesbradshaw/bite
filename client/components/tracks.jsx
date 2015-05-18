@@ -53,6 +53,12 @@ var exp = crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "track
           {to:"Country-Single-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
         ],this.context.router,this.props.params,isRoute);
       }
+      else if(this.props.params.artistId)
+      {
+        return links([
+          {to:"Country-Artist-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
+        ],this.context.router,this.props.params,isRoute);
+      }
       else
         {
           return links([
