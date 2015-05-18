@@ -11,7 +11,7 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {listedPicture, viewPicture} from "./mix-radio/items";
+import {listedPicture, viewPicture, menuPicture} from "./mix-radio/items";
 import {links} from './link/links';
 
 
@@ -31,15 +31,11 @@ var exp = crudFactory(crud, "singleId", "Single", "Singles", Actions, Store, "si
   )()
   .listHead().render()()
   .head().menuRender( 
-    function(){
-      return <span>
-        {links([
-            {to:"Country-Single-view", name:"Single", linkedIf:"Single"}
-          ],this.context.router,this.props.params)}
-        {links([
+    function(isRoute){
+      return links([
+          {to:"Country-Single-view", name:"Single", isLeaf:true, linkedIf:"Single", render:menuPicture(this.state.data)},       
           {to:"Country-Single-Track", name:"Tracks" }
-        ],this.context.router,this.props.params)}
-      </span>
+        ],this.context.router,this.props.params,);
     }
   )()
   .edit().render(

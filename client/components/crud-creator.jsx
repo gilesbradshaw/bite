@@ -55,12 +55,12 @@ const crudcreator= (name, itemId)=> {
 		  	   	return <Row key={data.get(itemId)} style={style.row}>
 		  	   		  <Col>
 		  	   		  	<Row >
-			          		{menuLinks(self,data,params).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link  to={link.path} params={params}>{link.title}</Link></Col>)}			          
+			          		{menuLinks(self,data,params).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
 			          	</Row>
 			          </Col>
-		  	   		  <Col>
+		  	   		  
 			          	{itemRender(data,self)}
-			          </Col>
+			          
 			          
 		          	</Row>
 		         }

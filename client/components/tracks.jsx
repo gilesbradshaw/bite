@@ -11,7 +11,7 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {listedTrack, viewPicture} from "./mix-radio/items";
+import {listedTrack, listedPicture, viewPicture, menuPicture, thumbnail} from "./mix-radio/items";
 import {links} from './link/links';
 
 const togglePlay=(self,id)=>()=>
@@ -24,7 +24,14 @@ const player=(self,data)=>
 
 var exp = crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "trackId", "id")
   .listHead().render()()
-  .list().nodeRender(listedTrack)()
+  .list()
+    .nodeRender(listedTrack)
+    .menuLinks(
+      (self,data,params)=>[
+        {title:'View',path:self.state.myPath + "-view", render:thumbnail(data)},
+      ]
+    )
+  ()
   .view().render( (self,data)=>
     <div>
       {viewPicture(self,data)}
@@ -33,33 +40,24 @@ var exp = crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "track
     
   )()
   .head().menuRender( 
-    function(){
+    function(isRoute){
       if(this.props.params.albumId)
       {
-        return <span>
-          {links([
-              {to:"Country-Album-Track-view", name:"Track", linkedIf:'Track' },
-            ],this.context.router,this.props.params)}
-
-        </span>
+        return links([
+          {to:"Country-Album-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data)},
+        ],this.context.router,this.props.params, isRoute);
       }
       else if(this.props.params.singleId)
       {
-        return <span>
-          {links([
-              {to:"Country-Single-Track-view", name:"Track", linkedIf:'Track' },
-            ],this.context.router,this.props.params)}
-
-        </span>
+        return links([
+          {to:"Country-Single-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
+        ],this.context.router,this.props.params,isRoute);
       }
       else
         {
-          return <span>
-            {links([
-                {to:"Country-Track-view", name:"Track", linkedIf:'Track' },
-              ],this.context.router,this.props.params)}
-
-          </span>
+          return links([
+            {to:"Country-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
+          ],this.context.router,this.props.params,isRoute);
         } 
 
     }

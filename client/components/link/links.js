@@ -3,23 +3,47 @@ import {PropTypes,Link} from "react-router";
 import style from '../styles/style';
 import _ from 'lodash';
 
-
-
-export const links=(links,router, params)=>
+var index=0;
+//isRoute means that at least one of the links is for a selected route
+export const links=(links,router, params, isRoute)=>
 {
   //a route is selected
   const currentRoutes=router.getCurrentRoutes();
-  const isRoute = links.reduce(((isRoute,link)=>isRoute|| (!link.preserve && currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 ||  link.to===r.name))), false);
-  const myStyle = !isRoute ? style.block : {background:'green', ['font-size']:'2em'};
-  
-  return (
-    <span key={links[0].to} style={myStyle}  umm= {[{background:'green'}, isRoute ? {background:'blue'}: {background:'red'}]}>
-      {links
-      .filter((link=>link.preserve || !isRoute || currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 || link.to===r.name)))
-      .map(link=>
-        <span key={link.to} ><Link key={link.to} style={style.link} to={link.to} params={params}>{link.name}</Link> </span>)}
-    </span>
-  );
+  const ls = links;
+  const _isRoute = links.some(link=>(!link.preserve && currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 ||  link.to===r.name)));
+  const _isLeaf = links.some(link=>(link.isLeaf && currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 ||  link.to===r.name))) &&
+                  !links.some(link=>(!link.isLeaf && currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 ||  link.to===r.name)));
+
+  if(isRoute)
+  {
+    const okLinks=links
+        .filter((link=> link.preserve || currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 || link.to===r.name)))
+        .map(link=>
+          <span key={link.to} ><Link key={link.to} style={style.link} to={link.to} params={params}>{link.render? link.render() : link.name}</Link> </span>);
+    return okLinks;
+  }
+
+  if(!isRoute && (!_isRoute || _isLeaf))
+  {
+    const okLinks=links
+        .filter((link=>  !currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 || link.to===r.name)))
+        .map(link=>
+          <span key={link.to} ><Link key={link.to} style={style.link} to={link.to} params={params}>{link.render? link.render() : link.name}</Link> </span>);
+    return okLinks;
+  }
+  return [];
+
+  if(isRoute==_isRoute)
+  {
+    const okLinks=links
+        .filter((link=>_isLeaf || link.preserve || !_isRoute || currentRoutes.some(r=> r.name && r.name.indexOf(link.linkedIf)>-1 || link.to===r.name)))
+        .map(link=>
+          <span key={link.to} ><Link key={link.to} style={style.link} to={link.to} params={params}>{link.render? link.render() : link.name}</Link> </span>);
+
+    return okLinks;
+
+
+  }
 } 
 
 //decorator adds router context types

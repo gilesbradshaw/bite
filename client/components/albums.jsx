@@ -11,12 +11,19 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {listedPicture, viewPicture} from "./mix-radio/items";
+import {listedPicture, viewPicture, menuPicture,thumbnail,listedNameGenre} from "./mix-radio/items";
 import {links} from './link/links';
 
 
 var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "albumId", "id")
-  .list().nodeRender(listedPicture)()
+  .list()
+    .nodeRender(listedNameGenre)
+    .menuLinks(
+      (self,data,params)=>[
+        {title:'View',path:self.state.myPath + "-view", render:thumbnail(data)},
+      ]
+    )
+  ()
   .view().render(viewPicture)()
   .del().render(
     function(){
@@ -29,16 +36,11 @@ var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "album
   )()
   .listHead().render()()
   .head().menuRender( 
-    function(){
-      return <span>
-        {links([
-            {to:"Country-Album-view", name:"Album", linkedIf:'Album' },
-          ],this.context.router,this.props.params)}
-
-        {links([       
+    function(isRoute){
+      return links([
+          {to:"Country-Album-view", isLeaf:true, name:"Album", linkedIf:'Album',render:menuPicture(this.state.data) },             
           {to:"Country-Album-Track", name:"Tracks" }
-        ],this.context.router,this.props.params)}
-      </span>
+      ],this.context.router,this.props.params,isRoute);
     }
   )()
   .edit().render(

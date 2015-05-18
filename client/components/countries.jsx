@@ -46,13 +46,9 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
   )()
   //.listHead().render()()
   .head().menuRender( 
-    function(){
-      return <span>
-      {links([
-          {to:"Country-view", name:"Country", linkedIf:'Country' },
-         
-        ],this.context.router,this.props.params)}
-        {links([
+    function(isRoute){
+      return links([
+          {to:"Country-view", name:"Country", isLeaf:true, linkedIf:'Country', render:()=><span>{this.state.data.getIn(["item", "name"])}</span>},      
           {to:"Country-Chart", name:"Charts" },
           {to:"Country-NewRelease", name:"New Releases"},
           {to:"Country-Genre", name:"Genres"},
@@ -60,8 +56,7 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
           {to:"Country-Album", name:"Albums"},
           {to:"Country-Single", name:"Singles"},
           {to:"Country-Track", name:"Tracks"}
-        ],this.context.router,this.props.params)}
-      </span>
+        ],this.context.router,this.props.params, isRoute)
     }
   )()
   .view().render(

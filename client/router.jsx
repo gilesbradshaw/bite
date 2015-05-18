@@ -4,7 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
-import Nav, {MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav,JobSearchNav} from "./components/nav";
+import Nav, {NavRoot,MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav,JobSearchNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -54,98 +54,100 @@ var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=>
 
 // Declare routes
 var routes = (
-  <Route handler={Nav} name='.' path="/">
-    <DefaultRoute name="app" handler={Home} />
-    <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
-      {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
-          <Route name="Country-Chart" path="Charts" handler={ChartsNav} >
-            {getRoute("Country-AlbumChart", "AlbumChart", "AlbumCharts", "albumChartId" , AlbumCharts)}
-            {getRoute("Country-TrackChart", "TrackChart", "TrackCharts", "trackChartId" , TrackCharts)}
-          </Route>,
-          <Route name="Country-NewRelease" path="NewReleases" handler={NewReleasesNav} >
-            {getRoute("Country-AlbumNewRelease", "AlbumNewRelease", "AlbumNewReleases", "albumNewReleaseId" , AlbumNewReleases)}
-            {getRoute("Country-TrackNewRelease", "TrackNewRelease", "TrackNewReleases", "trackNewReleaseId" , TrackNewReleases)}
-            {getRoute("Country-SingleNewRelease", "SingleNewRelease", "SingleNewReleases", "trackNewReleaseId" , SingleNewReleases)}
-          </Route>,
-          getRoute("Country-Genre", "Genre", "Genres", "genreId" , Genres,            
-            getRoute("Country-Genre-Artist", "Artist", "Artists", "artistId" , Artists),
-            getRoute("Country-Genre-Album", "Album", "Albums", "albumId" , Albums),
-            getRoute("Country-Genre-Single", "Single", "Singles", "singleId" , Singles),
-            getRoute("Country-Genre-Track", "Track", "Tracks", "trackId" , Tracks)
-          ),
-          getRoute("Country-Artist", "Artist", "Artists", "artistId" , Artists,
-            getRoute("Country-Artist-Album", "Album", "Albums", "albumId" , Albums),
-            getRoute("Country-Artist-Single", "Single", "Singles", "singleId" , Singles),
-            getRoute("Country-Artist-Track", "Track", "Tracks", "trackId" , Tracks)
-          ),
-          getRoute("Country-Album", "Album", "Albums", "albumId" , Albums,
-            getRoute("Country-Album-Track", "Track", "Tracks", "trackId" , Tracks)
-          ),
-          getRoute("Country-Single", "Single", "Singles", "singleId" , Singles,
-            getRoute("Country-Single-Track", "Track", "Tracks", "trackId" , Tracks)
-          ),
-          getRoute("Country-Track", "Track", "Tracks", "trackId" , Tracks)
-      )},
-    </Route>
-    <Route name="jobsArea" path="jobsArea" handler={JobSearchNav} > 
-      <Route name="userArea" path="userArea" handler={UserNav} > 
+  <Route handler={NavRoot} name='$' >
+    <Route handler={Nav} name='.' path="/">
+      <DefaultRoute name="app" handler={Home} />
+      <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
+        {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
+            <Route name="Country-Chart" path="Charts" handler={ChartsNav} >
+              {getRoute("Country-AlbumChart", "AlbumChart", "AlbumCharts", "albumChartId" , AlbumCharts)}
+              {getRoute("Country-TrackChart", "TrackChart", "TrackCharts", "trackChartId" , TrackCharts)}
+            </Route>,
+            <Route name="Country-NewRelease" path="NewReleases" handler={NewReleasesNav} >
+              {getRoute("Country-AlbumNewRelease", "AlbumNewRelease", "AlbumNewReleases", "albumNewReleaseId" , AlbumNewReleases)}
+              {getRoute("Country-TrackNewRelease", "TrackNewRelease", "TrackNewReleases", "trackNewReleaseId" , TrackNewReleases)}
+              {getRoute("Country-SingleNewRelease", "SingleNewRelease", "SingleNewReleases", "trackNewReleaseId" , SingleNewReleases)}
+            </Route>,
+            getRoute("Country-Genre", "Genre", "Genres", "genreId" , Genres,            
+              getRoute("Country-Genre-Artist", "Artist", "Artists", "artistId" , Artists),
+              getRoute("Country-Genre-Album", "Album", "Albums", "albumId" , Albums),
+              getRoute("Country-Genre-Single", "Single", "Singles", "singleId" , Singles),
+              getRoute("Country-Genre-Track", "Track", "Tracks", "trackId" , Tracks)
+            ),
+            getRoute("Country-Artist", "Artist", "Artists", "artistId" , Artists,
+              getRoute("Country-Artist-Album", "Album", "Albums", "albumId" , Albums),
+              getRoute("Country-Artist-Single", "Single", "Singles", "singleId" , Singles),
+              getRoute("Country-Artist-Track", "Track", "Tracks", "trackId" , Tracks)
+            ),
+            getRoute("Country-Album", "Album", "Albums", "albumId" , Albums,
+              getRoute("Country-Album-Track", "Track", "Tracks", "trackId" , Tracks)
+            ),
+            getRoute("Country-Single", "Single", "Singles", "singleId" , Singles,
+              getRoute("Country-Single-Track", "Track", "Tracks", "trackId" , Tracks)
+            ),
+            getRoute("Country-Track", "Track", "Tracks", "trackId" , Tracks)
+        )},
+      </Route>
+      <Route name="jobsArea" path="jobsArea" handler={JobSearchNav} > 
+        <Route name="userArea" path="userArea" handler={UserNav} > 
 
 
-      {getRoute("Agency", "Agency", "Agencies", "agencyId" , Agencies,
-        getRoute("Agency-Agent", "Agent", "Agents", "agentId" , Agents)
-      )}
-      {getRoute("Agent", "Agent", "Agents", "agentId" , Agents)}
-      {getRoute("Profile", "Profiles","Profile", "Profiles", "profileId" , Profiles,
-        getRoute("Profile-Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities),
-        getRoute("Profile-Note", "Note", "Notes", "noteId" , Notes),
-        getRoute("Profile-Task", "Task", "Tasks", "taskId" , Tasks),
-        getRoute("Profile-Email","Email", "Emails", "emailId" , Emails)
-      )}
+        {getRoute("Agency", "Agency", "Agencies", "agencyId" , Agencies,
+          getRoute("Agency-Agent", "Agent", "Agents", "agentId" , Agents)
+        )}
+        {getRoute("Agent", "Agent", "Agents", "agentId" , Agents)}
+        {getRoute("Profile", "Profiles","Profile", "Profiles", "profileId" , Profiles,
+          getRoute("Profile-Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities),
+          getRoute("Profile-Note", "Note", "Notes", "noteId" , Notes),
+          getRoute("Profile-Task", "Task", "Tasks", "taskId" , Tasks),
+          getRoute("Profile-Email","Email", "Emails", "emailId" , Emails)
+        )}
 
-      {getRoute("Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities,
-        getRoute("Opportunity-Task", "Task", "Tasks", "taskId" , Tasks),
-        getRoute("Opportunity-Note", "Note", "Notes", "noteId" , Notes),
-        getRoute("Opportunity-Email", "Email", "Emails", "emailId" , Emails)      
-      )}
+        {getRoute("Opportunity", "Opportunity", "Opportunities", "opportunityId" , Opportunities,
+          getRoute("Opportunity-Task", "Task", "Tasks", "taskId" , Tasks),
+          getRoute("Opportunity-Note", "Note", "Notes", "noteId" , Notes),
+          getRoute("Opportunity-Email", "Email", "Emails", "emailId" , Emails)      
+        )}
 
 
 
-      {getRoute("Note", "Note", "Notes", "noteId" , Notes)}
-      {getRoute("Task", "Task", "Tasks", "taskId" , Tasks)}
-      {getRoute("Email", "Email", "Emails", "emailId" , Emails)}
-      
-      <Route name="me" path="me" handler={Me} >
-          <DefaultRoute handler={Opportunities.list} />
-           <Route name="me-profile-opportunities" path='opportunities'  >
+        {getRoute("Note", "Note", "Notes", "noteId" , Notes)}
+        {getRoute("Task", "Task", "Tasks", "taskId" , Tasks)}
+        {getRoute("Email", "Email", "Emails", "emailId" , Emails)}
+        
+        <Route name="me" path="me" handler={Me} >
             <DefaultRoute handler={Opportunities.list} />
-            <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
-            <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
-              <DefaultRoute name="me-profile-opportunities-view" handler={Opportunities.view} />
-              <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
-              <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+             <Route name="me-profile-opportunities" path='opportunities'  >
+              <DefaultRoute handler={Opportunities.list} />
+              <Route name="me-profile-opportunities-create" path='create' handler={Opportunities.create} />
+              <Route name="me-profile-opportunities-id" path=':opportunityId' handler={Opportunities.head}>
+                <DefaultRoute name="me-profile-opportunities-view" handler={Opportunities.view} />
+                <Route name="me-profile-opportunities-edit" path='edit' handler={Opportunities.edit} />
+                <Route name="me-profile-opportunities-delete" path='delete' handler={Opportunities.del} />
+              </Route>
             </Route>
-          </Route>
-      </Route>
-      
-  </Route>
-  <Route name="adminArea" path="adminArea" handler={AdminNav} > 
+        </Route>
+        
+    </Route>
+    <Route name="adminArea" path="adminArea" handler={AdminNav} > 
 
-    {getRoute("OpportunityType", "OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
-    {getRoute("OpportunityStatus", "OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}
-    {getRoute("OpportunityAgentRating", "OpportunityAgentRating", "OpportunityAgentRatings", "opportunityAgentRatingId" , OpportunityAgentRatings)}
-    {getRoute("OpportunityRatePeriod", "OpportunityRatePeriod", "OpportunityRatePeriods", "opportunityRatePeriodId" , OpportunityRatePeriods)}
+      {getRoute("OpportunityType", "OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
+      {getRoute("OpportunityStatus", "OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}
+      {getRoute("OpportunityAgentRating", "OpportunityAgentRating", "OpportunityAgentRatings", "opportunityAgentRatingId" , OpportunityAgentRatings)}
+      {getRoute("OpportunityRatePeriod", "OpportunityRatePeriod", "OpportunityRatePeriods", "opportunityRatePeriodId" , OpportunityRatePeriods)}
 
 
-      <Route name="users" handler={Users}>
-        <Route name="user" path="user/:userId" handler={User} />
+        <Route name="users" handler={Users}>
+          <Route name="user" path="user/:userId" handler={User} />
 
-      </Route>
-  </Route>
-  </Route>
-    <Route name="signup" handler={UserSignUp} />
-    <Route name="signin" handler={UserSignIn} />
-    <Route name="signout" handler={UserSignOut} />
-    <NotFoundRoute handler={NotFound} />
+        </Route>
+    </Route>
+    </Route>
+      <Route name="signup" handler={UserSignUp} />
+      <Route name="signin" handler={UserSignIn} />
+      <Route name="signout" handler={UserSignOut} />
+      <NotFoundRoute handler={NotFound} />
+    </Route>
   </Route>
 );
 

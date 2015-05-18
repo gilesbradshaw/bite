@@ -197,7 +197,10 @@ function crudActions(single, plural,path, getData)
           }
           catch(error)
           {
+            if(error)
               logError.bind(self)(error.error.message,error, single, params.index);
+            else
+              window.alert("caught with no errror");
           }
         
       },0);
