@@ -60,9 +60,8 @@ const crudcreator= (name, itemId)=> {
 				          	</Row>
 				          </Grid>
 			          </Col>
-		  	   		  
 			          {itemRender(data,self)}
-			          
+		  	   		  
 			          
 		          	</Row>
 		         }

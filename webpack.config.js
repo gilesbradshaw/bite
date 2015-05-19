@@ -23,8 +23,8 @@ module.exports = {
       { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/radium"), loader: 'babel-loader?optional[]=runtime&stage=0' },
       { test: /\.js?$/, include:  path.resolve(__dirname, "node_modules/rc-menu"), loader: 'babel-loader?optional[]=runtime&stage=0' },
       { test: /\.css$/, loader: "style-loader!css-loader" },
-      { test: /\.json$/, loader: "json-loader" }
-
+      { test: /\.json$/, loader: "json-loader" },
+      { test: /\.svg$/, loader: "svg-loader" }
     ]
   },
   resolve: {

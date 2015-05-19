@@ -111,6 +111,7 @@
     "sourcemap": "^0.1.0",
     "style-loader": "~0.8.3",
     "supertest": "~0.14.0",
+    "svg-loader": "0.0.2",
     "watch": "^0.14.0",
     "webpack-dev-server": "1.6.4"
   },

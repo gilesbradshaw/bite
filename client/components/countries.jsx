@@ -35,14 +35,17 @@ var exp = crudFactory(crud, "countryCode", "Country", "Countries", Actions, Stor
   )()
   .listHead().render()()
   .list().nodeRender(
-    (data) => 
-    <Row >
-      <Col>
+    (data) => [   
+      <Col xs={1}>
+        <h4 className={`flag-icon flag-icon-${data.get('countryCode')}`} ></h4>
+      </Col>
+    ,
+      <Col xs={' '}>
         <div style={style.box}>
           {data.get('name')}
         </div>
       </Col>
-    </Row>
+    ]
   )()
   //.listHead().render()()
   .head().menuRender( 
