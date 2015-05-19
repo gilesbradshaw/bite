@@ -7,6 +7,7 @@ import style from './styles/style';
 import {PropTypes,Link} from "react-router";
 import MediaQuery from 'react-responsive';
 import flatten from './utils/flatten';
+import {Grid,Row,Col} from 'react-flexgrid';
 // Child Components
 
 var getState=function()
@@ -66,11 +67,11 @@ const menuStructure=(currentRoutes, isRoute, path)=>
 const singleLink=(link,text, className)=>
     link.current 
     ? <a className="menu-link-none" key={link.link.to} title={link.link.name}>{(text?text:(link.link.render? link.link.render() : link.link.name))}</a>
-    : <Link className={"menu-link " + (className||"")} key={link.link.to}  to={link.link.to} title={link.link.name} params={link.params}>
+    : <Link className={"menu-link " + (className||"") + (link.link.small ? " menu-link-small":"") } key={link.link.to}  to={link.link.to} title={link.link.name} params={link.params}>
       {text?text:(link.link.render? link.link.render() : link.link.name)}
     </Link>
 
-const getLink=(isRoute)=>(link)=> 
+const getMobileLink=(isRoute)=>(link)=> 
 {
   if(!link.link.current && !link.childLinks.length)
   {
@@ -83,6 +84,45 @@ const getLink=(isRoute)=>(link)=>
       <li  key={link.link.link.to} >
         {singleLink(link.link)}      
       </li>
+    ]
+  }
+  else
+  { return [];
+    return !isRoute?[]:[
+      (link.backLink
+        ? <li  key={link.backLink.link.to} >
+          {singleLink(link.backLink.link,'<', 'menu-link-small')}
+        </li>
+        :undefined),
+      <li  key={link.link.link.to} title={link.link.link.name}> 
+        { false && !link.link.current
+          ? singleLink(link.link,'.')
+          : <script/>
+        }
+        <a className='menu-link-dropdown' key={link.link.link.to} title={link.link.link.name}>
+          {link.link.link.render? link.link.link.render() : link.link.link.name}
+        </a>
+        <ul className='hidden'>
+          {link.childLinks.map(getLink(isRoute))}
+        </ul>
+    </li>]
+
+  }
+}
+
+const getLink=(isRoute)=>(link)=> 
+{
+  if(!link.link.current && !link.childLinks.length)
+  {
+    return [
+      (link.backLink
+        ? <Col  key={link.backLink.link.to} >
+          {singleLink(link.backLink.link,'<','menu-link-small')}
+        </Col>
+        :undefined),
+      <Col  key={link.link.link.to} >
+        {singleLink(link.link,null )}      
+      </Col>
     ]
   }
   else
@@ -135,9 +175,11 @@ class PathDisplay extends React.Component {
     return (
       <div>
         <MediaQuery query='(min-width: 761px)'>
-            <div className="menu desktop-menu">
-              <ul>{links.map(getLink(this.props.isRoute))}</ul>
-          </div>
+            <div className='menu-grid'>
+              <Grid fluid >
+                <Row center='xs'>{links.map(getLink(this.props.isRoute))}</Row>
+              </Grid>
+            </div>
         </MediaQuery>
         <MediaQuery query='(max-width: 760px)'> 
             <MobilePathDisplay isRoute={this.props.isRoute} links={links}/>
@@ -164,11 +206,11 @@ class MobilePathDisplay extends React.Component {
           <ul>
             {this.props.isRoute?<li>
               <a className={this.state.show?'menu-hide':'menu-show'} onClick={this.toggleShow}>
-                {this.state.show?'hide':'show'}
+                {this.state.show?<span className='fa fa-close'/>:<span className='fa fa-align-justify'/>}
               </a>
              </li>:null}
 
-            {this.state.show?this.props.links.map(getLink(this.props.isRoute)):undefined}
+            {this.state.show?this.props.links.map(getMobileLink(this.props.isRoute)):undefined}
           </ul>
         </div>
     );

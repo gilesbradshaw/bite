@@ -19,9 +19,6 @@ const myPathRender =(self,myLinks, myRender)=>
 const TitleNav = (title)=>
 {
   class TitleNav extends React.Component {
-    constructor(props) {
-      super(props);
-    }
     render() {
         return <h1>{title}</h1>
 
@@ -35,20 +32,19 @@ export {TitleNav};
 
 @routeClass
 class NavRoot extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  getInitialState(){
-    return getState();
-  }
   render() {
-    return myPathRender(this,[{to:"app", name:"Home", linkedIf:'.'}],()=>
+    return myPathRender(this,[{to:"app", name:"Home", small:true, linkedIf:'.', render:()=><span className='fa fa-home' />}],()=>
         <div>
          <UserLoggedIn/>
-        
-          <PathDisplay isRoute={true}/>          
-          <RouteHandler {...this.props} />
-          <PathDisplay isRoute={false}/>    
+          <Grid fluid>
+            <Row center='xs'>
+              <Col md={8} sm={12} >
+                <PathDisplay isRoute={true}/>          
+                <RouteHandler {...this.props} />
+                <PathDisplay isRoute={false}/>  
+              </Col>
+            </Row>
+          </Grid>  
       </div>
     );
   }
@@ -60,13 +56,10 @@ export {NavRoot};
 
 @routeClass
 class Nav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
      return myPathRender(this,[
         //{to:"app", name:"Home", linkedIf:'.'},
-        {to:"mixRadio", name:"Mix Radio"},
+        {to:"mixRadio", name:"Mix Radio",small:true, render:()=><span className='fa fa-music' />},
         {to:"jobsArea", name:"Jobs"},
         {to:"signup", name:"SignUp"}
       ]
@@ -78,9 +71,6 @@ export default Nav;
 
 @routeClass
 class UserNav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return myPathRender(
         this,
@@ -102,9 +92,6 @@ export {UserNav};
 
 @routeClass
 class MixRadioNav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return myPathRender(
       this,
@@ -120,9 +107,6 @@ export {MixRadioNav};
 
 @routeClass
 class AdminNav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return myPathRender(this,[
       {to:"Profile-list", name:"Profiles" }, 
@@ -138,9 +122,6 @@ export {AdminNav};
 
 @routeClass
 class JobSearchNav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return myPathRender(this,[
       {to:"userArea", name:"Main"},
@@ -153,9 +134,6 @@ export {JobSearchNav};
 
 @routeClass
 class ChartsNav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return myPathRender(
       this,
@@ -171,9 +149,6 @@ export {ChartsNav};
 
 @routeClass
 class NewReleasesNav extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return myPathRender(
       this,

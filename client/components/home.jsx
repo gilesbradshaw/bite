@@ -16,15 +16,7 @@ var Home = React.createClass({
 
   componentWillUnmount: function () {},
 
-  render: function () {
-    return (
-      <div>
-        <p>
-          home rendered
-        </p>
-      </div>
-    );
-  }
+  render: ()=><script/>
 });
 
 export default Home;

@@ -23,8 +23,28 @@ const togglePlay=(self,id)=>()=>
   self.setState({play:id})
 const player=(self,data)=>
   self.state.play==data.get("id") 
-    ? <audio autoplay controls src={data.getIn(['samples', 'wmamms'])}/> 
-    : <div onClick={togglePlay(self,data.get("id"))}>play!</div>
+    ? <Player src={data.getIn(['samples', 'wmamms'])}/> 
+    : <Player src={data.getIn(['samples', 'wmamms'])}/>  //<div onClick={togglePlay(self,data.get("id"))} className='fa fa-lg fa-play'/>
+
+
+class Player extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.componentDidMount=this.componentDidMount.bind(this);
+  }
+  componentDidMount()
+  {
+    const p = this.refs.player.getDOMNode();
+    p.play();
+  }
+  render() {
+    return <audio ref='player' autoplay controls src={this.props.src}/> 
+  }
+}
+Player.displayName = "Player";
+
+
 
 const path=(params)=>
   params.albumId 

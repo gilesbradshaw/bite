@@ -26,23 +26,16 @@
 	line-height: 50px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #fff;
-	background: red;
 	text-decoration: none;
 }
 
 /*Style for menu links*/
 .menu li a.menu-link {
-	background: #2f3036;
+	background: lightgray;
+
 }
 
 
-.menu li a.menu-link-none {
-	background: gray;
-}
-
-.menu li a.menu-link-dropdown {
-	background: orange;	
-}
 
 .menu li a.menu-hide {
 	background: red;
@@ -126,3 +119,46 @@
 	.mobile-menu ul li, li a {
 		width: 100%;
 }
+
+
+
+
+
+
+
+
+/*Create a horizontal list with spacing*/
+.menu-grid * div.row {
+	
+}
+
+/*Style for menu links*/
+.menu-grid *  a {
+	display:block;
+	min-width:120px;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #fff;
+	text-decoration: none;
+}
+
+/*Style for menu links*/
+.menu-grid *  a.menu-link {
+	background: lightgray;
+}
+
+
+
+/*Style for small menu links*/
+.menu-grid *  a.menu-link-small {
+	min-width:40px;
+}
+
+
+
+.menu-grid *  a:hover {
+	background: #19c589;
+}
+

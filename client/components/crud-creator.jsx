@@ -57,18 +57,11 @@ const crudcreator= (name, itemId)=>(titleRender, footerRender)=> {
 		      {
 		  	  	const params = _.extend({[singleId] : data.get(itemId)},self.props.params);
 		  	  	
-		  	   	return <Row className='item-row' middle={['xs']} key={data.get(itemId)} style={style.row}>
-		  	   		  <Col >
-		  	   		  	<Grid fluid>
-			  	   		  	<Row middle={['xs']}>
-				          		{flatten(menuLinks(self,data,params)).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
-				          	</Row>
-				          </Grid>
-			          </Col>
+		  	   	return <Row start='xs' className='item-row' middle={['xs']} key={data.get(itemId)} style={style.row}>
+		  	   		 
+			          {flatten(menuLinks(self,data,params)).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} md={1} sm={2} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
 			          {itemRender(data,self)}
-		  	   		  
-			          
-		          	</Row>
+		  	      	</Row>
 		         }
 	      	  );
 		  }
@@ -388,24 +381,34 @@ const crudcreator= (name, itemId)=>(titleRender, footerRender)=> {
 				      {	      	
 				      	return <div>
 				      		{titleRender?
-				      			<Grid fluid>
-				      				{titleRender(this,this.props.item).filter(l=>l).map(item=>
-				      					<Row key={item.field} bottom='xs'>
-				      						<Col xs={4} sm={3} md={1} lg={1}>{item.field}</Col>
-				      						<Col xs={0} md={4}>{item.render()}</Col>
+				      			<Grid fluid >
+				      				{flatten(titleRender(this,this.props.item).filter(l=>l).map(item=>
+				      					[
+				      					<Row center='xs' key='title' >
+				      						<Col><h1>{item.field}</h1></Col>
 				      					</Row>
-				      				)}
+				      					,
+				      					<Row center='xs' key='text'>
+				      						<Col xs={0} ><h4>{item.render()}</h4></Col>
+				      					</Row>
+				      					]
+				      				))}
 				      			</Grid>
 				      		:null}
 				      		{render(this,this.props.item)}
 				      		{footerRender?
 				      			<Grid fluid>
-				      				{flatten(footerRender(this,this.props.item)).filter(l=>l).map(item=>
-				      					<Row key={item.field} top='xs'>
-				      						<Col xs={4} sm={3} md={1} lg={1}>{item.field}</Col>
-				      						<Col xs={0} md={4}>{item.render()}</Col>
-				      					</Row>
-				      				)}
+				      				{flatten(flatten(footerRender(this,this.props.item)).filter(l=>l).map(item=>
+				      					[
+					      					<Row center='xs' key={'title-' + item.field} top='xs'>
+					      						<Col><h4>{item.field}</h4></Col>		
+					      					</Row>
+					      				,
+					      					<Row center='xs' key={item.field} top='xs'>
+					      						<Col  xs={0} >{item.render()}</Col>
+					      					</Row>
+				      					]
+				      				))}
 				      			</Grid>
 				      		:null}
 				      		<RouteHandler {...this.props}  myPath={this.state.myPath} />
