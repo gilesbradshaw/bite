@@ -1,7 +1,7 @@
 // React
 import React from "react";
 import {addons as ReactAddons} from 'react/addons';
-var PureRenderMixin = ReactAddons.PureRenderMixin;
+const PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
 import {artist as Store} from "../stores/store";
@@ -9,25 +9,60 @@ import {artist as Actions} from "../actions/actions";
 
 import  {Link} from "react-router";
 import FormInput from "./formInput";
+import {Grid,Row,Col} from 'react-flexgrid';
 
 import crudFactory from './crud-factory';
-import {listedPicture, viewPicture,menuPicture} from "./mix-radio/items";
-import {links} from './link/links';
+import {listedPicture, viewPicture, menuPicture,viewThumbnail, thumbnail,listedNameGenre} from "./mix-radio/items";
+import {links, makeLink} from './link/links';
+import {link as genreLink} from './genres';
+import mapOrNull from  './utils/mapornull';
 
 
-
-var exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "artistId", "id")
+const exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "artistId", "id")
   .listHead().render()()
-  .list().nodeRender(listedPicture)()
+  .list()
+
+    .titleRender((self)=> "Artists")
+    .nodeRender((data,self)=>
+      [ 
+        <Col xs={0}>
+          {listedNameGenre(data,self)}
+        </Col>      
+      ]
+    )
+    .menuLinks(
+      (self,data,params)=>[
+        {title:'View',path:self.state.myPath + "-view", render:thumbnail(data)},
+      ]
+    )
+  ()
   .view().render( (self,data)=>
     <div>
       {viewPicture(self,data)}
-      <p>
-        {data.get("biography")}
-      </p>
     </div>
     
-  )()
+  )
+    .titleRender((self,data)=>
+      [
+        {field:'Artist', render:()=>data.get('name')}
+      ]
+    )
+    .footerRender((self,data)=>
+      [      
+        {
+          field:'Genre' + (data.getIn(["genres"]).toArray().length>1 ? 's': '') , 
+          render:()=>data.getIn(["genres"]).toArray().map(p=>
+            genreLink(p, self.props.params)
+          )
+        },
+        {
+          field: "Biography",
+          render:()=>data.get('biography')
+        }
+      ]
+
+    )
+  ()
   .head().menuRender( 
     function(isRoute){
         return links([
@@ -38,29 +73,36 @@ var exp = crudFactory(crud, "artistId", "Artist", "Artists", Actions, Store, "ar
           ],this.context.router,this.props.params,isRoute)
     }
   )()
-
-  .del().render(
-    function(){
-      return (
-        <div >
-           <div>{this.props.item.get('title')}</div>
-        </div>
-      );
-    }
-  )()
-  .edit().render(
-     function(){
-        return (
-          <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )()
-
   
   .make();
 
 export default  exp;
+export const link = (data,params)=>makeLink("Country-Artist-view",params, "artistId",data.get("id"),()=>data.get("name"))
+
+
+export const artistLinks = (data, self)=>
+  [
+        mapOrNull(data.getIn(["creators","composers"]), p=>p.map(p=>link(p, self.props.params)))
+      ,
+        mapOrNull(data.getIn(["creators","performers"]), p=>p.map(p=>link(p, self.props.params)))
+  ]
+
+export const artistFooters=(data,self)=>
+  [
+      (data.getIn(["creators","composers"])
+          ?{
+            field:'Composer' + (data.getIn(["creators","composers"]).toArray().length>1 ? 's': '') , 
+            render:()=>data.getIn(["creators","composers"]).toArray().map(p=>
+              link(p, self.props.params)
+            )
+        }:null),
+        (data.getIn(["creators","performers"])
+          ?{
+            field:'Performer' + (data.getIn(["creators","performers"]).toArray().length>1 ? 's': '') , 
+            render:()=>data.getIn(["creators","performers"]).toArray().map(p=>
+              link(p, self.props.params)
+            )
+        }:null)
+  ]
 
 

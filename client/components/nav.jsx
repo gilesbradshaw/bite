@@ -16,6 +16,23 @@ const myPathRender =(self,myLinks, myRender)=>
   );
 
 
+const TitleNav = (title)=>
+{
+  class TitleNav extends React.Component {
+    constructor(props) {
+      super(props);
+    }
+    render() {
+        return <h1>{title}</h1>
+
+    }
+  }
+  TitleNav.displayName = "TitleNav";
+  return TitleNav;
+}
+export {TitleNav};
+
+
 @routeClass
 class NavRoot extends React.Component {
   constructor(props) {
@@ -28,10 +45,10 @@ class NavRoot extends React.Component {
     return myPathRender(this,[{to:"app", name:"Home", linkedIf:'.'}],()=>
         <div>
          <UserLoggedIn/>
-         <div>
-          <PathDisplay isRoute={true}/>
-        </div>      
-        <RouteHandler {...this.props} />
+        
+          <PathDisplay isRoute={true}/>          
+          <RouteHandler {...this.props} />
+          <PathDisplay isRoute={false}/>    
       </div>
     );
   }
@@ -68,7 +85,7 @@ class UserNav extends React.Component {
     return myPathRender(
         this,
         [
-          {to:"Agency-list", name:"Agencies!!" },
+          {to:"Agency-list", name:"Agencies" },
           {to:"Agent-list", name:"Agents" },
           {to:"Opportunity-list", name:"Opportunities" },
           {to:"Note-list", name:"Notes" },
@@ -108,7 +125,7 @@ class AdminNav extends React.Component {
   }
   render() {
     return myPathRender(this,[
-      {to:"Profile-list", name:"Profiles" },
+      {to:"Profile-list", name:"Profiles" }, 
       {to:"OpportunityType-list", name:"OpportunityTypes" },
       {to:"OpportunityStatus-list", name:"OpportunityStatuses" },
       {to:"OpportunityAgentRating-list", name:"OpportunityAgentRatings" },

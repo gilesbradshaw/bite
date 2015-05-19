@@ -11,30 +11,64 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {listedPicture, viewPicture, menuPicture,thumbnail,listedNameGenre} from "./mix-radio/items";
-import {links} from './link/links';
+import {listedPicture, viewPicture, menuPicture,viewThumbnail, thumbnail,listedNameGenre} from "./mix-radio/items";
+import {links, makeLink} from './link/links';
+import _ from "lodash";
+import {Grid,Row,Col} from 'react-flexgrid';
+import {link as artistLink, artistLinks, artistFooters} from './artists';
+import {link as genreLink, genreFooters} from './genres';
+import mapOrNull from  './utils/mapornull';
 
 
-var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "albumId", "id")
-  .list()
-    .nodeRender(listedNameGenre)
+export const crudMaker = (factory, listTitle)=>
+  factory.list()
+    .titleRender((self)=> listTitle)
+    .nodeRender((data,self)=>
+      [ 
+        (!self.props.params.artistId
+        ? <Col key='artistLinks' xs={3} sm={2} md={1}>
+          {artistLinks(data,self)}
+        </Col>
+        : null),
+        <Col  key='nameAndGenre' xs={0}>
+          {listedNameGenre(data,self)}
+        </Col>
+        ,
+        <Col key='variousartists' xs={1}>
+          {data.get('variousartists')?'various':null}
+        </Col>       
+      ]
+    )
     .menuLinks(
       (self,data,params)=>[
-        {title:'View',path:self.state.myPath + "-view", render:thumbnail(data)},
+        {title:'View',path:"Country-Album-view", render:thumbnail(data)},
       ]
     )
   ()
-  .view().render(viewPicture)()
-  .del().render(
-    function(){
-      return (
-        <div >
-           <div>{this.props.item.get('title')}</div>
-        </div>
-      );
-    }
-  )()
-  .listHead().render()()
+  .view()
+    .render((self,data)=>
+      <div>
+        {viewThumbnail(self,data)}
+      </div>
+      
+    )
+    .titleRender((self,data)=>
+      [
+        {field:'Album', render:()=>data.get('name')}
+      ]
+    )
+    .footerRender((self,data)=>
+      [
+        artistFooters(data,self),
+        genreFooters(data,self),
+        {field:'Label', render:()=>data.get("label")}
+      ]
+
+    )
+  ()
+  .listHead()
+    .render()
+  ()
   .head().menuRender( 
     function(isRoute){
       return links([
@@ -43,19 +77,10 @@ var exp = crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "album
       ],this.context.router,this.props.params,isRoute);
     }
   )()
-  .edit().render(
-     function(){
-        return (
-          <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )()
 
-  
-  .make();
+
+const exp = crudMaker(crudFactory(crud, "albumId", "Album", "Albums", Actions, Store, "albumId", "id"),'Albums').make();
 
 export default  exp;
-
+export const link = (data,params)=>makeLink("Country-Album-view",params, "albumId",data.get("id"),()=>data.get("name"))
 

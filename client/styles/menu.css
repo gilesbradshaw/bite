@@ -7,7 +7,7 @@
 	margin:0;
 	padding:0;
 	display:block;
-	position: absolute;
+	position: static;
 }
 
 /*Create a horizontal list with spacing*/

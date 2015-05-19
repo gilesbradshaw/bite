@@ -1,7 +1,7 @@
 // React
 import React from "react";
 import {addons as ReactAddons} from 'react/addons';
-var PureRenderMixin = ReactAddons.PureRenderMixin;
+const PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
 import {genre as Store} from "../stores/store";
@@ -11,19 +11,22 @@ import  {Link} from "react-router";
 import FormInput from "./formInput";
 
 import crudFactory from './crud-factory';
-import {links} from './link/links';
+import {links, makeLink} from './link/links';
 import {name} from "./mix-radio/items";
 
 
 
 
-var exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genreId", "id")
-  .list().nodeRender(
+const exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genreId", "id")
+  .list()
+    .titleRender((self)=> "Genres")
+    .nodeRender(
       (data) => 
       <div>
         <div>{data.get('name')}</div>
       </div>
-    )()
+    )
+  ()
   .view().render(
     (self,data)=>   
     {
@@ -44,30 +47,18 @@ var exp = crudFactory(crud, "genreId", "Genre", "Genres", Actions, Store, "genre
         ],this.context.router,this.props.params,isRoute);
     }
   )()
-
-
-  .del().render(
-    function(){
-      return (
-        <div >
-           <div>{this.props.item.get('title')}</div>
-        </div>
-      );
-    }
-  )()
-  .edit().render(
-     function(){
-        return (
-          <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )()
-
-  
   .make();
 
 export default  exp;
+export const link = (data,params)=>makeLink("Country-Genre-view",params, "genreId",data.get("id"),()=>data.get("name"))
 
-
+export const genreFooters=(data,self)=>
+  [
+      (data.getIn(["genres"])
+          ?{
+            field:'Genre' + (data.getIn(["genres"]).toArray().length>1 ? 's': '') , 
+            render:()=>data.getIn(["genres"]).toArray().map(p=>
+              link(p, self.props.params)
+            )
+        }:null)
+  ]

@@ -1,7 +1,7 @@
 // React
 import React from "react";
 import {addons as ReactAddons} from 'react/addons';
-var PureRenderMixin = ReactAddons.PureRenderMixin;
+const PureRenderMixin = ReactAddons.PureRenderMixin;
 
 import crud from "./crud-creator";
 import {track as Store} from "../stores/store";
@@ -9,10 +9,15 @@ import {track as Actions} from "../actions/actions";
 
 import  {Link} from "react-router";
 import FormInput from "./formInput";
+import {Grid,Row,Col} from 'react-flexgrid';
 
 import crudFactory from './crud-factory';
-import {listedTrack, listedPicture, viewPicture, menuPicture, thumbnail} from "./mix-radio/items";
-import {links} from './link/links';
+import {listedTrack, listedPicture, viewPicture, menuPicture, thumbnail,viewThumbnail,listedNameGenre} from "./mix-radio/items";
+import {makeLink, links} from './link/links';
+
+import {link as artistLink, artistLinks, artistFooters} from './artists';
+import {link as genreLink, genreFooters} from './genres';
+
 
 const togglePlay=(self,id)=>()=>
   self.setState({play:id})
@@ -21,76 +26,80 @@ const player=(self,data)=>
     ? <audio autoplay controls src={data.getIn(['samples', 'wmamms'])}/> 
     : <div onClick={togglePlay(self,data.get("id"))}>play!</div>
 
+const path=(params)=>
+  params.albumId 
+      ? "Country-Album-Track"
+      : (
+          params.singleId
+          ? "Country-Single-Track"
+          : (
+              params.artistId
+              ? "Country-Artist-Track"
+              : "Country-Track"
+            )
 
-var exp = crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "trackId", "id")
+        );
+
+export const crudMaker = (factory, listTitle)=>
+  factory
   .listHead().render()()
   .list()
-    .nodeRender(listedTrack)
-    .menuLinks(
-      (self,data,params)=>[
-        {title:'View',path:self.state.myPath + "-view", render:thumbnail(data)},
+    .titleRender((self)=> "Tracks")
+    .nodeRender((data,self)=>
+      [ 
+        (!self.props.params.artistId
+        ? <Col key='artistLinks' xs={3} sm={2} md={1}>
+          {artistLinks(data,self)}
+        </Col>
+        : null)
+        ,
+        <Col key='nameAndGenre'  xs={0}>
+          {listedNameGenre(data,self)}
+        </Col>
       ]
     )
+    .menuLinks(
+      (self,data,params)=>
+        [
+            {title:'View',path:path(params) + "-view", render:thumbnail(data)},
+        ]
+      
+    )
   ()
-  .view().render( (self,data)=>
-    <div>
-      {viewPicture(self,data)}
-      {player(self,data)}
-    </div>
+  .view()
+    //DRY!!
+    .titleRender((self,data)=>
+      [
+        {field:'Track', render:()=>data.get('name')}
+      ]
+    )
+    .footerRender((self,data)=>
+      [
+        artistFooters(data,self),
+        genreFooters(data,self),
+        {field:'Label', render:()=>data.get("label")}
+      ]
+
+    )
+    .render( (self,data)=>
+      <div>
+        {viewThumbnail(self,data)}
+        {player(self,data)}
+      </div>
     
-  )()
+    )
+  ()
   .head().menuRender( 
     function(isRoute){
-      if(this.props.params.albumId)
-      {
-        return links([
-          {to:"Country-Album-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data)},
+      return links([
+          {to:`${path(this.props.params)}-view`, name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data)},
         ],this.context.router,this.props.params, isRoute);
-      }
-      else if(this.props.params.singleId)
-      {
-        return links([
-          {to:"Country-Single-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
-        ],this.context.router,this.props.params,isRoute);
-      }
-      else if(this.props.params.artistId)
-      {
-        return links([
-          {to:"Country-Artist-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
-        ],this.context.router,this.props.params,isRoute);
-      }
-      else
-        {
-          return links([
-            {to:"Country-Track-view", name:"Track", isLeaf:true, linkedIf:'Track', render:menuPicture(this.state.data) },
-          ],this.context.router,this.props.params,isRoute);
-        } 
-
     }
-  )()
+  )();
 
-  .del().render(
-    function(){
-      return (
-        <div >
-           <div>{this.props.item.get('title')}</div>
-        </div>
-      );
-    }
-  )()
-  .edit().render(
-     function(){
-        return (
-          <div >
-             <FormInput id='title' title='Title' value={this.props.item.get('title')} onChange={this.props.handleChange('title')} />
-          </div>
-        );
-     }
-  )()
-
-  
-  .make();
+const exp = crudMaker(crudFactory(crud, "trackId", "Track", "Tracks", Actions, Store, "trackId", "id"), "Tracks").make();
 
 export default  exp;
+export const link = (data,params)=>makeLink("Country-Track-view",params, "trackId",data.get("id"),()=>data.get("name"))
 
 

@@ -4,7 +4,7 @@ import request from "superagent";
 
 import App from "./components/app"
 import Home from "./components/home";
-import Nav, {NavRoot,MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav,JobSearchNav} from "./components/nav";
+import Nav, {TitleNav,NavRoot,MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav,JobSearchNav} from "./components/nav";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -57,13 +57,16 @@ var routes = (
   <Route handler={NavRoot} name='$' >
     <Route handler={Nav} name='.' path="/">
       <DefaultRoute name="app" handler={Home} />
-      <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} > 
+      <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} >
+        <DefaultRoute  handler={TitleNav("Mix Radio")} /> 
         {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
             <Route name="Country-Chart" path="Charts" handler={ChartsNav} >
+              <DefaultRoute  handler={TitleNav("Charts")} />
               {getRoute("Country-ChartAlbum", "ChartAlbum", "ChartAlbums", "chartAlbumId" , ChartAlbums)}
               {getRoute("Country-ChartTrack", "ChartTrack", "ChartTracks", "chartTrackId" , ChartTracks)}
             </Route>,
             <Route name="Country-NewRelease" path="NewReleases" handler={NewReleasesNav} >
+              <DefaultRoute  handler={TitleNav("New releases")} />
               {getRoute("Country-NewReleaseAlbum", "NewReleaseAlbum", "NewReleaseAlbums", "newReleaseAlbumId" , NewReleaseAlbums)}
               {getRoute("Country-NewReleaseTrack", "NewReleaseTrack", "NewReleaseTracks", "newReleaseTrackId" , NewReleaseTracks)}
               {getRoute("Country-NewReleaseSingle", "NewReleaseSingle", "NewReleaseSingles", "newReleaseSingleId" , NewReleaseSingles)}
@@ -89,9 +92,8 @@ var routes = (
         )},
       </Route>
       <Route name="jobsArea" path="jobsArea" handler={JobSearchNav} > 
+        <DefaultRoute  handler={TitleNav("Jobs")} />
         <Route name="userArea" path="userArea" handler={UserNav} > 
-
-
         {getRoute("Agency", "Agency", "Agencies", "agencyId" , Agencies,
           getRoute("Agency-Agent", "Agent", "Agents", "agentId" , Agents)
         )}
@@ -130,6 +132,7 @@ var routes = (
         
     </Route>
     <Route name="adminArea" path="adminArea" handler={AdminNav} > 
+      <DefaultRoute  handler={TitleNav("Admin")} />
 
       {getRoute("OpportunityType", "OpportunityType", "OpportunityTypes", "opportunityTypeId" , OpportunityTypes)}
       {getRoute("OpportunityStatus", "OpportunityStatus", "OpportunityStatuses", "opportunityStatusId" , OpportunityStatuses)}

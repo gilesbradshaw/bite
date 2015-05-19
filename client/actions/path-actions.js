@@ -6,10 +6,8 @@ import {fromJS} from "immutable";
 
 export var pathActions= Biff.createActions({
     active: function (name,path,pathRender) {
-      
       if(path && pathRender)
       {
-        console.log(`path active:: ${name}: ${path}`);
         setTimeout(()=>
           {
             this.dispatch({
@@ -26,7 +24,6 @@ export var pathActions= Biff.createActions({
       }
     },
     dispose: function (name,path) {
-      console.log(`path inactive:: ${name}: ${path}`);
       setTimeout(()=>
         {
           this.dispatch({

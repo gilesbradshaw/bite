@@ -63,6 +63,9 @@ export function routeClass(target){
   return target;
 }
 
+export const makeLink= (to, params, paramName, paramValue, content)=>
+  <Link key={`${to}_${paramValue}`} to={to} params ={_.extend({},params, {[paramName]:paramValue})}>{content()}</Link>
+
 
 
 

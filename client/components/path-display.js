@@ -6,6 +6,7 @@ import {links,routeClass} from './link/links';
 import style from './styles/style';
 import {PropTypes,Link} from "react-router";
 import MediaQuery from 'react-responsive';
+import flatten from './utils/flatten';
 // Child Components
 
 var getState=function()
@@ -16,14 +17,6 @@ var getState=function()
 }
 
 
-const flatten = (arr, givenArr = []) => {
-  arr.forEach((item) => {
-    (Array.isArray(item)) && (flatten(item, givenArr));
-    (!Array.isArray(item)) && (givenArr.push(item));
-  });
-
-  return givenArr;
-};
 
 
 const allStructure=(currentRoutes, isRoute, path)=>
@@ -77,9 +70,9 @@ const singleLink=(link,text, className)=>
       {text?text:(link.link.render? link.link.render() : link.link.name)}
     </Link>
 
-const getLink=(link)=> 
+const getLink=(isRoute)=>(link)=> 
 {
-  if(!link.childLinks.length)
+  if(!link.link.current && !link.childLinks.length)
   {
     return [
       (link.backLink
@@ -93,8 +86,8 @@ const getLink=(link)=>
     ]
   }
   else
-  {
-    return [
+  { return [];
+    return !isRoute?[]:[
       (link.backLink
         ? <li  key={link.backLink.link.to} >
           {singleLink(link.backLink.link,'<', 'menu-link-small')}
@@ -109,7 +102,7 @@ const getLink=(link)=>
           {link.link.link.render? link.link.link.render() : link.link.link.name}
         </a>
         <ul className='hidden'>
-          {link.childLinks.map(getLink)}
+          {link.childLinks.map(getLink(isRoute))}
         </ul>
     </li>]
 
@@ -125,7 +118,6 @@ class PathDisplay extends React.Component {
     
   }
   onStoreChange(){
-    console.log("changed");
     var s=getState();
     this.setState(prev=>s);
   }
@@ -137,25 +129,19 @@ class PathDisplay extends React.Component {
   }
   render() {
    const self = this;
-   const links = menuStructure(this.context.router.getCurrentRoutes(), true, this.state.path);
+   const links = menuStructure(this.context.router.getCurrentRoutes(), this.props.isRoute, this.state.path);
    //const allLinks = allStructure(this.context.router.getCurrentRoutes(), true, this.state.path);
    //const allLinks1 = allStructure(this.context.router.getCurrentRoutes(), false, this.state.path);
     return (
       <div>
-
-        
-
         <MediaQuery query='(min-width: 761px)'>
             <div className="menu desktop-menu">
-              <ul>{links.map(getLink)}</ul>
-              <div style={{height:'50px'}}/>
+              <ul>{links.map(getLink(this.props.isRoute))}</ul>
           </div>
         </MediaQuery>
         <MediaQuery query='(max-width: 760px)'> 
-            <MobilePathDisplay links={links}/>
+            <MobilePathDisplay isRoute={this.props.isRoute} links={links}/>
         </MediaQuery>
-          
-        
       </div>
     );
   }
@@ -167,7 +153,7 @@ export {PathDisplay}
 class MobilePathDisplay extends React.Component {
   constructor(props) {
     super(props);
-    this.state= {show:false};
+    this.state= {show:!this.props.isRoute};
     this.toggleShow=()=>
       this.setState(s=>s.show=!s.show)
 
@@ -176,13 +162,13 @@ class MobilePathDisplay extends React.Component {
     return (
        <div className="menu mobile-menu">
           <ul>
-            <li>
+            {this.props.isRoute?<li>
               <a className={this.state.show?'menu-hide':'menu-show'} onClick={this.toggleShow}>
                 {this.state.show?'hide':'show'}
               </a>
-             </li>
+             </li>:null}
 
-            {this.state.show?this.props.links.map(getLink):undefined}
+            {this.state.show?this.props.links.map(getLink(this.props.isRoute)):undefined}
           </ul>
         </div>
     );

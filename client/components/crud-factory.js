@@ -9,15 +9,17 @@ import {Link} from 'react-router';
 
 var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
 {
-  crud=crud(name, itemId);
+  
   var cruded={};
   var cruder={};
+  crud=crud(name, itemId);
+        
   
   var factory= {
     make:()=>{
       if(cruder.head)
       {
-        cruded.head=crud.getter (
+        cruded.head=crud().getter (
           name,
            name + ".head",
             actions,
@@ -30,7 +32,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.select)
       {
-        cruded.select = crud.lister(
+        cruded.select = crud().lister(
           singleId,
           pluralName,
           name + ".select",
@@ -48,7 +50,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.list)
       {
-        cruded.list=crud.lister(
+        cruded.list=crud(cruder.list.titleRender).lister(
           singleId,
           pluralName,
           name + ".list",
@@ -62,7 +64,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.view)
       {
-        cruded.view = crud.viewer (
+        cruded.view = crud(cruder.view.titleRender,cruder.view.footerRender).viewer (
           "view",
            name + ".view",
             actions,
@@ -75,7 +77,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.edit)
       {
-        cruded.edit = crud.editor (
+        cruded.edit = crud().editor (
           "edit",
           name + ".edit",
            actions,
@@ -87,7 +89,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.del)
       {
-        cruded.del = crud.deleter (
+        cruded.del = crud().deleter (
           pluralName,
          "delete",
           name + ".delete",
@@ -100,7 +102,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.create)
       {
-        cruded.create= crud.creator (
+        cruded.create= crud().creator (
           pluralName,
           "create",
           name + ".create",
@@ -113,7 +115,7 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       }
       if(cruder.listHead)
       {
-        cruded.listHead= crud.listHead (
+        cruded.listHead= crud(cruder.listHead.titleRender).listHead (
           pluralName,
           pluralName,
           pluralName,
@@ -124,13 +126,13 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
       return cruded
     },
     select:makeCruder('select',['renderer']),
-    list:makeCruder('list', ['render', 'nodeRender', 'menuLinks']),
+    list:makeCruder('list', ['render', 'nodeRender', 'menuLinks', 'titleRender']),
     head:makeCruder('head', ['render', 'menuRender']),
-    view:makeCruder('view', ['render']),
+    view:makeCruder('view', ['render','titleRender', 'footerRender']),
     edit:makeCruder('edit', ['render']),
     del:makeCruder('del', ['render']),
     create:makeCruder('create', ['render']),
-    listHead:makeCruder('listHead', ['render'])
+    listHead:makeCruder('listHead', ['render', 'titleRender'])
   }
 
 
@@ -149,8 +151,10 @@ var crudFactory=(crud, singleId, name, pluralName, actions, store, id, itemId)=>
     .menuLinks(
       (self,data,params)=>[
         {title:'View',path:self.state.myPath + "-view"},
-        {title:'Edit',path:self.state.myPath + "-edit"},
-        {title:'Delete',path:self.state.myPath + "-delete"},
+        self.state.data.get('user')?[
+          {title:'Edit',path:self.state.myPath + "-edit"},
+          {title:'Delete',path:self.state.myPath + "-delete"}
+        ]:[]
       ]
     )()
     .create().render(

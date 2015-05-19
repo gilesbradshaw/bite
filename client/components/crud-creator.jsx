@@ -13,6 +13,10 @@ import {pathRender} from './Path';
 import {PathDisplay} from "./path-display";
 import {Grid,Row,Col} from 'react-flexgrid';
 import style from './styles/style';
+import currentUser from './decorators/current-user';
+import userStore from '../stores/user-current-store';
+import flatten from './utils/flatten';
+
 
 var index=0;
 
@@ -34,7 +38,7 @@ const nullPath= (name)=> function()
 
 
 
-const crudcreator= (name, itemId)=> {
+const crudcreator= (name, itemId)=>(titleRender, footerRender)=> {
 	itemId=itemId||'_id';
 	return {
 		lister:function lister(singleId,pluralName,displayName,actions, store,errorStore, itemRender, render, menuLinks)
@@ -43,7 +47,8 @@ const crudcreator= (name, itemId)=> {
 		  function getState(index) {
 		    return {
 		      store: store.get(index),
-		      error: errorStore.get(index)
+		      error: errorStore.get(index),
+		      user:userStore.getCurrentUser()
 		    };
 		  }
 		  function nodes (items) {
@@ -52,11 +57,11 @@ const crudcreator= (name, itemId)=> {
 		      {
 		  	  	const params = _.extend({[singleId] : data.get(itemId)},self.props.params);
 		  	  	
-		  	   	return <Row middle={['xs']} key={data.get(itemId)} style={style.row}>
+		  	   	return <Row className='item-row' middle={['xs']} key={data.get(itemId)} style={style.row}>
 		  	   		  <Col >
 		  	   		  	<Grid fluid>
 			  	   		  	<Row middle={['xs']}>
-				          		{menuLinks(self,data,params).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
+				          		{flatten(menuLinks(self,data,params)).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
 				          	</Row>
 				          </Grid>
 			          </Col>
@@ -74,6 +79,7 @@ const crudcreator= (name, itemId)=> {
 		    	PureRenderMixin,
 		    	store.mixin,
 		    	errorStore.mixin,
+		    	userStore.mixin,
 		    	Navigation
 		    ],
 		    propTypes: {
@@ -82,7 +88,6 @@ const crudcreator= (name, itemId)=> {
 
 
 		    getInitialState() {
-		    	var catchit={singleId, name,pluralName,displayName,actions, store,errorStore, itemRender, render};
 		      return {
 		      	data:Map(getState(index)),
 		      	index:index++,
@@ -97,7 +102,6 @@ const crudcreator= (name, itemId)=> {
 		      		index:this.state.index,
 		      		props:this.props
 		      	});
-		      	console.log(`lister -- mount -- ${this.state.myPath} : ${this.props.myPath}` );
 		    },
 
 		    componentWillUnmount() {
@@ -113,7 +117,6 @@ const crudcreator= (name, itemId)=> {
 		    },
 		    componentWillReceiveProps(props) 
 		    {
-		    	console.log(`lister rec props::::  ${this.state.myPath} : ${this.props.myPath}` );
 		    },
 
 		    render()
@@ -121,21 +124,23 @@ const crudcreator= (name, itemId)=> {
 		      	var res=this.state.data.get('store').toArray();
 		      	return pathRender(
 		      		this,
-		      		()=> {
-			      		if(render)
-					      	{
-					      		return render(this,res).bind(this)()
-					      	}
-					      	else
-					      	{
-					      	  	return( 
-						      		<Grid fluid> 
-						      			{nodes.bind(this)(res)}
-							  			<RouteHandler myPath={this.state.myPath} {...this.props} />
-						      		</Grid>
-						    	);
-						    }
-			      		},
+		      		()=> 
+		      			<div>
+		      				{titleRender?
+				      			<h1>
+				      				{titleRender(this)}
+				      			</h1>
+				      		:null}
+							{render
+								? render(this,res).bind(this)()
+								: <Grid fluid> 
+					      			{nodes.bind(this)(res)}
+						  			<RouteHandler myPath={this.state.myPath} {...this.props} />
+					      		</Grid>
+							}
+
+		      			</div>
+		      		,
 			      	nullPath('lister').bind(this)
 	    	  	);
 		      }
@@ -180,7 +185,6 @@ const crudcreator= (name, itemId)=> {
 		      	{
 		      		index:this.state.index
 		      	});
-		      console.log(`${this.state.myPath} : ${this.props.myPath}` );
 		    },
 
 		    componentWillUnmount() {
@@ -293,7 +297,6 @@ const crudcreator= (name, itemId)=> {
 
 		    componentWillMount() {
 		    	init.bind(this)(this.props);
-		    	console.log(`${this.state.myPath} : ${this.props.myPath}` );
 		    },
 
 		    componentWillUnmount() {
@@ -384,7 +387,27 @@ const crudcreator= (name, itemId)=> {
 				      if(this.props.item)
 				      {	      	
 				      	return <div>
+				      		{titleRender?
+				      			<Grid fluid>
+				      				{titleRender(this,this.props.item).filter(l=>l).map(item=>
+				      					<Row key={item.field} bottom='xs'>
+				      						<Col xs={4} sm={3} md={1} lg={1}>{item.field}</Col>
+				      						<Col xs={0} md={4}>{item.render()}</Col>
+				      					</Row>
+				      				)}
+				      			</Grid>
+				      		:null}
 				      		{render(this,this.props.item)}
+				      		{footerRender?
+				      			<Grid fluid>
+				      				{flatten(footerRender(this,this.props.item)).filter(l=>l).map(item=>
+				      					<Row key={item.field} top='xs'>
+				      						<Col xs={4} sm={3} md={1} lg={1}>{item.field}</Col>
+				      						<Col xs={0} md={4}>{item.render()}</Col>
+				      					</Row>
+				      				)}
+				      			</Grid>
+				      		:null}
 				      		<RouteHandler {...this.props}  myPath={this.state.myPath} />
 				      	</div>
 				      }
@@ -434,7 +457,6 @@ const crudcreator= (name, itemId)=> {
 
 		    componentWillMount() {
 		    	init.bind(this)(this.props);
-		    	console.log(`${this.state.myPath} : ${this.props.myPath}` );
 		    },
 
 		    componentWillUnmount() {
@@ -461,7 +483,7 @@ const crudcreator= (name, itemId)=> {
 				      {
 				       return(
 				          <div> 
-		   		            {render(this,this.state.data.get('item'))}
+				          	{render(this,this.state.data.get('item'))}
 				             <Error error={this.state.data.get('error')}/>
 				             <RouteHandler {...this.props} item={this.state.data.get('item')} myPath={this.state.myPath} index={this.state.index} />
 				          </div>
@@ -521,7 +543,6 @@ const crudcreator= (name, itemId)=> {
 		    },
 			componentWillMount() {
 				init.bind(this)(this.props);
-				console.log(`${this.state.myPath} : ${this.props.myPath}` );
 		    },
 
 		    componentWillUnmount() {
@@ -610,7 +631,12 @@ const crudcreator= (name, itemId)=> {
 		    	return pathRender(
 		    		this,
 		    		()=>
-			          <div> 
+			          <div>
+			          	{titleRender?
+			      			<h1>
+			      				{titleRender(this)}
+			      			</h1>
+				      	:null}
 			          	{render? render(this): <script/>}		          	
 			          	<RouteHandler {...this.props} myPath={this.state.myPath} />
 			          </div>
