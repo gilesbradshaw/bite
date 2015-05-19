@@ -35,7 +35,7 @@ import UserSignIn from "./components/user.sign.in";
 import UserSignOut from "./components/user.sign.out";
 import NotFound from "./components/notfound";
 
-
+React.initializeTouchEvents(true);
 var getRoute=(prefix, name, pluralName, id, components, ...childRoutes)=> 
   //React.addOns.createFragment(
     <Route key={prefix} name={prefix} path={pluralName} handler={components.listHead} >

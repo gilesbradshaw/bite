@@ -5,7 +5,7 @@ body {
 a.active {
   background:yellow;
 }
-
+/*
  :root {
   --gutter-width: 1rem;
   --outer-margin: 2rem;
@@ -19,7 +19,7 @@ a.active {
   --container-md: calc( 60rem + var( --gutter-width ) );
   --container-lg: calc( 70rem + var( --gutter-width ) );
  }
-
+*/
 
 
 @custom-media --sm-viewport only screen and (min-width: 48em);

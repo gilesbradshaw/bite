@@ -52,14 +52,16 @@ const crudcreator= (name, itemId)=> {
 		      {
 		  	  	const params = _.extend({[singleId] : data.get(itemId)},self.props.params);
 		  	  	
-		  	   	return <Row key={data.get(itemId)} style={style.row}>
-		  	   		  <Col>
-		  	   		  	<Row >
-			          		{menuLinks(self,data,params).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
-			          	</Row>
+		  	   	return <Row middle={['xs']} key={data.get(itemId)} style={style.row}>
+		  	   		  <Col >
+		  	   		  	<Grid fluid>
+			  	   		  	<Row middle={['xs']}>
+				          		{menuLinks(self,data,params).map(link=><Col key={`$index}:${data.get(itemId)}-${link.title}`} style={[style.link, style.box]} ><Link to={link.path} params={params}>{link.render ? link.render() : link.title}</Link></Col>)}			          
+				          	</Row>
+				          </Grid>
 			          </Col>
 		  	   		  
-			          	{itemRender(data,self)}
+			          {itemRender(data,self)}
 			          
 			          
 		          	</Row>

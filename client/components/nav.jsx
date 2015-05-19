@@ -7,7 +7,6 @@ import {links,routeClass} from './link/links';
 import {pathRender} from './Path';
 import {Grid,Row,Col} from 'react-flexgrid';
 
-
 const myPathRender =(self,myLinks, myRender)=>
   pathRender(
     self,
@@ -31,8 +30,7 @@ class NavRoot extends React.Component {
          <UserLoggedIn/>
          <div>
           <PathDisplay isRoute={true}/>
-        </div>
-       
+        </div>      
         <RouteHandler {...this.props} />
       </div>
     );

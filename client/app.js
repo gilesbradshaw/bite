@@ -6,6 +6,7 @@ import Router from "./router";
 import ticker from "./ticker";
 
 require("./styles/main.css");
+require("./styles/menu.css");
 //require("./styles/flexboxgrid.css");
 
 

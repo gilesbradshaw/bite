@@ -1,0 +1,128 @@
+.menu {
+	overflow:hidden;
+}
+/*Strip the ul of padding and list styling*/
+.menu ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	display:block;
+	position: absolute;
+}
+
+/*Create a horizontal list with spacing*/
+.menu li {
+	display:inline-block;
+	float: left;
+	margin-right: 1px;
+}
+
+/*Style for menu links*/
+.menu li a {
+	display:block;
+	min-width:120px;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #fff;
+	background: red;
+	text-decoration: none;
+}
+
+/*Style for menu links*/
+.menu li a.menu-link {
+	background: #2f3036;
+}
+
+
+.menu li a.menu-link-none {
+	background: gray;
+}
+
+.menu li a.menu-link-dropdown {
+	background: orange;	
+}
+
+.menu li a.menu-hide {
+	background: red;
+	cursor: hand;
+	cursor: pointer;		
+}
+.menu li a.menu-show {
+	background: green;	
+	cursor: hand;
+	cursor: pointer;
+}
+
+.menu li:hover a.menu-hide {
+	background: pink;	
+}
+.menu li:hover a.menu-show {
+	background: lightgreen;	
+}
+
+/*Style for small menu links*/
+.menu li a.menu-link-small {
+	min-width:40px;
+}
+
+/*Hover state for top level links*/
+.menu li:hover a.menu-link {
+	background: #19c589;
+}
+
+/*Style for dropdown links*/
+.menu li:hover ul a.menu-link {
+	background: #f3f3f3;
+	color: #2f3036;
+	height: 40px;
+	line-height: 40px;
+}
+
+/*Hover state for dropdown links*/
+.menu li:hover ul a.menu-link:hover {
+	background: #19c589;
+	color: #fff;
+}
+
+/*Hide dropdown links until they are needed*/
+.menu li ul {
+	display: none;
+}
+
+/*Make dropdown links vertical*/
+.menu li ul li {
+	display: block;
+	float: none;
+}
+
+/*Prevent text wrapping*/
+.menu li ul li a {
+	width: auto;
+	min-width: 150px;
+	padding: 0 20px;
+}
+
+/*Display the dropdown on hover*/
+.menu ul li a:hover + .hidden, .hidden:hover {
+	display: block;
+}
+
+
+
+/*Responsive Styles*/
+
+
+	.mobile-menu ul {
+		position: static;
+		/*display: none;*/
+	}
+	/*Create vertical spacing*/
+	.mobile-menu li {
+		margin-bottom: 1px;
+	}
+	/*Make all menu links full width*/
+	.mobile-menu ul li, li a {
+		width: 100%;
+}

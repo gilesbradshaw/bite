@@ -70,10 +70,10 @@ const menuStructure=(currentRoutes, isRoute, path)=>
 
 }
 
-const singleLink=(link,text)=>
+const singleLink=(link,text, className)=>
     link.current 
-    ? <span title={link.link.name}>{(text?text:(link.link.render? link.link.render() : link.link.name))}</span>
-    : <Link key={link.link.to} className="pure-menu-link" to={link.link.to} title={link.link.name} params={link.params}>
+    ? <a className="menu-link-none" key={link.link.to} title={link.link.name}>{(text?text:(link.link.render? link.link.render() : link.link.name))}</a>
+    : <Link className={"menu-link " + (className||"")} key={link.link.to}  to={link.link.to} title={link.link.name} params={link.params}>
       {text?text:(link.link.render? link.link.render() : link.link.name)}
     </Link>
 
@@ -83,11 +83,11 @@ const getLink=(link)=>
   {
     return [
       (link.backLink
-        ? <li className="pure-menu-item pure-menu-selected" key={link.backLink.link.to} >
-          {singleLink(link.backLink.link,'<')}
+        ? <li  key={link.backLink.link.to} >
+          {singleLink(link.backLink.link,'<','menu-link-small')}
         </li>
         :undefined),
-      <li className="pure-menu-item pure-menu-selected" key={link.link.link.to} >
+      <li  key={link.link.link.to} >
         {singleLink(link.link)}      
       </li>
     ]
@@ -96,19 +96,19 @@ const getLink=(link)=>
   {
     return [
       (link.backLink
-        ? <li className="pure-menu-item pure-menu-selected" key={link.backLink.link.to} >
-          {singleLink(link.backLink.link,'<')}
+        ? <li  key={link.backLink.link.to} >
+          {singleLink(link.backLink.link,'<', 'menu-link-small')}
         </li>
         :undefined),
-      <li className="pure-menu-item pure-menu-has-children pure-menu-allow-hover" key={link.link.link.to} title={link.link.link.name}> 
+      <li  key={link.link.link.to} title={link.link.link.name}> 
         { false && !link.link.current
           ? singleLink(link.link,'.')
           : <script/>
         }
-        <span >
+        <a className='menu-link-dropdown' key={link.link.link.to} title={link.link.link.name}>
           {link.link.link.render? link.link.link.render() : link.link.link.name}
-        </span>
-        <ul className="pure-menu-children">
+        </a>
+        <ul className='hidden'>
           {link.childLinks.map(getLink)}
         </ul>
     </li>]
@@ -138,40 +138,53 @@ class PathDisplay extends React.Component {
   render() {
    const self = this;
    const links = menuStructure(this.context.router.getCurrentRoutes(), true, this.state.path);
-   const allLinks = allStructure(this.context.router.getCurrentRoutes(), true, this.state.path);
-   const allLinks1 = allStructure(this.context.router.getCurrentRoutes(), false, this.state.path);
+   //const allLinks = allStructure(this.context.router.getCurrentRoutes(), true, this.state.path);
+   //const allLinks1 = allStructure(this.context.router.getCurrentRoutes(), false, this.state.path);
     return (
       <div>
 
-        <div>
-          <div>Device Test!</div>
-          <MediaQuery query='(min-device-width: 1224px)'>
-            <div>You are a desktop or laptop</div>
-            <MediaQuery query='(min-device-width: 1824px)'>
-              <div>You also have a huge screen</div>
-            </MediaQuery>
-            <MediaQuery query='(max-width: 1224px)'>
-              <div>You are sized like a tablet or mobile phone though</div>
-            </MediaQuery>
-          </MediaQuery>
-          <MediaQuery query='(max-device-width: 1224px)'>
-            <div>You are a tablet or mobile phone</div>
-          </MediaQuery>
-          <MediaQuery query='(orientation: portrait)'>
-            <div>You are portrait</div>
-          </MediaQuery>
-           <MediaQuery query='(orientation: landscape)'>
-            <div>You are landscape</div>
-          </MediaQuery>
-          <MediaQuery query='(min-resolution: 2dppx)'>
-            <div>You are retina</div>
-          </MediaQuery>
-        </div>
+        
 
-        <div className="pure-menu pure-menu-horizontal">
-          <ul class="pure-menu-list">{links.map(getLink)}</ul>
-        </div>
+        <MediaQuery query='(min-width: 761px)'>
+            <div className="menu desktop-menu">
+              <ul>{links.map(getLink)}</ul>
+              <div style={{height:'50px'}}/>
+          </div>
+        </MediaQuery>
+        <MediaQuery query='(max-width: 760px)'> 
+            <MobilePathDisplay links={links}/>
+        </MediaQuery>
+          
+        
       </div>
+    );
+  }
+}
+export {PathDisplay}
+
+
+
+class MobilePathDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state= {show:false};
+    this.toggleShow=()=>
+      this.setState(s=>s.show=!s.show)
+
+  }
+  render() {
+    return (
+       <div className="menu mobile-menu">
+          <ul>
+            <li>
+              <a className={this.state.show?'menu-hide':'menu-show'} onClick={this.toggleShow}>
+                {this.state.show?'hide':'show'}
+              </a>
+             </li>
+
+            {this.state.show?this.props.links.map(getLink):undefined}
+          </ul>
+        </div>
     );
   }
 }

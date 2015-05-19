@@ -131,7 +131,7 @@ gulp.task("build:dev", function (done) {
 
 gulp.task("watch:dev", function () {
   gulp.watch([
-    "client/**/*.{js,jsx}",
+    "client/**/*.{js,jsx,css}",
     "node_modules/react-router/**/*.{js,jsx}",
 
   ], ["build:dev"]);
