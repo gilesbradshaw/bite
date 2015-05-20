@@ -6,7 +6,7 @@ import {PathDisplay} from "./path-display";
 import {links,routeClass} from './link/links';
 import {pathRender} from './Path';
 import {Grid,Row,Col} from 'react-flexgrid';
-
+import displayName from './decorators/displayName';
 const myPathRender =(self,myLinks, myRender)=>
   pathRender(
     self,
@@ -18,13 +18,13 @@ const myPathRender =(self,myLinks, myRender)=>
 
 const TitleNav = (title)=>
 {
+  @displayName(`TitleNav${title}`)
   class TitleNav extends React.Component {
     render() {
         return <h1>{title}</h1>
 
     }
   }
-  TitleNav.displayName = "TitleNav";
   return TitleNav;
 }
 export {TitleNav};

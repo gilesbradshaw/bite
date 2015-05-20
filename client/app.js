@@ -4,6 +4,8 @@
 import Router from "./router";
 
 import ticker from "./ticker";
+import 'core-js/modules/es6.reflect' // Reflect polyfill is required
+
 
 require("./styles/main.css");
 require("./styles/menu.css");

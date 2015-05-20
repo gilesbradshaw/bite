@@ -18,3 +18,8 @@ h4 {
 	margin-bottom: 4px;
 	margin-top: 8px;
 }
+
+.point {
+	cursor:hand;
+	cursor:pointer;
+}

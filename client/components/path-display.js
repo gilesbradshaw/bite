@@ -8,9 +8,9 @@ import {PropTypes,Link} from "react-router";
 import MediaQuery from 'react-responsive';
 import flatten from './utils/flatten';
 import {Grid,Row,Col} from 'react-flexgrid';
-// Child Components
+import autobind from 'autobind-decorator'
 
-var getState=function()
+const getState=function()
 {
   return {
     path:pathStore.get()
@@ -154,12 +154,10 @@ class PathDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state= getState();
-    this.onStoreChange=this.onStoreChange.bind(this);
-    
   }
+  @autobind
   onStoreChange(){
-    var s=getState();
-    this.setState(prev=>s);
+    this.setState(prev=>getState());
   }
   componentDidMount() { 
     pathStore.addChangeListener(this.onStoreChange);

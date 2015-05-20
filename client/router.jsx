@@ -5,6 +5,7 @@ import request from "superagent";
 import App from "./components/app"
 import Home from "./components/home";
 import Nav, {TitleNav,NavRoot,MixRadioNav,ChartsNav,NewReleasesNav,UserNav, AdminNav,JobSearchNav} from "./components/nav";
+import MixRadio from "./components/mixRadio";
 import OpportunityTypes from "./components/opportunityTypes";
 import OpportunityStatuses from "./components/opportunityStatuses";
 import OpportunityAgentRatings from "./components/opportunityAgentRatings";
@@ -58,7 +59,7 @@ var routes = (
     <Route handler={Nav} name='.' path="/">
       <DefaultRoute name="app" handler={Home} />
       <Route name="mixRadio" path="mixRadio" handler={MixRadioNav} >
-        <DefaultRoute  handler={TitleNav("Mix Radio")} /> 
+        <DefaultRoute  handler={MixRadio} /> 
         {getRoute("Country", "Country", "Countries", "countryCode" , Countries,
             <Route name="Country-Chart" path="Charts" handler={ChartsNav} >
               <DefaultRoute  handler={TitleNav("Charts")} />

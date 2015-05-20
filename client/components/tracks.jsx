@@ -17,33 +17,14 @@ import {makeLink, links} from './link/links';
 
 import {link as artistLink, artistLinks, artistFooters} from './artists';
 import {link as genreLink, genreFooters} from './genres';
-
+import Player from './player';
 
 const togglePlay=(self,id)=>()=>
   self.setState({play:id})
 const player=(self,data)=>
   self.state.play==data.get("id") 
-    ? <Player src={data.getIn(['samples', 'wmamms'])}/> 
-    : <Player src={data.getIn(['samples', 'wmamms'])}/>  //<div onClick={togglePlay(self,data.get("id"))} className='fa fa-lg fa-play'/>
-
-
-class Player extends React.Component {
-  constructor(props)
-  {
-    super(props);
-    this.componentDidMount=this.componentDidMount.bind(this);
-  }
-  componentDidMount()
-  {
-    const p = this.refs.player.getDOMNode();
-    p.play();
-  }
-  render() {
-    return <audio ref='player' autoplay controls src={this.props.src}/> 
-  }
-}
-Player.displayName = "Player";
-
+    ? <Player playClass='point a fa-lg fa-play' src={data.getIn(['samples', 'wmamms'])}/> 
+    : <Player playClass='point fa fa-lg fa-play' src={data.getIn(['samples', 'wmamms'])}/>  //<div onClick={togglePlay(self,data.get("id"))} className='fa fa-lg fa-play'/>
 
 
 const path=(params)=>
